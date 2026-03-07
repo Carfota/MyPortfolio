@@ -23,10 +23,19 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container { max-width: 900px; width: 100%; padding: 40px 20px; text-align: center; }
         
+        /* الأنميشن الأساسي لظهور الصفحة */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate { animation: fadeInUp 0.8s ease-out forwards; }
+
         /* Navigation */
         nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
         .nav-link { 
@@ -54,6 +63,8 @@
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.2));
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
         }
 
         .welcome-card { 
@@ -64,15 +75,26 @@
             margin-top: 40px;
             backdrop-filter: blur(10px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
         }
 
-        .description {
-            font-size: 1.4rem;
-            line-height: 1.6;
-            color: #ccc;
-        }
-
+        .description { font-size: 1.4rem; line-height: 1.6; color: #ccc; }
         .highlight { color: var(--primary); font-weight: bold; }
+
+        /* اللينكات اللي جوه الكلام */
+        .inline-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 2px solid rgba(0, 255, 136, 0.3);
+            transition: 0.3s;
+        }
+        .inline-link:hover {
+            background: rgba(0, 255, 136, 0.1);
+            border-bottom-color: var(--primary);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
 
         @media (max-width: 600px) {
             h1 { font-size: 2.5rem; }
@@ -83,7 +105,7 @@
 <body>
 
     <div class="container">
-        <nav>
+        <nav class="animate">
             <a href="index.html" class="nav-link active">Home</a>
             <a href="games.html" class="nav-link">Games</a>
             <a href="systems.html" class="nav-link">Systems</a>
@@ -94,7 +116,11 @@
         <div class="welcome-card">
             <p class="description">
                 I am a <span class="highlight">Roblox Game Developer</span>. <br>
-                I build  games and advanced systems in <span class="highlight">Roblox Studio</span>.
+                I build 
+                <a href="games.html" class="inline-link">Games</a> 
+                and advanced 
+                <a href="systems.html" class="inline-link">Systems</a> 
+                in <span class="highlight">Roblox Studio</span>.
             </p>
         </div>
     </div>
