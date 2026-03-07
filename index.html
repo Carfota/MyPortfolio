@@ -5,21 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ahmed Nabil | Home</title>
     <style>
-        :root { --primary: #00ff88; --bg: #050505; --border: rgba(255, 255, 255, 0.1); }
-        body { font-family: sans-serif; background-color: var(--bg); color: #fff; margin: 0; text-align: center; }
-        .container { max-width: 800px; margin: auto; padding: 30px; }
-        
-        /* قائمة التنقل - ثابتة في كل الصفحات */
-        nav { margin: 40px 0; display: flex; justify-content: center; gap: 15px; }
-        .nav-link { color: #888; text-decoration: none; padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { color: var(--primary); border-color: var(--primary); background: rgba(0, 255, 136, 0.1); }
+        :root { 
+            --primary: #00ff88; 
+            --bg: #050505; 
+            --card-bg: rgba(255, 255, 255, 0.03); 
+            --border: rgba(255, 255, 255, 0.1); 
+        }
 
-        .welcome-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 20px; padding: 50px 20px; margin-top: 20px; }
-        h1 { font-size: 3rem; color: var(--primary); margin: 0 0 20px 0; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: var(--bg); 
+            color: #fff; 
+            margin: 0; 
+            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); 
+            background-size: 40px 40px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 900px; width: 100%; padding: 40px 20px; text-align: center; }
+        
+        /* Navigation */
+        nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
+        .nav-link { 
+            color: #888; 
+            text-decoration: none; 
+            padding: 10px 25px; 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            transition: 0.3s; 
+            background: var(--card-bg);
+            font-weight: bold;
+        }
+        .nav-link:hover, .nav-link.active { 
+            color: var(--primary); 
+            border-color: var(--primary); 
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+        }
+
+        /* Hero Section */
+        h1 { 
+            font-size: 4rem; 
+            margin: 0; 
+            background: linear-gradient(to right, #fff, var(--primary)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.2));
+        }
+
+        .welcome-card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 24px; 
+            padding: 60px 40px; 
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .description {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
         .highlight { color: var(--primary); font-weight: bold; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .description { font-size: 1.1rem; }
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
         <nav>
             <a href="index.html" class="nav-link active">Home</a>
@@ -27,13 +89,15 @@
             <a href="systems.html" class="nav-link">Systems</a>
         </nav>
 
+        <h1>Ahmed Nabil</h1>
+        
         <div class="welcome-card">
-            <h1>Ahmed Nabil</h1>
-            <p style="font-size: 1.2rem; color: #ccc;">
+            <p class="description">
                 I am a <span class="highlight">Roblox Game Developer</span>. <br>
-                I make games and  advacned systems in <span class="highlight">Roblox Studio</span>.
+                I build  games and advanced systems in <span class="highlight">Roblox Studio</span>.
             </p>
         </div>
     </div>
+
 </body>
 </html>
