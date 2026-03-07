@@ -1,148 +1,23 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmed Nabil | Dev Portfolio</title>
-    <style>
-        :root {
-            --primary: #00ff88;
-            --bg: #050505;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-        }
+<nav class="main-nav">
+    <a href="index.html" class="nav-link active">Home</a>
+    <a href="games.html" class="nav-link">Games</a>
+    <a href="systems.html" class="nav-link">Systems</a>
+</nav>
 
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg);
-            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
-            background-size: 40px 40px; /* خلفية الشبكة التقنية */
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        .container { max-width: 1000px; margin: auto; padding: 40px 20px; }
-
-        header {
-            text-align: center;
-            padding: 80px 0;
-            animation: fadeIn 1s ease-out;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            margin: 0;
-            background: linear-gradient(to right, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
-
-        .tagline { color: #888; font-size: 1.2rem; margin-top: 10px; }
-
-        /* قسم المشاريع */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .project-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: slideUp 0.8s ease-out both;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
-        }
-
-        .video-wrapper {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-        }
-
-        video { width: 100%; height: 100%; object-fit: cover; }
-
-        h2 { font-size: 1.4rem; margin: 0 0 10px 0; color: var(--primary); }
-        p { color: #aaa; font-size: 0.95rem; line-height: 1.6; }
-
-        .tech-tags { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        .tech-tag {
-            font-size: 11px;
-            padding: 4px 10px;
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--primary);
-            border-radius: 5px;
-            border: 1px solid rgba(0, 255, 136, 0.2);
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* موبايل */
-        @media (max-width: 600px) {
-            h1 { font-size: 2.2rem; }
-            .projects-grid { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <header>
-            <h1>Ahmed Nabil</h1>
-            <p class="tagline">Roblox Game Developer & Luau Scripter</p>
-        </header>
-
-        <div class="projects-grid">
-            <div class="project-card" style="animation-delay: 0.1s;">
-                <div class="video-wrapper">
-                    <video autoplay loop muted playsinline>
-                        <source src="https://www.dropbox.com/scl/fi/pajp01mdq92zyifappwf6/League-of-Legends-2026.02.17-22.11.27.02.DVR-online-video-cutter.com.mp4?rlkey=ljnkxi8febfg5q7l61doz1mxa&st=vza0xput&raw=1" type="video/mp4">
-                    </video>
-                </div>
-                <h2>Project OBSTCALES</h2>
-                <p>نظام عقبات وفيزياء متطور مبني بلغة Luau، يركز على تجربة حركة سلسة وتحديات صعبة.</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Luau</span>
-                    <span class="tech-tag">Roblox Studio</span>
-                    <span class="tech-tag">Physics</span>
-                </div>
-            </div>
-
-            <div class="project-card" style="animation-delay: 0.2s;">
-                <div class="video-wrapper">
-                    <video autoplay loop muted playsinline>
-                        <source src="https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&st=n0ts1ciz&raw=1" type="video/mp4">
-                    </video>
-                </div>
-                <h2>Systems & UI</h2>
-                <p>تصميم وتطوير أنظمة خلفية (Back-end) مثل الـ DataStores وواجهات المستخدم المتفاعلة.</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">UI/UX</span>
-                    <span class="tech-tag">DataStore</span>
-                    <span class="tech-tag">Optimization</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</body>
-</html>
+<style>
+    .main-nav { margin-top: 20px; display: flex; justify-content: center; gap: 20px; }
+    .nav-link {
+        color: #888;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        transition: 0.3s;
+    }
+    .nav-link:hover, .nav-link.active {
+        color: var(--primary);
+        border-color: var(--primary);
+        background: rgba(0, 255, 136, 0.05);
+    }
+</style>
