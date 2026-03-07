@@ -12,24 +12,25 @@
         }
 
         body { 
-            font-family: 'Segoe UI', sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background-color: #0f0f0f; 
             color: #e0e0e0; 
             margin: 0; 
             padding: 20px;
+            line-height: 1.6;
         }
 
         .container { max-width: 850px; margin: auto; }
 
         header { 
             text-align: center;
-            padding: 40px 0;
+            padding: 50px 0;
             animation: fadeInUp 0.8s ease-out;
         }
 
-        h1 { color: #00ff88; font-size: 2.5rem; margin: 0; }
+        h1 { color: #00ff88; font-size: 2.8rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        p.subtitle { color: #888; font-size: 1.1rem; margin-top: 5px; }
 
-        /* تنسيق كارت المشروع */
         .project-card { 
             background: #161616; 
             border-radius: 15px; 
@@ -41,65 +42,76 @@
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             border-color: #00ff88;
-            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.1);
         }
 
-        .video-container { 
+        h2 { color: #fff; margin-top: 0; font-size: 1.5rem; }
+        .description { color: #aaa; margin-bottom: 20px; }
+
+        .media-container { 
             width: 100%;
             border-radius: 12px; 
             overflow: hidden; 
             background: #000;
-            margin: 20px 0;
+            margin-bottom: 20px;
+            border: 1px solid #222;
         }
 
+        /* تنسيق الفيديو والصور */
         video, img { width: 100%; display: block; border-radius: 12px; }
 
+        .tags { display: flex; gap: 10px; flex-wrap: wrap; }
         .tag { 
-            display: inline-block;
-            background: #00ff8822; 
+            background: #00ff8815; 
             color: #00ff88; 
-            padding: 5px 15px; 
+            padding: 6px 15px; 
             border-radius: 20px; 
             font-size: 13px; 
-            margin-left: 10px; 
-            border: 1px solid #00ff8844;
+            border: 1px solid #00ff8830;
+            font-weight: 600;
         }
-
-        h2 { color: #fff; margin-bottom: 10px; }
-        p { color: #aaa; }
     </style>
 </head>
 <body>
+
     <div class="container">
         <header>
             <h1>Ahmed Nabil</h1>
-            <p>Developer & Writer | Specialized in Luau (Roblox Studio)</p>
+            <p class="subtitle">Developer & Writer | Specialized in Luau (Roblox Studio)</p>
         </header>
 
         <div class="project-card">
-            <h2>SOME OF MY PROJECT I DID</h2>
-            <p></p>
-            <div class="video-container">
+            <h2>مشروع OBSTCALES</h2>
+            <p class="description"></p>
+            <div class="media-container">
                 <video controls preload="metadata">
                     <source src="https://www.dropbox.com/scl/fi/pajp01mdq92zyifappwf6/League-of-Legends-2026.02.17-22.11.27.02.DVR-online-video-cutter.com.mp4?rlkey=ljnkxi8febfg5q7l61doz1mxa&st=vza0xput&raw=1" type="video/mp4">
+                    متصفحك لا يدعم تشغيل الفيديو.
                 </video>
             </div>
-            <div class="tags"><span class="tag">Luau</span><span class="tag">Roblox Studio</span></div>
+            <div class="tags">
+                <span class="tag">Luau</span>
+                <span class="tag">Roblox Studio</span>
+                <span class="tag">Physics</span>
+            </div>
         </div>
 
-<div class="project-card">
-    <h2>Daily Reward System</h2>
-    <p class="description"></p>
-    
-    <div class="video-container">
-        <img src="https://www.dropbox.com/scl/fi/974zfxqjeebtrjleg48yu/RobloxStudioBeta_GTFs2eW1ZQ.gif?rlkey=tnowpd6d0bwsbf24sjqvgfqu&st=4c0p4y56&raw=1" alt="Daily Reward System">
+        <div class="project-card">
+            <h2>Daily Reward System</h2>
+            <p class="description"></p>
+            <div class="media-container">
+                <img src="https://www.dropbox.com/scl/fi/974zfxqjeebtrjleg48yu/RobloxStudioBeta_GTFs2eW1ZQ.gif?rlkey=tnowpd6d0bwsbf24sjqvgfqu&st=4c0p4y56&raw=1" alt="Daily Reward System UI">
+            </div>
+            <div class="tags">
+                <span class="tag">UI Design</span>
+                <span class="tag">Scripting</span>
+                <span class="tag">DataStore</span>
+            </div>
+        </div>
+
     </div>
 
-    <div class="tags">
-        <span class="tag">Scripting</span>
-        <span class="tag">UI Design</span>
-    </div>
-</div></body>
+</body>
 </html>
