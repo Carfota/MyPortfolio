@@ -5,15 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ahmed Nabil | Portfolio</title>
     <style>
-        body { font-family: sans-serif; background-color: #0f0f0f; color: #e0e0e0; margin: 0; padding: 20px; }
+        /* أنيميشن الدخول */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #0f0f0f; 
+            color: #e0e0e0; 
+            margin: 0; 
+            padding: 20px;
+            line-height: 1.6;
+        }
+
         .container { max-width: 900px; margin: auto; }
-        header { border-bottom: 2px solid #00ff88; padding-bottom: 20px; margin-bottom: 40px; }
-        h1 { color: #00ff88; margin: 0; }
-        .project-card { background: #1a1a1a; border-radius: 12px; padding: 20px; margin-bottom: 30px; border: 1px solid #333; }
+
+        header { 
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        h1 { color: #00ff88; font-size: 2.5rem; margin-bottom: 10px; }
+
+        .project-card { 
+            background: #1a1a1a; 
+            border-radius: 15px; 
+            padding: 25px; 
+            margin-bottom: 40px; 
+            border: 1px solid #333;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff88;
+        }
+
         h2 { color: #fff; margin-top: 0; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        .tag { background: #00ff8822; color: #00ff88; padding: 5px 12px; border-radius: 20px; font-size: 14px; margin-left: 8px; border: 1px solid #00ff8844; }
+
+        .video-container { 
+            position: relative; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin: 20px 0;
+        }
+
+        video { width: 100%; display: block; border-radius: 12px; }
+
+        .tag { 
+            display: inline-block;
+            background: #00ff8822; 
+            color: #00ff88; 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            font-size: 13px; 
+            margin-left: 10px; 
+            border: 1px solid #00ff8844;
+            font-weight: bold;
+        }
+
+        .description { color: #aaa; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -24,16 +82,23 @@
         </header>
 
         <div class="project-card">
-            <h2>مشروع OBSTCALES</h2>
-            <p>ده البروجكت الأساسي اللي شغال عليه حالياً، مركز فيه على نظام العقبات والفيزياء.</p>
+            <h2>مشروع OBSTCALES (League Update)</h2>
+            <p class="description">استعراض لآخر التحديثات ونظام الحركة اللي شغال عليه حالياً.</p>
+            
             <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/ID_VIDEO_HERE" allowfullscreen></iframe>
+                <video controls preload="metadata">
+                    <source src="https://www.dropbox.com/scl/fi/pajp01mdq92zyifappwf6/League-of-Legends-2026.02.17-22.11.27.02.DVR-online-video-cutter.com.mp4?rlkey=ljnkxi8febfg5q7l61doz1mxa&st=vza0xput&raw=1" type="video/mp4">
+                    متصفحك لا يدعم تشغيل الفيديو.
+                </video>
             </div>
+
             <div class="tags">
                 <span class="tag">Luau</span>
                 <span class="tag">Roblox Studio</span>
+                <span class="tag">VFX</span>
             </div>
         </div>
+
     </div>
 </body>
 </html>
