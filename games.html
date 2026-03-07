@@ -1,12 +1,30 @@
-<div class="container">
-    <nav class="main-nav">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="games.html" class="nav-link active">Games</a>
-        <a href="systems.html" class="nav-link">Systems</a>
-    </nav>
-    
-    <h1>My Games</h1>
-    <div class="projects-grid">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Games</title>
+    <style>
+        :root { --primary: #00ff88; --bg: #050505; --card-bg: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: #fff; margin: 0; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 40px 40px; }
+        .container { max-width: 1000px; margin: auto; padding: 40px 20px; }
+        nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; }
+        .nav-link { color: #888; text-decoration: none; padding: 10px 25px; border: 1px solid var(--border); border-radius: 12px; transition: 0.3s; background: var(--card-bg); }
+        .nav-link:hover, .nav-link.active { color: var(--primary); border-color: var(--primary); }
+        
+        .project-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; backdrop-filter: blur(10px); }
+        .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+        video { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="games.html" class="nav-link active">Games</a>
+            <a href="systems.html" class="nav-link">Systems</a>
+        </nav>
+        <h1>My Games</h1>
         <div class="project-card">
             <div class="video-wrapper">
                 <video autoplay loop muted playsinline>
@@ -14,7 +32,8 @@
                 </video>
             </div>
             <h2>OBSTCALES</h2>
-            <p>some of my games</p>
+            <p>نظام عقبات وفيزياء متطور في Roblox Studio.</p>
         </div>
     </div>
-</div>
+</body>
+</html>
