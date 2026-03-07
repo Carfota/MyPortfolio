@@ -1,20 +1,25 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Games</title>
+    <title>My Games | Ahmed Nabil</title>
     <style>
         :root { --primary: #00ff88; --bg: #050505; --card-bg: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: #fff; margin: 0; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 40px 40px; }
-        .container { max-width: 1000px; margin: auto; padding: 40px 20px; }
-        nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; }
-        .nav-link { color: #888; text-decoration: none; padding: 10px 25px; border: 1px solid var(--border); border-radius: 12px; transition: 0.3s; background: var(--card-bg); }
-        .nav-link:hover, .nav-link.active { color: var(--primary); border-color: var(--primary); }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: #fff; margin: 0; text-align: center; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 40px 40px; }
+        .container { max-width: 900px; margin: auto; padding: 40px 20px; }
         
-        .project-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; backdrop-filter: blur(10px); }
-        .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+        nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; }
+        .nav-link { color: #888; text-decoration: none; padding: 10px 25px; border: 1px solid var(--border); border-radius: 12px; transition: 0.3s; background: var(--card-bg); font-weight: bold; }
+        .nav-link:hover, .nav-link.active { color: var(--primary); border-color: var(--primary); background: rgba(0, 255, 136, 0.1); box-shadow: 0 0 15px rgba(0, 255, 136, 0.1); }
+
+        h1 { font-size: 2.5rem; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; }
+        .project-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 25px; backdrop-filter: blur(10px); transition: 0.4s; text-align: left; }
+        .project-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
         video { width: 100%; height: 100%; object-fit: cover; }
+        h2 { color: var(--primary); margin: 0; font-size: 1.8rem; }
+        p { color: #aaa; margin: 10px 0; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -24,7 +29,9 @@
             <a href="games.html" class="nav-link active">Games</a>
             <a href="systems.html" class="nav-link">Systems</a>
         </nav>
+
         <h1>My Games</h1>
+
         <div class="project-card">
             <div class="video-wrapper">
                 <video autoplay loop muted playsinline>
@@ -32,7 +39,7 @@
                 </video>
             </div>
             <h2>OBSTCALES</h2>
-            <p>A simple Ranked system</p>
+            <p>A simple Ranked system developed in Roblox Studio.</p>
         </div>
     </div>
 </body>
