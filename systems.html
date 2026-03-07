@@ -1,92 +1,29 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scripting Systems | AhmedTheDEV</title>
+    <title>Scripting Systems | Ahmed Nabil</title>
     <style>
-        :root { 
-            --primary: #00ff88; 
-            --bg: #050505; 
-            --card-bg: rgba(255, 255, 255, 0.03); 
-            --border: rgba(255, 255, 255, 0.1); 
-        }
+        :root { --primary: #00ff88; --bg: #050505; --card-bg: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: #fff; margin: 0; text-align: center; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 40px 40px; }
+        .container { max-width: 900px; margin: auto; padding: 40px 20px; }
         
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background-color: var(--bg); 
-            color: #fff; 
-            margin: 0; 
-            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); 
-            background-size: 40px 40px; 
-        }
-
-        .container { max-width: 1000px; margin: auto; padding: 40px 20px; }
-        
-        /* Nav Bar */
         nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; }
-        .nav-link { 
-            color: #888; 
-            text-decoration: none; 
-            padding: 10px 25px; 
-            border: 1px solid var(--border); 
-            border-radius: 12px; 
-            transition: 0.3s; 
-            background: var(--card-bg); 
-        }
-        .nav-link:hover, .nav-link.active { 
-            color: var(--primary); 
-            border-color: var(--primary); 
-            background: rgba(0, 255, 136, 0.1); 
-        }
+        .nav-link { color: #888; text-decoration: none; padding: 10px 25px; border: 1px solid var(--border); border-radius: 12px; transition: 0.3s; background: var(--card-bg); font-weight: bold; }
+        .nav-link:hover, .nav-link.active { color: var(--primary); border-color: var(--primary); background: rgba(0, 255, 136, 0.1); }
 
-        h1 { 
-            font-size: 2.5rem; 
-            text-align: center;
-            background: linear-gradient(to right, #fff, var(--primary)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            margin-bottom: 40px;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        .project-card { 
-            background: var(--card-bg); 
-            border: 1px solid var(--border); 
-            border-radius: 20px; 
-            padding: 20px; 
-            backdrop-filter: blur(10px); 
-            transition: 0.4s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-        }
-
-        .video-wrapper { 
-            width: 100%; 
-            aspect-ratio: 16/9; 
-            background: #000; 
-            border-radius: 12px; 
-            overflow: hidden; 
-            border: 1px solid var(--border);
-            margin-bottom: 15px;
-        }
-
+        h1 { font-size: 2.5rem; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; }
+        .project-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 25px; backdrop-filter: blur(10px); transition: 0.4s; text-align: left; }
+        .project-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
         video { width: 100%; height: 100%; object-fit: cover; }
-        
-        h2 { color: var(--primary); margin: 0 0 10px 0; font-size: 1.4rem; }
-        p { color: #aaa; font-size: 0.95rem; line-height: 1.6; }
+        h2 { color: var(--primary); margin: 0; font-size: 1.8rem; }
+        p { color: #aaa; margin: 10px 0; line-height: 1.6; }
+        .tag { font-size: 12px; color: var(--primary); background: rgba(0,255,136,0.1); padding: 4px 12px; border-radius: 6px; margin-right: 5px; }
     </style>
 </head>
 <body>
-
     <div class="container">
         <nav>
             <a href="index.html" class="nav-link">Home</a>
@@ -96,23 +33,19 @@
 
         <h1>Scripting Systems</h1>
 
-        <div class="projects-grid">
-            <div class="project-card">
-                <div class="video-wrapper">
-                    <video autoplay loop muted playsinline>
-                        <source src="https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&st=zd5ld2e9&raw=1" type="video/mp4">
-                    </video>
-                </div>
-                <h2>Daily Reward System</h2>
-                <p>A flexbile daily reward system.</p>
-                <div style="margin-top: 10px;">
-                    <span style="font-size: 12px; color: #00ff88; background: rgba(0,255,136,0.1); padding: 4px 10px; border-radius: 5px;">Luau</span>
-                    <span style="font-size: 12px; color: #00ff88; background: rgba(0,255,136,0.1); padding: 4px 10px; border-radius: 5px; margin-right: 5px;">UI</span>
-                </div>
+        <div class="project-card">
+            <div class="video-wrapper">
+                <video autoplay loop muted playsinline>
+                    <source src="https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&st=zd5ld2e9&raw=1" type="video/mp4">
+                </video>
             </div>
-
+            <h2>Daily Reward System</h2>
+            <p>A flexible daily reward system with custom UI integration.</p>
+            <div style="margin-top: 15px;">
+                <span class="tag">Luau</span>
+                <span class="tag">UI Design</span>
             </div>
+        </div>
     </div>
-
 </body>
 </html>
