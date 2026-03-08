@@ -19,93 +19,41 @@
             margin: 0; 
             background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); 
             background-size: 40px 40px; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
         .container { max-width: 900px; width: 100%; padding: 40px 20px; text-align: center; }
         
-        /* الأنميشن الأساسي لظهور الصفحة */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        .animate { animation: fadeInUp 0.8s ease-out forwards; }
+        nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; animation: fadeInUp 0.8s ease-out forwards; }
+        .nav-link { color: #888; text-decoration: none; padding: 10px 25px; border: 1px solid var(--border); border-radius: 12px; transition: 0.3s; background: var(--card-bg); font-weight: bold; }
+        .nav-link.active { color: var(--primary); border-color: var(--primary); background: rgba(0, 255, 136, 0.1); }
 
-        /* Navigation */
-        nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
-        .nav-link { 
-            color: #888; 
-            text-decoration: none; 
-            padding: 10px 25px; 
-            border: 1px solid var(--border); 
-            border-radius: 12px; 
-            transition: 0.3s; 
-            background: var(--card-bg);
-            font-weight: bold;
-        }
-        .nav-link:hover, .nav-link.active { 
-            color: var(--primary); 
-            border-color: var(--primary); 
-            background: rgba(0, 255, 136, 0.1);
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
-        }
+        h1 { font-size: 4rem; margin: 0; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.2)); opacity: 0; animation: fadeInUp 0.8s ease-out 0.2s forwards; }
 
-        /* Hero Section */
-        h1 { 
-            font-size: 4rem; 
-            margin: 0; 
-            background: linear-gradient(to right, #fff, var(--primary)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.2));
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.2s forwards;
-        }
-
-        .welcome-card { 
-            background: var(--card-bg); 
-            border: 1px solid var(--border); 
-            border-radius: 24px; 
-            padding: 60px 40px; 
-            margin-top: 40px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.4s forwards;
-        }
-
-        .description { font-size: 1.4rem; line-height: 1.6; color: #ccc; }
+        .welcome-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 50px 40px; margin-top: 30px; backdrop-filter: blur(10px); opacity: 0; animation: fadeInUp 0.8s ease-out 0.4s forwards; }
+        .description { font-size: 1.3rem; color: #ccc; margin-bottom: 30px; }
         .highlight { color: var(--primary); font-weight: bold; }
 
-        /* اللينكات اللي جوه الكلام */
-        .inline-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: bold;
-            border-bottom: 2px solid rgba(0, 255, 136, 0.3);
-            transition: 0.3s;
-        }
-        .inline-link:hover {
-            background: rgba(0, 255, 136, 0.1);
-            border-bottom-color: var(--primary);
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-        }
+        /* Skills Section */
+        .skills-container { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        .skill-tag { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 8px 15px; border-radius: 20px; font-size: 0.9rem; color: #aaa; transition: 0.3s; }
+        .skill-tag:hover { border-color: var(--primary); color: var(--primary); transform: scale(1.05); }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-            .description { font-size: 1.1rem; }
-        }
+        /* Social Links */
+        .social-links { margin-top: 40px; display: flex; justify-content: center; gap: 20px; opacity: 0; animation: fadeInUp 0.8s ease-out 0.6s forwards; }
+        .social-icon { color: #888; text-decoration: none; font-size: 1.5rem; transition: 0.3s; border: 1px solid var(--border); padding: 10px 20px; border-radius: 12px; background: var(--card-bg); }
+        .social-icon:hover { color: var(--primary); border-color: var(--primary); transform: translateY(-5px); }
+
+        .inline-link { color: var(--primary); text-decoration: none; font-weight: bold; border-bottom: 2px solid rgba(0, 255, 136, 0.3); transition: 0.3s; }
+        .inline-link:hover { background: rgba(0, 255, 136, 0.1); border-bottom-color: var(--primary); }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <nav class="animate">
+        <nav>
             <a href="index.html" class="nav-link active">Home</a>
             <a href="games.html" class="nav-link">Games</a>
             <a href="systems.html" class="nav-link">Systems</a>
@@ -115,13 +63,26 @@
         
         <div class="welcome-card">
             <p class="description">
-                Hello, I Am a <span class="highlight">Roblox Game Developer And Writer</span>. <br>
-                I build 
+                I am a <span class="highlight">Roblox Game Developer</span>. <br>
+                I build high-quality 
                 <a href="games.html" class="inline-link">Games</a> 
                 and advanced 
                 <a href="systems.html" class="inline-link">Systems</a> 
                 in <span class="highlight">Roblox Studio</span>.
             </p>
+
+            <div class="skills-container">
+                <div class="skill-tag">Luau Scripting</div>
+                <div class="skill-tag">UI/UX Design</div>
+                <div class="skill-tag">DataStores</div>
+                <div class="skill-tag">Game Optimization</div>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="#" class="social-icon">Discord</a>
+            <a href="#" class="social-icon">Roblox</a>
+            <a href="#" class="social-icon">GitHub</a>
         </div>
     </div>
 
