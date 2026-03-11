@@ -4,48 +4,432 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scripting Systems | Ahmed Nabil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --primary: #00ff88; --bg: #050505; --card-bg: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: #fff; margin: 0; text-align: center; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 40px 40px; }
-        .container { max-width: 900px; margin: auto; padding: 40px 20px; }
-        
-        nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; }
-        .nav-link { color: #888; text-decoration: none; padding: 10px 25px; border: 1px solid var(--border); border-radius: 12px; transition: 0.3s; background: var(--card-bg); font-weight: bold; }
-        .nav-link:hover, .nav-link.active { color: var(--primary); border-color: var(--primary); background: rgba(0, 255, 136, 0.1); }
+        :root {
+            --teal: #00e0b8;
+            --teal-dim: rgba(0, 224, 184, 0.15);
+            --teal-glow: rgba(0, 224, 184, 0.5);
+            --purple: #7c3aed;
+            --dark: #050508;
+            --card: rgba(10, 8, 20, 0.88);
+            --border: rgba(0, 224, 184, 0.18);
+        }
 
-        h1 { font-size: 2.5rem; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; }
-        .project-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 25px; backdrop-filter: blur(10px); transition: 0.4s; text-align: left; }
-        .project-card:hover { transform: translateY(-10px); border-color: var(--primary); }
-        .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
-        video { width: 100%; height: 100%; object-fit: cover; }
-        h2 { color: var(--primary); margin: 0; font-size: 1.8rem; }
-        p { color: #aaa; margin: 10px 0; line-height: 1.6; }
-        .tag { font-size: 12px; color: var(--primary); background: rgba(0,255,136,0.1); padding: 4px 12px; border-radius: 6px; margin-right: 5px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--dark);
+            color: #ddd;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ── ANIMATED BACKGROUND ── */
+        .bg-layer { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+        .bg-layer::before {
+            content: '';
+            position: absolute;
+            top: -20%; left: -10%;
+            width: 700px; height: 700px;
+            background: radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, transparent 70%);
+            animation: driftA 18s ease-in-out infinite alternate;
+        }
+        .bg-layer::after {
+            content: '';
+            position: absolute;
+            bottom: -20%; right: -10%;
+            width: 600px; height: 600px;
+            background: radial-gradient(ellipse, rgba(0,224,184,0.12) 0%, transparent 70%);
+            animation: driftB 14s ease-in-out infinite alternate;
+        }
+        @keyframes driftA { from { transform: translate(0,0) scale(1); } to { transform: translate(60px,80px) scale(1.15); } }
+        @keyframes driftB { from { transform: translate(0,0) scale(1); } to { transform: translate(-50px,-60px) scale(1.2); } }
+
+        .fog { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .fog-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,224,184,0.3), transparent 60%);
+            animation: floatFog linear infinite;
+        }
+        @keyframes floatFog {
+            0%   { transform: translateY(110vh) scale(0.5); opacity: 0; }
+            10%  { opacity: 1; }
+            90%  { opacity: 0.4; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* ── SWORD WATERMARK ── */
+        .sword-bg {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.07;
+            width: min(600px, 90vw);
+            filter: drop-shadow(0 0 30px var(--teal));
+            animation: swordPulse 6s ease-in-out infinite;
+        }
+        @keyframes swordPulse {
+            0%, 100% { opacity: 0.07; filter: drop-shadow(0 0 25px var(--teal)); }
+            50%       { opacity: 0.13; filter: drop-shadow(0 0 55px var(--teal)); }
+        }
+
+        /* ── LAYOUT ── */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 960px;
+            width: 100%;
+            padding: 50px 24px 80px;
+            text-align: center;
+        }
+
+        /* ── NAV ── */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 70px;
+            animation: fadeDown 0.9s ease-out both;
+        }
+        .nav-link {
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #666;
+            text-decoration: none;
+            padding: 10px 28px;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 4px;
+            background: rgba(5,5,12,0.7);
+            backdrop-filter: blur(8px);
+            transition: all 0.35s;
+        }
+        .nav-link.active,
+        .nav-link:hover {
+            color: var(--teal);
+            border-color: var(--border);
+            background: var(--teal-dim);
+            box-shadow: 0 0 20px rgba(0,224,184,0.1), inset 0 0 10px rgba(0,224,184,0.05);
+        }
+
+        /* ── PAGE HEADER ── */
+        .rune-icon {
+            font-size: 2.2rem;
+            line-height: 1;
+            margin-bottom: 18px;
+            display: block;
+            filter: drop-shadow(0 0 12px var(--teal));
+            animation: fadeDown 0.9s ease-out 0.2s both;
+            color: var(--teal);
+            opacity: 0.9;
+        }
+        h1 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            line-height: 1.05;
+            background: linear-gradient(135deg, #fff 0%, var(--teal) 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 25px rgba(0,224,184,0.3));
+            animation: fadeDown 0.9s ease-out 0.35s both;
+        }
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: rgba(0,224,184,0.55);
+            margin-top: 12px;
+            animation: fadeDown 0.9s ease-out 0.5s both;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            margin: 32px auto 48px;
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--teal), transparent);
+            position: relative;
+            animation: fadeDown 0.9s ease-out 0.55s both;
+        }
+        .divider::before {
+            content: '⬡';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--teal);
+            font-size: 0.6rem;
+            background: var(--dark);
+            padding: 0 6px;
+        }
+
+        /* ── SYSTEMS GRID ── */
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 28px;
+        }
+
+        /* ── SYSTEM CARD ── */
+        .system-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,224,184,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            text-align: left;
+            animation: fadeDown 0.9s ease-out both;
+        }
+        .system-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0,224,184,0.45);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.7), 0 0 40px rgba(0,224,184,0.1);
+        }
+        .system-card::before,
+        .system-card::after {
+            content: '';
+            position: absolute;
+            width: 24px; height: 24px;
+            border-color: var(--teal);
+            border-style: solid;
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 5;
+        }
+        .system-card::before { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+        .system-card::after  { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+        .system-card:hover::before,
+        .system-card:hover::after { opacity: 0.5; }
+
+        /* Video */
+        .video-wrapper {
+            width: 100%; aspect-ratio: 16/9;
+            background: #000; overflow: hidden; position: relative;
+        }
+        .video-wrapper::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(10,8,20,0.95) 100%);
+            pointer-events: none; z-index: 2;
+        }
+        video {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            transition: transform 0.5s ease;
+        }
+        .system-card:hover video { transform: scale(1.04); }
+
+        /* Card body */
+        .card-body { padding: 24px 26px 28px; position: relative; }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+            padding: 3px 10px; border-radius: 2px; margin-bottom: 10px;
+        }
+        .badge-live  { background: rgba(0,224,184,0.12); color: var(--teal); border: 1px solid rgba(0,224,184,0.3); }
+        .badge-dev   { background: rgba(124,58,237,0.12); color: #a78bfa;    border: 1px solid rgba(124,58,237,0.3); }
+        .badge-soon  { background: rgba(255,180,0,0.1);   color: #fbbf24;    border: 1px solid rgba(251,191,36,0.3); }
+
+        .system-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.45rem; font-weight: 700;
+            color: var(--teal);
+            text-shadow: 0 0 12px rgba(0,224,184,0.3);
+            margin-bottom: 10px; line-height: 1.2;
+        }
+        .system-desc {
+            font-size: 0.92rem; color: #999; line-height: 1.75;
+            font-weight: 300; margin-bottom: 20px;
+        }
+
+        .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+        .tag {
+            font-size: 0.65rem; letter-spacing: 0.12em;
+            font-family: 'Cinzel', serif;
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 2px; color: #666; text-transform: uppercase;
+        }
+
+        .card-footer {
+            display: flex; align-items: center; gap: 12px;
+            border-top: 1px solid rgba(0,224,184,0.08);
+            padding-top: 18px;
+        }
+        .btn-play {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--dark); background: var(--teal);
+            text-decoration: none; padding: 10px 22px;
+            border-radius: 2px; transition: all 0.3s; font-weight: 700;
+        }
+        .btn-play:hover {
+            background: #00ffce;
+            box-shadow: 0 0 25px rgba(0,224,184,0.4);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--teal); text-decoration: none;
+            padding: 10px 22px;
+            border: 1px solid var(--border); border-radius: 2px;
+            transition: all 0.3s; background: transparent;
+        }
+        .btn-outline:hover {
+            background: var(--teal-dim);
+            border-color: rgba(0,224,184,0.45);
+        }
+
+        /* ── FOOTER ── */
+        .footer-rune {
+            margin-top: 70px;
+            font-size: 0.7rem; letter-spacing: 0.35em;
+            color: rgba(0,224,184,0.2);
+            font-family: 'Cinzel', serif; text-transform: uppercase;
+            animation: fadeDown 0.9s ease-out 1s both;
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 640px) {
+            .systems-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <nav>
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="games.html" class="nav-link">Games</a>
-            <a href="systems.html" class="nav-link active">Systems</a>
-        </nav>
 
-        <h1>Scripting Systems</h1>
+<div class="bg-layer"></div>
+<div class="fog" id="fog"></div>
 
-        <div class="project-card">
+<!-- Same sword watermark as home & games -->
+<svg class="sword-bg" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#003d30"/>
+      <stop offset="40%"  stop-color="#00e0b8"/>
+      <stop offset="60%"  stop-color="#00e0b8"/>
+      <stop offset="100%" stop-color="#003d30"/>
+    </linearGradient>
+    <linearGradient id="runeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#00e0b8" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.2"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <polygon points="100,10 112,600 100,640 88,600" fill="url(#bladeGrad)" filter="url(#glow)" opacity="0.9"/>
+  <line x1="100" y1="10" x2="100" y2="620" stroke="#00e0b8" stroke-width="0.5" opacity="0.6"/>
+  <g fill="none" stroke="url(#runeGlow)" stroke-width="1.2" opacity="0.8" filter="url(#glow)">
+    <rect x="94" y="120" width="12" height="12" rx="1" transform="rotate(45 100 126)"/>
+    <rect x="94" y="200" width="10" height="10" rx="1" transform="rotate(45 100 205)"/>
+    <rect x="94" y="280" width="12" height="12" rx="1" transform="rotate(45 100 286)"/>
+    <rect x="94" y="360" width="10" height="10" rx="1" transform="rotate(45 100 365)"/>
+    <rect x="94" y="440" width="12" height="12" rx="1" transform="rotate(45 100 446)"/>
+  </g>
+  <path d="M40,640 Q100,620 160,640 L165,660 Q100,645 35,660 Z" fill="#00e0b8" opacity="0.7" filter="url(#glow)"/>
+  <ellipse cx="45"  cy="650" rx="5" ry="4" fill="#7c3aed" opacity="0.9"/>
+  <ellipse cx="155" cy="650" rx="5" ry="4" fill="#7c3aed" opacity="0.9"/>
+  <ellipse cx="100" cy="642" rx="7" ry="5" fill="#00e0b8" opacity="1" filter="url(#glow)"/>
+  <rect x="90" y="660" width="20" height="90" rx="3" fill="#1a0a2e" stroke="#7c3aed" stroke-width="1" opacity="0.9"/>
+  <g stroke="rgba(124,58,237,0.5)" stroke-width="1">
+    <line x1="90" y1="675" x2="110" y2="675"/>
+    <line x1="90" y1="690" x2="110" y2="690"/>
+    <line x1="90" y1="705" x2="110" y2="705"/>
+    <line x1="90" y1="720" x2="110" y2="720"/>
+    <line x1="90" y1="735" x2="110" y2="735"/>
+  </g>
+  <ellipse cx="100" cy="758" rx="18" ry="10" fill="#0d0d1a" stroke="#00e0b8" stroke-width="1.2" filter="url(#glow)"/>
+  <ellipse cx="100" cy="757" rx="8" ry="5" fill="#00e0b8" opacity="0.6"/>
+</svg>
+
+<div class="container">
+    <nav>
+        <a href="index.html"   class="nav-link">Home</a>
+        <a href="games.html"   class="nav-link">Games</a>
+        <a href="systems.html" class="nav-link active">Systems</a>
+    </nav>
+
+    <span class="rune-icon">⚜</span>
+    <h1>Systems</h1>
+    <p class="subtitle">&nbsp;·&nbsp; Roblox Studio</p>
+    <div class="divider"></div>
+
+    <div class="systems-grid">
+
+        <!-- ── CARD 1: Daily Reward System ── -->
+        <div class="system-card" style="animation-delay: 0.7s">
             <div class="video-wrapper">
                 <video autoplay loop muted playsinline>
                     <source src="https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&st=zd5ld2e9&raw=1" type="video/mp4">
                 </video>
             </div>
-            <h2>Daily Reward System</h2>
-            <p>A flexible daily reward system with custom UI integration.</p>
-            <div style="margin-top: 15px;">
-                <span class="tag">Luau</span>
-                <span class="tag">UI Design</span>
+            <div class="card-body">
+                <span class="badge badge-live">● Live</span>
+                <div class="system-title">Daily Reward System</div>
+                <p class="system-desc">A flexible daily reward system with custom UI integration. Tracks streaks, handles edge cases, and delivers a polished player experience.</p>
+                <div class="tags">
+                    <span class="tag">Luau</span>
+                    <span class="tag">UI Design</span>
+                    <span class="tag">DataStore</span>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
+                    <a href="#" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</a>
+                </div>
             </div>
         </div>
+
+        <!-- ── ADD MORE CARDS BELOW THIS LINE ── -->
+        <!-- Copy the block above, swap the video src, title, description, tags, and links -->
+
     </div>
+
+    <p class="footer-rune">From &nbsp;·&nbsp; Egypt. Cairo</p>
+</div>
+
+<script>
+    const fog = document.getElementById('fog');
+    for (let i = 0; i < 18; i++) {
+        const p = document.createElement('div');
+        p.className = 'fog-particle';
+        const size = 40 + Math.random() * 120;
+        p.style.cssText = `
+            width:${size}px; height:${size}px;
+            left:${Math.random()*100}%;
+            animation-duration:${12+Math.random()*20}s;
+            animation-delay:${-Math.random()*25}s;
+            opacity:${0.2+Math.random()*0.4};
+        `;
+        fog.appendChild(p);
+    }
+</script>
 </body>
 </html>
