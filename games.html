@@ -323,6 +323,89 @@
         @media (max-width: 640px) {
             .games-grid { grid-template-columns: 1fr; }
         }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background: rgba(5,5,8,0.85);
+            backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: center;
+            padding: 24px;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .modal {
+            background: rgba(10,8,20,0.97);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            max-width: 620px; width: 100%;
+            position: relative;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.9), 0 0 0 1px rgba(0,224,184,0.08);
+            transform: translateY(24px) scale(0.97);
+            transition: transform 0.35s cubic-bezier(0.23,1,0.32,1);
+            overflow: hidden;
+        }
+        .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+        .modal::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(to right, transparent, var(--teal), transparent);
+        }
+        .modal-corner-tl {
+            position: absolute; top: 12px; left: 12px;
+            width: 20px; height: 20px;
+            border-top: 1px solid rgba(0,224,184,0.4);
+            border-left: 1px solid rgba(0,224,184,0.4);
+            pointer-events: none;
+        }
+        .modal-corner-br {
+            position: absolute; bottom: 12px; right: 12px;
+            width: 20px; height: 20px;
+            border-bottom: 1px solid rgba(0,224,184,0.4);
+            border-right: 1px solid rgba(0,224,184,0.4);
+            pointer-events: none;
+        }
+        .modal-video { width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; }
+        .modal-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .modal-body { padding: 26px 28px 30px; }
+        .modal-badge {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+            padding: 3px 10px; border-radius: 2px; margin-bottom: 12px;
+            background: rgba(0,224,184,0.12); color: var(--teal);
+            border: 1px solid rgba(0,224,184,0.3);
+        }
+        .modal-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.55rem; font-weight: 700;
+            color: var(--teal);
+            text-shadow: 0 0 15px rgba(0,224,184,0.3);
+            margin-bottom: 12px;
+        }
+        .modal-desc {
+            font-size: 0.95rem; color: #999; line-height: 1.8;
+            font-weight: 300; margin-bottom: 20px;
+        }
+        .modal-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 4px; }
+        .modal-tag {
+            font-size: 0.65rem; letter-spacing: 0.12em;
+            font-family: 'Cinzel', serif; text-transform: uppercase;
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 2px; color: #666;
+        }
+        .modal-close {
+            position: absolute; top: 12px; right: 14px;
+            background: none; border: none; cursor: pointer;
+            color: #444; font-size: 1rem;
+            font-family: 'Cinzel', serif; letter-spacing: 0.1em;
+            transition: color 0.2s; z-index: 10;
+            text-transform: uppercase;
+        }
+        .modal-close:hover { color: var(--teal); }
     </style>
 </head>
 <body>
@@ -406,7 +489,7 @@
                 </div>
                 <div class="card-footer">
                     <a href="#" class="btn-play"><i class="fas fa-gamepad"></i> Play Now</a>
-                    <a href="#" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</a>
+                    <button onclick="openModal('modal-obstacles')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
                 </div>
             </div>
         </div>
@@ -417,6 +500,34 @@
     </div>
 
     <p class="footer-rune">From &nbsp;·&nbsp; Egypt. Cairo</p>
+</div>
+
+<!-- ── MODAL: Obstacles ── -->
+<div class="modal-overlay" id="modal-obstacles" onclick="closeModalOutside(event)">
+    <div class="modal">
+        <div class="modal-corner-tl"></div>
+        <div class="modal-corner-br"></div>
+        <button class="modal-close" onclick="closeModal('modal-obstacles')">✕ Close</button>
+        <div class="modal-video">
+            <video autoplay loop muted playsinline>
+                <source src="https://www.dropbox.com/scl/fi/mwj5sewh98qvl3slrrrx9/RobloxStudioBeta_nwi1cUYzGq.mp4?rlkey=g0oekbyojfudlbnihuw5nodam&st=43uvqgb8&raw=1" type="video/mp4">
+            </video>
+        </div>
+        <div class="modal-body">
+            <span class="modal-badge">● Live</span>
+            <div class="modal-title">Obstacles</div>
+            <p class="modal-desc">
+                A competitive obstacle course with a fully ranked progression system.
+                Climb the leaderboard, beat your personal records, and prove your dominance
+                over other players — all inside a polished Roblox experience.
+            </p>
+            <div class="modal-tags">
+                <span class="modal-tag">Ranked System</span>
+                <span class="modal-tag">Obby</span>
+                <span class="modal-tag">Competitive</span>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -434,6 +545,27 @@
         `;
         fog.appendChild(p);
     }
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function closeModalOutside(e) {
+        if (e.target.classList.contains('modal-overlay')) {
+            e.target.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.open')
+                .forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; });
+        }
+    });
 </script>
 </body>
 </html>
