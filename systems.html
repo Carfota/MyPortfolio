@@ -31,7 +31,6 @@
             align-items: center;
         }
 
-        /* ── ANIMATED BACKGROUND ── */
         .bg-layer { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
         .bg-layer::before {
             content: '';
@@ -54,8 +53,7 @@
 
         .fog { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
         .fog-particle {
-            position: absolute;
-            border-radius: 50%;
+            position: absolute; border-radius: 50%;
             background: radial-gradient(circle, rgba(0,224,184,0.3), transparent 60%);
             animation: floatFog linear infinite;
         }
@@ -66,15 +64,11 @@
             100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
-        /* ── SWORD WATERMARK ── */
         .sword-bg {
-            position: fixed;
-            top: 50%; left: 50%;
+            position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.07;
-            width: min(600px, 90vw);
+            z-index: 1; pointer-events: none;
+            opacity: 0.07; width: min(600px, 90vw);
             filter: drop-shadow(0 0 30px var(--teal));
             animation: swordPulse 6s ease-in-out infinite;
         }
@@ -83,165 +77,100 @@
             50%       { opacity: 0.13; filter: drop-shadow(0 0 55px var(--teal)); }
         }
 
-        /* ── LAYOUT ── */
         .container {
-            position: relative;
-            z-index: 10;
-            max-width: 960px;
-            width: 100%;
-            padding: 50px 24px 80px;
-            text-align: center;
+            position: relative; z-index: 10;
+            max-width: 960px; width: 100%;
+            padding: 50px 24px 80px; text-align: center;
         }
 
-        /* ── NAV ── */
         nav {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 70px;
-            animation: fadeDown 0.9s ease-out both;
+            display: flex; justify-content: center; gap: 12px;
+            margin-bottom: 70px; animation: fadeDown 0.9s ease-out both;
         }
         .nav-link {
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #666;
-            text-decoration: none;
-            padding: 10px 28px;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 4px;
-            background: rgba(5,5,12,0.7);
-            backdrop-filter: blur(8px);
-            transition: all 0.35s;
+            font-family: 'Cinzel', serif; font-size: 0.78rem;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: #666; text-decoration: none; padding: 10px 28px;
+            border: 1px solid rgba(255,255,255,0.06); border-radius: 4px;
+            background: rgba(5,5,12,0.7); backdrop-filter: blur(8px); transition: all 0.35s;
         }
-        .nav-link.active,
-        .nav-link:hover {
-            color: var(--teal);
-            border-color: var(--border);
-            background: var(--teal-dim);
+        .nav-link.active, .nav-link:hover {
+            color: var(--teal); border-color: var(--border); background: var(--teal-dim);
             box-shadow: 0 0 20px rgba(0,224,184,0.1), inset 0 0 10px rgba(0,224,184,0.05);
         }
 
-        /* ── PAGE HEADER ── */
         .rune-icon {
-            font-size: 2.2rem;
-            line-height: 1;
-            margin-bottom: 18px;
-            display: block;
+            font-size: 2.2rem; line-height: 1; margin-bottom: 18px; display: block;
             filter: drop-shadow(0 0 12px var(--teal));
-            animation: fadeDown 0.9s ease-out 0.2s both;
-            color: var(--teal);
-            opacity: 0.9;
+            animation: fadeDown 0.9s ease-out 0.2s both; color: var(--teal); opacity: 0.9;
         }
         h1 {
             font-family: 'Cinzel Decorative', serif;
-            font-size: clamp(2.8rem, 7vw, 5.5rem);
-            font-weight: 900;
-            letter-spacing: 0.04em;
-            line-height: 1.05;
+            font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 900;
+            letter-spacing: 0.04em; line-height: 1.05;
             background: linear-gradient(135deg, #fff 0%, var(--teal) 50%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             filter: drop-shadow(0 0 25px rgba(0,224,184,0.3));
             animation: fadeDown 0.9s ease-out 0.35s both;
         }
         .subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
-            color: rgba(0,224,184,0.55);
-            margin-top: 12px;
+            font-family: 'Cinzel', serif; font-size: 0.78rem;
+            letter-spacing: 0.4em; text-transform: uppercase;
+            color: rgba(0,224,184,0.55); margin-top: 12px;
             animation: fadeDown 0.9s ease-out 0.5s both;
         }
-
-        /* ── DIVIDER ── */
         .divider {
-            margin: 32px auto 48px;
-            width: 200px;
-            height: 1px;
+            margin: 32px auto 48px; width: 200px; height: 1px;
             background: linear-gradient(to right, transparent, var(--teal), transparent);
-            position: relative;
-            animation: fadeDown 0.9s ease-out 0.55s both;
+            position: relative; animation: fadeDown 0.9s ease-out 0.55s both;
         }
         .divider::before {
-            content: '⬡';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--teal);
-            font-size: 0.6rem;
-            background: var(--dark);
-            padding: 0 6px;
+            content: '⬡'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); color: var(--teal);
+            font-size: 0.6rem; background: var(--dark); padding: 0 6px;
         }
 
-        /* ── SYSTEMS GRID ── */
         .systems-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
             gap: 28px;
         }
 
-        /* ── SYSTEM CARD ── */
         .system-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-            backdrop-filter: blur(16px);
+            background: var(--card); border: 1px solid var(--border); border-radius: 2px;
+            overflow: hidden; backdrop-filter: blur(16px);
             box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,224,184,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
-            text-align: left;
-            animation: fadeDown 0.9s ease-out both;
+            position: relative; text-align: left; animation: fadeDown 0.9s ease-out both;
         }
         .system-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(0,224,184,0.45);
+            transform: translateY(-8px); border-color: rgba(0,224,184,0.45);
             box-shadow: 0 30px 70px rgba(0,0,0,0.7), 0 0 40px rgba(0,224,184,0.1);
         }
-        .system-card::before,
-        .system-card::after {
-            content: '';
-            position: absolute;
-            width: 24px; height: 24px;
-            border-color: var(--teal);
-            border-style: solid;
-            opacity: 0;
-            transition: opacity 0.4s;
-            z-index: 5;
+        .system-card::before, .system-card::after {
+            content: ''; position: absolute;
+            width: 24px; height: 24px; border-color: var(--teal); border-style: solid;
+            opacity: 0; transition: opacity 0.4s; z-index: 5;
         }
         .system-card::before { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
         .system-card::after  { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
-        .system-card:hover::before,
-        .system-card:hover::after { opacity: 0.5; }
+        .system-card:hover::before, .system-card:hover::after { opacity: 0.5; }
 
-        /* Video */
         .video-wrapper {
-            width: 100%; aspect-ratio: 16/9;
-            background: #000; overflow: hidden; position: relative;
+            width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; position: relative;
         }
         .video-wrapper::after {
-            content: '';
-            position: absolute; inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: linear-gradient(to bottom, transparent 60%, rgba(10,8,20,0.95) 100%);
             pointer-events: none; z-index: 2;
         }
-        video {
-            width: 100%; height: 100%; object-fit: cover; display: block;
-            transition: transform 0.5s ease;
-        }
+        video { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
         .system-card:hover video { transform: scale(1.04); }
 
-        /* Card body */
         .card-body { padding: 24px 26px 28px; position: relative; }
 
-        /* Badge */
         .badge {
-            display: inline-block;
-            font-family: 'Cinzel', serif;
+            display: inline-block; font-family: 'Cinzel', serif;
             font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
             padding: 3px 10px; border-radius: 2px; margin-bottom: 10px;
         }
@@ -250,65 +179,40 @@
         .badge-soon  { background: rgba(255,180,0,0.1);   color: #fbbf24;    border: 1px solid rgba(251,191,36,0.3); }
 
         .system-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.45rem; font-weight: 700;
-            color: var(--teal);
-            text-shadow: 0 0 12px rgba(0,224,184,0.3);
+            font-family: 'Cinzel Decorative', serif; font-size: 1.45rem; font-weight: 700;
+            color: var(--teal); text-shadow: 0 0 12px rgba(0,224,184,0.3);
             margin-bottom: 10px; line-height: 1.2;
         }
-        .system-desc {
-            font-size: 0.92rem; color: #999; line-height: 1.75;
-            font-weight: 300; margin-bottom: 20px;
-        }
+        .system-desc { font-size: 0.92rem; color: #999; line-height: 1.75; font-weight: 300; margin-bottom: 20px; }
 
         .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
         .tag {
-            font-size: 0.65rem; letter-spacing: 0.12em;
-            font-family: 'Cinzel', serif;
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 2px; color: #666; text-transform: uppercase;
+            font-size: 0.65rem; letter-spacing: 0.12em; font-family: 'Cinzel', serif;
+            padding: 4px 10px; background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 2px; color: #666; text-transform: uppercase;
         }
 
-        .card-footer {
-            display: flex; align-items: center; gap: 12px;
-            border-top: 1px solid rgba(0,224,184,0.08);
-            padding-top: 18px;
-        }
+        .card-footer { display: flex; align-items: center; gap: 12px; border-top: 1px solid rgba(0,224,184,0.08); padding-top: 18px; }
         .btn-play {
-            display: inline-flex; align-items: center; gap: 8px;
-            font-family: 'Cinzel', serif;
+            display: inline-flex; align-items: center; gap: 8px; font-family: 'Cinzel', serif;
             font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
-            color: var(--dark); background: var(--teal);
-            text-decoration: none; padding: 10px 22px;
-            border-radius: 2px; transition: all 0.3s; font-weight: 700;
+            color: var(--dark); background: var(--teal); text-decoration: none;
+            padding: 10px 22px; border-radius: 2px; transition: all 0.3s; font-weight: 700;
+            border: none; cursor: pointer;
         }
-        .btn-play:hover {
-            background: #00ffce;
-            box-shadow: 0 0 25px rgba(0,224,184,0.4);
-            transform: translateY(-2px);
-        }
+        .btn-play:hover { background: #00ffce; box-shadow: 0 0 25px rgba(0,224,184,0.4); transform: translateY(-2px); }
         .btn-outline {
-            display: inline-flex; align-items: center; gap: 8px;
-            font-family: 'Cinzel', serif;
+            display: inline-flex; align-items: center; gap: 8px; font-family: 'Cinzel', serif;
             font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
-            color: var(--teal); text-decoration: none;
-            padding: 10px 22px;
-            border: 1px solid var(--border); border-radius: 2px;
-            transition: all 0.3s; background: transparent;
+            color: var(--teal); text-decoration: none; padding: 10px 22px;
+            border: 1px solid var(--border); border-radius: 2px; transition: all 0.3s;
+            background: transparent; cursor: pointer;
         }
-        .btn-outline:hover {
-            background: var(--teal-dim);
-            border-color: rgba(0,224,184,0.45);
-        }
+        .btn-outline:hover { background: var(--teal-dim); border-color: rgba(0,224,184,0.45); }
 
-        /* ── FOOTER ── */
         .footer-rune {
-            margin-top: 70px;
-            font-size: 0.7rem; letter-spacing: 0.35em;
-            color: rgba(0,224,184,0.2);
-            font-family: 'Cinzel', serif; text-transform: uppercase;
+            margin-top: 70px; font-size: 0.7rem; letter-spacing: 0.35em;
+            color: rgba(0,224,184,0.2); font-family: 'Cinzel', serif; text-transform: uppercase;
             animation: fadeDown 0.9s ease-out 1s both;
         }
 
@@ -317,90 +221,60 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 640px) {
-            .systems-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 640px) { .systems-grid { grid-template-columns: 1fr; } }
 
         /* ── MODAL ── */
         .modal-overlay {
             position: fixed; inset: 0; z-index: 100;
-            background: rgba(5,5,8,0.85);
-            backdrop-filter: blur(10px);
-            display: flex; align-items: center; justify-content: center;
-            padding: 24px;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.35s ease;
+            background: rgba(5,5,8,0.85); backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: center; padding: 24px;
+            opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
         }
         .modal-overlay.open { opacity: 1; pointer-events: all; }
         .modal {
-            background: rgba(10,8,20,0.97);
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            max-width: 620px; width: 100%;
-            position: relative;
+            background: rgba(10,8,20,0.97); border: 1px solid var(--border); border-radius: 2px;
+            max-width: 620px; width: 100%; position: relative;
             box-shadow: 0 40px 100px rgba(0,0,0,0.9), 0 0 0 1px rgba(0,224,184,0.08);
             transform: translateY(24px) scale(0.97);
-            transition: transform 0.35s cubic-bezier(0.23,1,0.32,1);
-            overflow: hidden;
+            transition: transform 0.35s cubic-bezier(0.23,1,0.32,1); overflow: hidden;
         }
         .modal-overlay.open .modal { transform: translateY(0) scale(1); }
         .modal::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
             background: linear-gradient(to right, transparent, var(--teal), transparent);
         }
         .modal-corner-tl {
-            position: absolute; top: 12px; left: 12px;
-            width: 20px; height: 20px;
-            border-top: 1px solid rgba(0,224,184,0.4);
-            border-left: 1px solid rgba(0,224,184,0.4);
-            pointer-events: none;
+            position: absolute; top: 12px; left: 12px; width: 20px; height: 20px;
+            border-top: 1px solid rgba(0,224,184,0.4); border-left: 1px solid rgba(0,224,184,0.4); pointer-events: none;
         }
         .modal-corner-br {
-            position: absolute; bottom: 12px; right: 12px;
-            width: 20px; height: 20px;
-            border-bottom: 1px solid rgba(0,224,184,0.4);
-            border-right: 1px solid rgba(0,224,184,0.4);
-            pointer-events: none;
+            position: absolute; bottom: 12px; right: 12px; width: 20px; height: 20px;
+            border-bottom: 1px solid rgba(0,224,184,0.4); border-right: 1px solid rgba(0,224,184,0.4); pointer-events: none;
         }
         .modal-video { width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; }
         .modal-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
         .modal-body { padding: 26px 28px 30px; }
         .modal-badge {
-            display: inline-block;
-            font-family: 'Cinzel', serif;
+            display: inline-block; font-family: 'Cinzel', serif;
             font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
             padding: 3px 10px; border-radius: 2px; margin-bottom: 12px;
-            background: rgba(0,224,184,0.12); color: var(--teal);
-            border: 1px solid rgba(0,224,184,0.3);
+            background: rgba(0,224,184,0.12); color: var(--teal); border: 1px solid rgba(0,224,184,0.3);
         }
         .modal-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.55rem; font-weight: 700;
-            color: var(--teal);
-            text-shadow: 0 0 15px rgba(0,224,184,0.3);
-            margin-bottom: 12px;
+            font-family: 'Cinzel Decorative', serif; font-size: 1.55rem; font-weight: 700;
+            color: var(--teal); text-shadow: 0 0 15px rgba(0,224,184,0.3); margin-bottom: 12px;
         }
-        .modal-desc {
-            font-size: 0.95rem; color: #999; line-height: 1.8;
-            font-weight: 300; margin-bottom: 20px;
-        }
+        .modal-desc { font-size: 0.95rem; color: #999; line-height: 1.8; font-weight: 300; margin-bottom: 20px; }
         .modal-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 4px; }
         .modal-tag {
-            font-size: 0.65rem; letter-spacing: 0.12em;
-            font-family: 'Cinzel', serif; text-transform: uppercase;
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 2px; color: #666;
+            font-size: 0.65rem; letter-spacing: 0.12em; font-family: 'Cinzel', serif; text-transform: uppercase;
+            padding: 4px 10px; background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 2px; color: #666;
         }
         .modal-close {
-            position: absolute; top: 12px; right: 14px;
-            background: none; border: none; cursor: pointer;
-            color: #444; font-size: 1rem;
-            font-family: 'Cinzel', serif; letter-spacing: 0.1em;
-            transition: color 0.2s; z-index: 10;
-            text-transform: uppercase;
+            position: absolute; top: 12px; right: 14px; background: none; border: none;
+            cursor: pointer; color: #444; font-size: 1rem; font-family: 'Cinzel', serif;
+            letter-spacing: 0.1em; transition: color 0.2s; z-index: 10; text-transform: uppercase;
         }
         .modal-close:hover { color: var(--teal); }
     </style>
@@ -410,7 +284,6 @@
 <div class="bg-layer"></div>
 <div class="fog" id="fog"></div>
 
-<!-- Same sword watermark as home & games -->
 <svg class="sword-bg" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -490,67 +363,84 @@
             </div>
         </div>
 
+        <!-- ── CARD 2: Admin Announcement System ── -->
+        <div class="system-card" style="animation-delay: 0.9s">
+            <div class="video-wrapper">
+                <video autoplay loop muted playsinline>
+                    <source src="https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&st=6hokqcly&raw=1" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-body">
+                <span class="badge badge-live">● Live</span>
+                <div class="system-title">Admin Announcement System</div>
+                <p class="system-desc">A flexible Admin Announcement System built in Luau inside Roblox Studio. Allows admins to broadcast styled messages to all players instantly.</p>
+                <div class="tags">
+                    <span class="tag">Luau</span>
+                    <span class="tag">Commissioned</span>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
+                    <button onclick="openModal('modal-admin')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
+                </div>
+            </div>
+        </div>
+
         <!-- ── ADD MORE CARDS BELOW THIS LINE ── -->
-        <!-- Copy the block above, swap the video src, title, description, tags, and links -->
+        <!-- Copy a card block above, give the View button a new unique modal id, then add a matching modal at the bottom -->
 
     </div>
 
     <p class="footer-rune">From &nbsp;·&nbsp; Egypt. Cairo</p>
 </div>
 
-<!-- ── MODAL: Daily Reward System ── -->
+<!-- ── MODAL 1: Daily Reward System ── -->
 <div class="modal-overlay" id="modal-daily" onclick="closeModalOutside(event)">
     <div class="modal">
         <div class="modal-corner-tl"></div>
         <div class="modal-corner-br"></div>
         <button class="modal-close" onclick="closeModal('modal-daily')">✕ Close</button>
         <div class="modal-video">
-            <video autoplay loop muted playsinline id="modal-daily-video">
+            <video autoplay loop muted playsinline>
                 <source src="https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&st=zd5ld2e9&raw=1" type="video/mp4">
             </video>
         </div>
         <div class="modal-body">
             <span class="modal-badge">● Live</span>
             <div class="modal-title">Daily Reward System</div>
-            <p class="modal-desc">
-                A fully flexible daily reward system built in Luau
-            </p>
+            <p class="modal-desc">A fully flexible daily reward system built in Luau with custom UI integration. Tracks player streaks, handles edge cases, and delivers a polished animated player experience — backed by DataStore for persistence.</p>
             <div class="modal-tags">
                 <span class="modal-tag">Luau</span>
+                <span class="modal-tag">UI Design</span>
+                <span class="modal-tag">DataStore</span>
             </div>
         </div>
     </div>
 </div>
 
-
-
-    <div class="modal-overlay" id="modal-daily" onclick="closeModalOutside(event)">
+<!-- ── MODAL 2: Admin Announcement System ── -->
+<div class="modal-overlay" id="modal-admin" onclick="closeModalOutside(event)">
     <div class="modal">
         <div class="modal-corner-tl"></div>
         <div class="modal-corner-br"></div>
-        <button class="modal-close" onclick="closeModal('modal-daily')">✕ Close</button>
+        <button class="modal-close" onclick="closeModal('modal-admin')">✕ Close</button>
         <div class="modal-video">
-            <video autoplay loop muted playsinline id="modal-daily-video">
+            <video autoplay loop muted playsinline>
                 <source src="https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&st=6hokqcly&raw=1" type="video/mp4">
             </video>
         </div>
         <div class="modal-body">
             <span class="modal-badge">● Live</span>
             <div class="modal-title">Admin Announcement System</div>
-            <p class="modal-desc">
-                Flexbile Admin Announcement System i made with Luau in roblox studio.
-            </p>
+            <p class="modal-desc">A flexible Admin Announcement System built in Luau inside Roblox Studio. Allows admins to broadcast styled messages to all players instantly with a clean, polished UI.</p>
             <div class="modal-tags">
                 <span class="modal-tag">Luau</span>
-                  <span class="modal-tag">Commissioned</span>
+                <span class="modal-tag">Commissioned</span>
             </div>
         </div>
     </div>
 </div>
 
-
 <script>
-    // Fog particles
     const fog = document.getElementById('fog');
     for (let i = 0; i < 18; i++) {
         const p = document.createElement('div');
@@ -566,7 +456,6 @@
         fog.appendChild(p);
     }
 
-    // Modal
     function openModal(id) {
         document.getElementById(id).classList.add('open');
         document.body.style.overflow = 'hidden';
@@ -581,7 +470,6 @@
             document.body.style.overflow = '';
         }
     }
-    // Close with Escape key
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
             document.querySelectorAll('.modal-overlay.open')
