@@ -350,7 +350,7 @@
             <div class="card-body">
                 <span class="badge badge-live">● Live</span>
                 <div class="system-title">Daily Reward System</div>
-                <p class="system-desc">A flexible daily reward system I made</p>
+                <p class="system-desc">A flexible daily reward system I made.</p>
                 <div class="tags">
                     <span class="tag">Luau</span>
                 </div>
@@ -383,6 +383,29 @@
             </div>
         </div>
 
+        <!-- ── CARD 3: Advanced AI System ── -->
+        <div class="system-card" style="animation-delay: 1.1s">
+            <div class="video-wrapper">
+                <video autoplay loop muted playsinline>
+                    <source src="https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&st=aunqojnz&raw=1" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-body">
+                <span class="badge badge-live">● Live</span>
+                <div class="system-title">Advanced AI System</div>
+                <p class="system-desc">An advanced AI NPC using GroqCloud API and Replit. The NPC answers and interacts based on what you say, with a reputation system per player.</p>
+                <div class="tags">
+                    <span class="tag">Luau</span>
+                    <span class="tag">GroqCloud</span>
+                    <span class="tag">For Fun</span>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
+                    <button onclick="openModal('modal-advancedai')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
+                </div>
+            </div>
+        </div>
+
         <!-- ── ADD MORE CARDS BELOW THIS LINE ── -->
         <!-- Copy a card block above, give the View button a new unique modal id, then add a matching modal at the bottom -->
 
@@ -405,11 +428,9 @@
         <div class="modal-body">
             <span class="modal-badge">● Live</span>
             <div class="modal-title">Daily Reward System</div>
-            <p class="modal-desc">A fully flexible daily reward system built in Luau</p>
+            <p class="modal-desc">A fully flexible daily reward system built in Luau.</p>
             <div class="modal-tags">
                 <span class="modal-tag">Luau</span>
-         
-         
             </div>
         </div>
     </div>
@@ -438,12 +459,12 @@
     </div>
 </div>
 
-
-    <div class="modal-overlay" id="modal-AdvancedAi" onclick="closeModalOutside(event)">
+<!-- ── MODAL 3: Advanced AI System ── -->
+<div class="modal-overlay" id="modal-advancedai" onclick="closeModalOutside(event)">
     <div class="modal">
         <div class="modal-corner-tl"></div>
         <div class="modal-corner-br"></div>
-        <button class="modal-close" onclick="closeModal('modal--AdvancedAi')">✕ Close</button>
+        <button class="modal-close" onclick="closeModal('modal-advancedai')">✕ Close</button>
         <div class="modal-video">
             <video autoplay loop muted playsinline>
                 <source src="https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&st=aunqojnz&raw=1" type="video/mp4">
@@ -451,16 +472,16 @@
         </div>
         <div class="modal-body">
             <span class="modal-badge">● Live</span>
-            <div class="modal-title">Advanced Ai system</div>
-            <p class="modal-desc"> An advanced AI SYSTEM NPC using GroqCloud api key and Replit,  Ai Answers You. Interacts With What Are You Saying Even With  Reputation System For Every Player. The normal Ai for the npc i made with luau the ai system and reply made with replit using https service</p>
+            <div class="modal-title">Advanced AI System</div>
+            <p class="modal-desc">An advanced AI NPC using GroqCloud API and Replit. The NPC answers and interacts based on what you say, even with a reputation system for every player. The NPC base logic is built in Luau — the AI responses are handled via Replit using an HTTP service.</p>
             <div class="modal-tags">
                 <span class="modal-tag">Luau</span>
-                <span class="modal-tag">ForFun</span>
+                <span class="modal-tag">GroqCloud</span>
+                <span class="modal-tag">For Fun</span>
             </div>
         </div>
     </div>
 </div>
-
 
 <script>
     const fog = document.getElementById('fog');
