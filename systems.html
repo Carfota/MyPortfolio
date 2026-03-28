@@ -406,6 +406,29 @@
             </div>
         </div>
 
+        <!-- ── CARD 4: Combat System ── -->
+        <div class="system-card" style="animation-delay: 1.3s">
+            <div class="video-wrapper">
+                <video autoplay loop muted playsinline>
+                    <source src="https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&st=u8gaaye2&raw=1" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-body">
+                <span class="badge badge-live">● Live</span>
+                <div class="system-title">Flexible Combat System</div>
+                <p class="system-desc">A modular combo-based combat system built in Luau. Easily extendable with sword support, camera shake, sound effects, and unique knockback per combo.</p>
+                <div class="tags">
+                    <span class="tag">Luau</span>
+                    <span class="tag">Combat</span>
+                    <span class="tag">For Fun</span>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
+                    <button onclick="openModal('modal-combatsystem')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
+                </div>
+            </div>
+        </div>
+
         <!-- ── ADD MORE CARDS BELOW THIS LINE ── -->
         <!-- Copy a card block above, give the View button a new unique modal id, then add a matching modal at the bottom -->
 
@@ -483,8 +506,8 @@
     </div>
 </div>
 
-
-    <div class="modal-overlay" id="modal-combatsystem" onclick="closeModalOutside(event)">
+<!-- ── MODAL 4: Combat System ── -->
+<div class="modal-overlay" id="modal-combatsystem" onclick="closeModalOutside(event)">
     <div class="modal">
         <div class="modal-corner-tl"></div>
         <div class="modal-corner-br"></div>
@@ -496,11 +519,8 @@
         </div>
         <div class="modal-body">
             <span class="modal-badge">● Live</span>
-            <div class="modal-title">Flexbile CombatSystem</div>
-            <p class="modal-desc">Built to extend:
-The architecture makes it straightforward to layer on top of this base — swap M1 input for a Tool.Activated for sword support, add camera shake by firing a RemoteEvent on hit, attach sound effects per combo index, or drive unique knockback animations from the same comboIndex value already passed through the system.
-
-</p>
+            <div class="modal-title">Flexible Combat System</div>
+            <p class="modal-desc">A modular combo-based combat system built in Luau. Designed to be easily extended — add sword support, camera shake on hit, sound effects per combo index, or unique knockback animations, all on top of the same clean base system.</p>
             <div class="modal-tags">
                 <span class="modal-tag">Luau</span>
                 <span class="modal-tag">Combat</span>
@@ -509,8 +529,6 @@ The architecture makes it straightforward to layer on top of this base — swap 
         </div>
     </div>
 </div>
-
-    
 
 <script>
     const fog = document.getElementById('fog');
