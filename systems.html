@@ -430,6 +430,29 @@
         </div>
 
         <!-- ── ADD MORE CARDS BELOW THIS LINE ── -->
+
+                <div class="system-card" style="animation-delay: 1.3s">
+            <div class="video-wrapper">
+                <video autoplay loop muted playsinline>
+                    <source src="https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&st=q7de1f85&raw=1" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-body">
+                <span class="badge badge-live">● Live</span>
+                <div class="system-title">Flexible Combat System</div>
+                <p class="system-desc">A shiftlock system that u can lock on everything not just a player with a custom gui(ididnt made it!!!)</p>
+                <div class="tags">
+                    <span class="tag">Luau</span>
+                    <span class="tag">For Fun</span>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
+                    <button onclick="openModal('modal-Shiftlock')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Copy a card block above, give the View button a new unique modal id, then add a matching modal at the bottom -->
 
     </div>
@@ -530,6 +553,30 @@
         </div>
     </div>
 </div>
+
+    <div class="modal-overlay" id="modal-Shiftlock" onclick="closeModalOutside(event)">
+    <div class="modal">
+        <div class="modal-corner-tl"></div>
+        <div class="modal-corner-br"></div>
+        <button class="modal-close" onclick="closeModal('modal-Shiftlock')">✕ Close</button>
+        <div class="modal-video">
+            <video autoplay loop muted playsinline>
+                <source src="https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&st=u8gaaye2&raw=1" type="video/mp4">
+            </video>
+        </div>
+        <div class="modal-body">
+            <span class="modal-badge">● Live</span>
+            <div class="modal-title">Shiftlock System</div>
+            <p class="modal-desc">A shiftlock system that u can lock on everything not just a player with a custom gui(iDidnt made it!!!)</p>
+            <div class="modal-tags">
+                <span class="modal-tag">Luau</span>
+                <span class="modal-tag">For Fun</span>
+       
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     const fog = document.getElementById('fog');
