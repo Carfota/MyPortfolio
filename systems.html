@@ -355,8 +355,7 @@
                     <span class="tag">Luau</span>
                 </div>
                 <div class="card-footer">
-                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
-                    <button onclick="openModal('modal-daily')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
+                    <button onclick="openModal('modal-daily')" class="btn-play"><i class="fas fa-external-link-alt"></i> View</button>
                 </div>
             </div>
         </div>
@@ -377,8 +376,7 @@
                     <span class="tag">Commissioned</span>
                 </div>
                 <div class="card-footer">
-                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
-                    <button onclick="openModal('modal-admin')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
+                    <button onclick="openModal('modal-admin')" class="btn-play"><i class="fas fa-external-link-alt"></i> View</button>
                 </div>
             </div>
         </div>
@@ -400,8 +398,7 @@
                     <span class="tag">For Fun</span>
                 </div>
                 <div class="card-footer">
-                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
-                    <button onclick="openModal('modal-advancedai')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
+                    <button onclick="openModal('modal-advancedai')" class="btn-play"><i class="fas fa-external-link-alt"></i> View</button>
                 </div>
             </div>
         </div>
@@ -423,15 +420,13 @@
                     <span class="tag">For Fun</span>
                 </div>
                 <div class="card-footer">
-                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
-                    <button onclick="openModal('modal-combatsystem')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
+                    <button onclick="openModal('modal-combatsystem')" class="btn-play"><i class="fas fa-external-link-alt"></i> View</button>
                 </div>
             </div>
         </div>
 
-        <!-- ── ADD MORE CARDS BELOW THIS LINE ── -->
-
-                <div class="system-card" style="animation-delay: 1.3s">
+        <!-- ── CARD 5: Locking System ── -->
+        <div class="system-card" style="animation-delay: 1.3s">
             <div class="video-wrapper">
                 <video autoplay loop muted playsinline>
                     <source src="https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&st=q7de1f85&raw=1" type="video/mp4">
@@ -446,14 +441,10 @@
                     <span class="tag">For Fun</span>
                 </div>
                 <div class="card-footer">
-                    <a href="#" class="btn-play"><i class="fas fa-play"></i> Preview</a>
-                    <button onclick="openModal('modal-Shiftlock')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
+                    <button onclick="openModal('modal-Shiftlock')" class="btn-play"><i class="fas fa-external-link-alt"></i> View</button>
                 </div>
             </div>
         </div>
-
-
-        <!-- Copy a card block above, give the View button a new unique modal id, then add a matching modal at the bottom -->
 
     </div>
 
@@ -554,7 +545,8 @@
     </div>
 </div>
 
-    <div class="modal-overlay" id="modal-Shiftlock" onclick="closeModalOutside(event)">
+<!-- ── MODAL 5: Locking System ── -->
+<div class="modal-overlay" id="modal-Shiftlock" onclick="closeModalOutside(event)">
     <div class="modal">
         <div class="modal-corner-tl"></div>
         <div class="modal-corner-br"></div>
@@ -571,12 +563,10 @@
             <div class="modal-tags">
                 <span class="modal-tag">Luau</span>
                 <span class="modal-tag">For Fun</span>
-       
             </div>
         </div>
     </div>
 </div>
-
 
 <script>
     const fog = document.getElementById('fog');
