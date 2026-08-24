@@ -4,582 +4,937 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scripting Systems | Carfota</title>
+    
+    <!-- Google Fonts for Dopamine/Maximalist Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         :root {
-            --teal: #00e0b8;
-            --teal-dim: rgba(0, 224, 184, 0.15);
-            --teal-glow: rgba(0, 224, 184, 0.5);
-            --purple: #7c3aed;
-            --dark: #050508;
-            --card: rgba(10, 8, 20, 0.88);
-            --border: rgba(0, 224, 184, 0.18);
+            /* Base Colors */
+            --bg: #0D0D1A;
+            --fg: #FFFFFF;
+            --muted-container: rgba(45, 27, 78, 0.88);
+            
+            /* The 5 Dopamine Accents */
+            --accent-1: #FF3AF2;  /* Electric Magenta */
+            --accent-2: #00F5D4;  /* Digital Cyan */
+            --accent-3: #FFE600;  /* Screaming Yellow */
+            --accent-4: #FF6B35;  /* Electric Orange */
+            --accent-5: #7B2FFF;  /* Vivid Purple */
+
+            /* Fonts */
+            --font-head: 'Outfit', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-display: 'Bungee', cursive;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Raleway', sans-serif;
-            background-color: var(--dark);
-            color: #ddd;
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
             min-height: 100vh;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
-        /* ── ANIMATED BACKGROUND ── */
-        .bg-layer { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
-        .bg-layer::before {
-            content: ''; position: absolute; top: -20%; left: -10%; width: 700px; height: 700px;
-            background: radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, transparent 70%);
-            animation: driftA 18s ease-in-out infinite alternate;
-        }
-        .bg-layer::after {
-            content: ''; position: absolute; bottom: -20%; right: -10%; width: 600px; height: 600px;
-            background: radial-gradient(ellipse, rgba(0,224,184,0.12) 0%, transparent 70%);
-            animation: driftB 14s ease-in-out infinite alternate;
-        }
-        @keyframes driftA { from { transform: translate(0,0) scale(1); } to { transform: translate(60px,80px) scale(1.15); } }
-        @keyframes driftB { from { transform: translate(0,0) scale(1); } to { transform: translate(-50px,-60px) scale(1.2); } }
-
-        .fog { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-        .fog-particle {
-            position: absolute; border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,224,184,0.3), transparent 60%);
-            animation: floatFog linear infinite;
-        }
-        @keyframes floatFog {
-            0%   { transform: translateY(110vh) scale(0.5); opacity: 0; }
-            10%  { opacity: 1; }
-            90%  { opacity: 0.4; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        /* ─── LAYERED PATTERNS ─── */
+        .bg-pattern-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .sword-bg {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 1; pointer-events: none; opacity: 0.07; width: min(600px, 90vw);
-            filter: drop-shadow(0 0 30px var(--teal)); animation: swordPulse 6s ease-in-out infinite;
-        }
-        @keyframes swordPulse {
-            0%, 100% { opacity: 0.07; filter: drop-shadow(0 0 25px var(--teal)); }
-            50%       { opacity: 0.13; filter: drop-shadow(0 0 55px var(--teal)); }
+        .pattern-dots {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, var(--accent-1) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+            opacity: 0.15;
         }
 
+        .pattern-stripes {
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 14px,
+                rgba(255, 230, 0, 0.05) 14px,
+                rgba(255, 230, 0, 0.05) 28px
+            );
+        }
+
+        .pattern-mesh {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(255, 58, 242, 0.22) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 30%, rgba(0, 245, 212, 0.18) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(123, 47, 255, 0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 70%, rgba(255, 107, 53, 0.15) 0%, transparent 50%);
+        }
+
+        /* ─── WATERMARK TYPOGRAPHY ─── */
+        .bg-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-10deg);
+            font-family: var(--font-display);
+            font-size: clamp(8rem, 18vw, 18rem);
+            line-height: 0.8;
+            color: rgba(0, 245, 212, 0.03);
+            text-shadow: 
+                4px 4px 0px rgba(255, 58, 242, 0.03),
+                -4px -4px 0px rgba(255, 230, 0, 0.03);
+            white-space: nowrap;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ─── FLOATING DECORATIONS ─── */
+        .floating-shape {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            filter: drop-shadow(0 0 15px currentColor);
+        }
+
+        .shape-1 { top: 6%; left: 4%; color: var(--accent-3); animation: wiggle 2s ease-in-out infinite; font-size: 2.8rem; }
+        .shape-2 { top: 18%; right: 5%; color: var(--accent-2); animation: float 5s ease-in-out infinite; font-size: 2.6rem; }
+        .shape-3 { top: 45%; left: 2%; color: var(--accent-1); animation: spin-slow 16s linear infinite; font-size: 3.2rem; }
+        .shape-4 { bottom: 15%; right: 4%; color: var(--accent-4); animation: bounce-subtle 2.5s ease-in-out infinite; font-size: 3rem; }
+        .shape-5 { bottom: 35%; left: 3%; color: var(--accent-5); animation: float-reverse 6s ease-in-out infinite; font-size: 2.4rem; }
+
+        /* ─── CONTAINER ─── */
         .container {
-            position: relative; z-index: 10; max-width: 1000px; width: 100%;
-            padding: 50px 24px 80px; text-align: center;
+            position: relative;
+            z-index: 10;
+            max-width: 1100px;
+            width: 100%;
+            padding: 40px 24px 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* ── NAV ── */
-        nav { display: flex; justify-content: center; gap: 12px; margin-bottom: 70px; animation: fadeDown 0.9s ease-out both; }
+        /* ─── NAVIGATION ─── */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 45px;
+            flex-wrap: wrap;
+        }
+
         .nav-link {
-            font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase;
-            color: #666; text-decoration: none; padding: 10px 28px; border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 4px; background: rgba(5,5,12,0.7); backdrop-filter: blur(8px); transition: all 0.35s;
-        }
-        .nav-link.active, .nav-link:hover {
-            color: var(--teal); border-color: var(--border); background: var(--teal-dim);
-            box-shadow: 0 0 20px rgba(0,224,184,0.1), inset 0 0 10px rgba(0,224,184,0.05);
+            font-family: var(--font-head);
+            font-weight: 900;
+            font-size: 0.95rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--fg);
+            text-decoration: none;
+            padding: 12px 32px;
+            border-radius: 9999px;
+            background: var(--muted-container);
+            border: 4px solid var(--accent-1);
+            box-shadow: 4px 4px 0px var(--accent-5), 8px 8px 0px var(--accent-2);
+            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .rune-icon {
-            font-size: 2.2rem; line-height: 1; margin-bottom: 18px; display: block;
-            filter: drop-shadow(0 0 12px var(--teal)); animation: fadeDown 0.9s ease-out 0.2s both; color: var(--teal); opacity: 0.9;
+        .nav-link:nth-child(2) {
+            border-color: var(--accent-2);
+            box-shadow: 4px 4px 0px var(--accent-1), 8px 8px 0px var(--accent-3);
         }
-        
+
+        .nav-link:nth-child(3) {
+            border-color: var(--accent-3);
+            box-shadow: 4px 4px 0px var(--accent-4), 8px 8px 0px var(--accent-5);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            transform: scale(1.1) translateY(-4px) rotate(-1deg);
+            border-color: var(--accent-3);
+            background: var(--accent-1);
+            color: #0D0D1A;
+            box-shadow: 
+                0 0 25px rgba(255, 58, 242, 0.8),
+                6px 6px 0px var(--accent-3),
+                12px 12px 0px var(--accent-2);
+        }
+
+        /* ─── HEADER ─── */
+        .hero-badge {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            color: #0D0D1A;
+            background: var(--accent-2);
+            padding: 8px 24px;
+            border-radius: 9999px;
+            border: 4px dashed var(--accent-1);
+            transform: rotate(-2deg);
+            box-shadow: 4px 4px 0px var(--accent-3), 8px 8px 0px var(--accent-5);
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            animation: wiggle 3s ease-in-out infinite;
+        }
+
         h1 {
-            font-family: 'Cinzel Decorative', serif; font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 900;
-            letter-spacing: 0.04em; line-height: 1.05;
-            background: linear-gradient(135deg, #fff 0%, var(--teal) 50%, #a78bfa 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            filter: drop-shadow(0 0 25px rgba(0,224,184,0.3)); animation: fadeDown 0.9s ease-out 0.35s both;
-        }
-        .subtitle {
-            font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.4em; text-transform: uppercase;
-            color: rgba(0,224,184,0.55); margin-top: 12px; animation: fadeDown 0.9s ease-out 0.5s both;
-        }
-        .divider {
-            margin: 32px auto 36px; width: 200px; height: 1px;
-            background: linear-gradient(to right, transparent, var(--teal), transparent);
-            position: relative; animation: fadeDown 0.9s ease-out 0.55s both;
-        }
-        .divider::before {
-            content: '⬡'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: var(--teal); font-size: 0.6rem; background: var(--dark); padding: 0 6px;
+            font-family: var(--font-head);
+            font-size: clamp(3.6rem, 9vw, 6.8rem);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            text-align: center;
+            color: var(--fg);
+            text-shadow: 
+                3px 3px 0px var(--accent-5),
+                6px 6px 0px var(--accent-1),
+                9px 9px 0px var(--accent-2),
+                12px 12px 0px var(--accent-3);
+            margin-bottom: 12px;
         }
 
-        /* ── ADVANCED FILTER BAR ── */
+        .gradient-text {
+            background: linear-gradient(90deg, var(--accent-2), var(--accent-3), var(--accent-1), var(--accent-4), var(--accent-2));
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 4s ease infinite;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-display);
+            font-size: clamp(0.95rem, 2vw, 1.25rem);
+            color: var(--accent-3);
+            text-shadow: 2px 2px 0px var(--accent-5), 4px 4px 0px var(--accent-1);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            transform: rotate(1deg);
+        }
+
+        /* ─── DOPAMINE FILTER BAR ─── */
         .filter-container {
-            display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
-            margin-bottom: 50px; animation: fadeDown 0.9s ease-out 0.6s both;
-        }
-        .filter-btn {
-            font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
-            color: #777; background: rgba(15,12,28,0.6); border: 1px solid rgba(255,255,255,0.05);
-            padding: 8px 20px; border-radius: 2px; cursor: pointer; transition: all 0.3s ease;
-        }
-        .filter-btn:hover, .filter-btn.active {
-            color: var(--teal); border-color: rgba(0,224,184,0.4); background: rgba(0,224,184,0.08);
-            box-shadow: 0 0 15px rgba(0,224,184,0.1);
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+            width: 100%;
         }
 
-        /* ── VERTICAL STREAM LAYOUT ── */
+        .filter-btn {
+            font-family: var(--font-head);
+            font-weight: 900;
+            font-size: 0.82rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--fg);
+            background: var(--muted-container);
+            padding: 10px 22px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn:nth-child(1) { border: 3px solid var(--accent-1); box-shadow: 3px 3px 0px var(--accent-5); }
+        .filter-btn:nth-child(2) { border: 3px dashed var(--accent-2); box-shadow: 3px 3px 0px var(--accent-1); }
+        .filter-btn:nth-child(3) { border: 3px solid var(--accent-3); box-shadow: 3px 3px 0px var(--accent-4); }
+        .filter-btn:nth-child(4) { border: 3px solid var(--accent-4); box-shadow: 3px 3px 0px var(--accent-2); }
+        .filter-btn:nth-child(5) { border: 3px dashed var(--accent-5); box-shadow: 3px 3px 0px var(--accent-3); }
+        .filter-btn:nth-child(6) { border: 3px solid var(--accent-2); box-shadow: 3px 3px 0px var(--accent-1); }
+
+        .filter-btn:hover, .filter-btn.active {
+            transform: scale(1.12) translateY(-3px) rotate(-1deg);
+            background: var(--accent-3);
+            color: #0D0D1A;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 20px rgba(255, 230, 0, 0.8), 5px 5px 0px var(--accent-5);
+        }
+
+        /* ─── VERTICAL SYSTEMS STREAM ─── */
         .systems-stream {
-            display: flex; flex-direction: column; gap: 45px; width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            width: 100%;
         }
 
         .system-showcase {
-            display: flex; background: var(--card); border: 1px solid var(--border);
-            border-radius: 4px; overflow: hidden; backdrop-filter: blur(16px);
-            box-shadow: 0 30px 70px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.3, 1); text-align: left;
-            animation: fadeDown 0.9s ease-out both; opacity: 1; transform: scale(1);
+            display: flex;
+            background: var(--muted-container);
+            border-radius: 32px;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: left;
+            position: relative;
         }
+
         .system-showcase.hidden {
-            display: none !important; opacity: 0; transform: scale(0.95);
+            display: none !important;
         }
-        
-        /* Alternate Layout for premium rhythm */
-        .system-showcase:nth-child(even) { flex-direction: row-reverse; }
+
+        /* 5-Color Rotation for Cards */
+        .system-showcase:nth-child(5n+1) {
+            border: 5px solid var(--accent-1);
+            box-shadow: 8px 8px 0px var(--accent-3), 16px 16px 0px var(--accent-2), 24px 24px 0px var(--accent-5);
+            transform: rotate(-0.5deg);
+        }
+        .system-showcase:nth-child(5n+2) {
+            border: 5px dashed var(--accent-2);
+            box-shadow: 8px 8px 0px var(--accent-1), 16px 16px 0px var(--accent-4), 24px 24px 0px var(--accent-5);
+            transform: rotate(0.8deg);
+        }
+        .system-showcase:nth-child(5n+3) {
+            border: 5px solid var(--accent-3);
+            box-shadow: 8px 8px 0px var(--accent-5), 16px 16px 0px var(--accent-1), 24px 24px 0px var(--accent-2);
+            transform: rotate(-0.8deg);
+        }
+        .system-showcase:nth-child(5n+4) {
+            border: 5px solid var(--accent-4);
+            box-shadow: 8px 8px 0px var(--accent-2), 16px 16px 0px var(--accent-3), 24px 24px 0px var(--accent-1);
+            transform: rotate(0.6deg);
+        }
+        .system-showcase:nth-child(5n+5) {
+            border: 5px dashed var(--accent-5);
+            box-shadow: 8px 8px 0px var(--accent-4), 16px 16px 0px var(--accent-2), 24px 24px 0px var(--accent-3);
+            transform: rotate(-0.5deg);
+        }
+
+        .system-showcase:nth-child(even) {
+            flex-direction: row-reverse;
+        }
 
         .system-showcase:hover {
-            border-color: rgba(0,224,184,0.4);
-            box-shadow: 0 35px 80px rgba(0,0,0,0.7), 0 0 30px rgba(0,224,184,0.08);
+            transform: scale(1.02) translateY(-6px) rotate(0deg) !important;
+            box-shadow: 
+                0 0 35px rgba(255, 58, 242, 0.5),
+                12px 12px 0px var(--accent-3),
+                24px 24px 0px var(--accent-2),
+                36px 36px 0px var(--accent-5) !important;
         }
 
-        /* Premium Massive Media Engine */
+        /* ─── MEDIA ENGINE ─── */
         .media-container {
-            flex: 1.2; min-width: 50%; max-width: 60%; aspect-ratio: 16/9;
-            background: #000; overflow: hidden; position: relative; cursor: zoom-in;
+            flex: 1.25;
+            min-width: 50%;
+            max-width: 58%;
+            aspect-ratio: 16/9;
+            background: #000;
+            overflow: hidden;
+            position: relative;
+            cursor: zoom-in;
+            border-right: 4px solid var(--accent-1);
         }
-        .media-container::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(5,5,10,0.4) 0%, transparent 40%);
-            pointer-events: none; z-index: 2;
+
+        .system-showcase:nth-child(even) .media-container {
+            border-right: none;
+            border-left: 4px solid var(--accent-2);
         }
+
         .media-container video {
-            width: 100%; height: 100%; object-fit: cover; display: block;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.3, 1);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.3, 1);
         }
-        .system-showcase:hover .media-container video { transform: scale(1.03); }
 
-        /* Premium Floating View Overlay on Hover */
+        .system-showcase:hover .media-container video {
+            transform: scale(1.05);
+        }
+
         .media-overlay {
-            position: absolute; inset: 0; background: rgba(0, 224, 184, 0.08);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.3s ease; z-index: 3;
-        }
-        .media-container:hover .media-overlay { opacity: 1; }
-        .media-overlay i {
-            color: #fff; background: var(--dark); border: 1px solid var(--teal);
-            width: 50px; height: 50px; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; font-size: 1.1rem;
-            box-shadow: 0 0 20px rgba(0,224,184,0.4);
+            position: absolute;
+            inset: 0;
+            background: rgba(13, 13, 26, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            z-index: 3;
         }
 
-        /* Info Body */
+        .media-container:hover .media-overlay {
+            opacity: 1;
+        }
+
+        .media-overlay i {
+            color: #0D0D1A;
+            background: var(--accent-3);
+            border: 3px solid var(--accent-1);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 0 25px var(--accent-3);
+            animation: bounce-subtle 1.5s ease-in-out infinite;
+        }
+
+        /* ─── INFO BODY ─── */
         .info-container {
-            flex: 1; padding: 36px 40px; display: flex; flex-direction: column; justify-content: center;
+            flex: 1;
+            padding: 36px 34px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .badge {
-            align-self: flex-start; font-family: 'Cinzel', serif; font-size: 0.6rem;
-            letter-spacing: 0.2em; text-transform: uppercase; padding: 4px 12px;
-            border-radius: 2px; margin-bottom: 16px;
+            align-self: flex-start;
+            font-family: var(--font-display);
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 9999px;
+            margin-bottom: 16px;
+            color: #0D0D1A;
+            background: var(--accent-2);
+            border: 2px solid var(--accent-1);
+            box-shadow: 3px 3px 0px var(--accent-3);
         }
-        .badge-live  { background: rgba(0,224,184,0.12); color: var(--teal); border: 1px solid rgba(0,224,184,0.25); }
 
         .system-title {
-            font-family: 'Cinzel Decorative', serif; font-size: 1.65rem; font-weight: 700;
-            color: var(--teal); text-shadow: 0 0 12px rgba(0,224,184,0.25); margin-bottom: 14px; line-height: 1.25;
+            font-family: var(--font-head);
+            font-size: clamp(1.55rem, 2.5vw, 2.1rem);
+            font-weight: 900;
+            line-height: 1.15;
+            color: var(--fg);
+            text-shadow: 2px 2px 0px var(--accent-5), 4px 4px 0px var(--accent-1);
+            margin-bottom: 14px;
+            text-transform: uppercase;
         }
-        .system-desc { font-size: 0.95rem; color: #aaa; line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
 
-        .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .system-desc {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.88);
+            line-height: 1.7;
+            font-weight: 400;
+            margin-bottom: 22px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
         .tag {
-            font-size: 0.65rem; letter-spacing: 0.12em; font-family: 'Cinzel', serif;
-            padding: 4px 12px; background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.07); border-radius: 2px; color: #777; text-transform: uppercase;
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 9999px;
+            background: rgba(13, 13, 26, 0.7);
+            color: var(--accent-3);
+            border: 2px solid var(--accent-3);
+            box-shadow: 2px 2px 0px var(--accent-5);
         }
 
-        .action-tray { display: flex; gap: 12px; }
+        .tag:nth-child(2) { color: var(--accent-2); border-color: var(--accent-2); }
+        .tag:nth-child(3) { color: var(--accent-1); border-color: var(--accent-1); }
+
         .btn-action {
-            display: inline-flex; align-items: center; gap: 8px; font-family: 'Cinzel', serif;
-            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
-            color: var(--dark); background: var(--teal); text-decoration: none;
-            padding: 12px 26px; border-radius: 2px; transition: all 0.3s; font-weight: 700;
-            border: none; cursor: pointer;
-        }
-        .btn-action:hover { background: #00ffce; box-shadow: 0 0 25px rgba(0,224,184,0.35); transform: translateY(-2px); }
-
-        .footer-rune {
-            margin-top: 80px; font-size: 0.7rem; letter-spacing: 0.35em;
-            color: rgba(0,224,184,0.2); font-family: 'Cinzel', serif; text-transform: uppercase;
-            animation: fadeDown 0.9s ease-out 1.2s both;
-        }
-
-        @keyframes fadeDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive Flow collapse */
-        @media (max-width: 900px) {
-            .system-showcase, .system-showcase:nth-child(even) { flex-direction: column; }
-            .media-container { max-width: 100%; min-width: 100%; }
-            .info-container { padding: 30px 24px; }
+            align-self: flex-start;
+            font-family: var(--font-head);
+            font-weight: 900;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #0D0D1A;
+            background: linear-gradient(90deg, var(--accent-3), var(--accent-4));
+            border: 3px solid var(--accent-1);
+            padding: 12px 28px;
+            border-radius: 9999px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--accent-5);
+            transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* ── PROFESSIONAL FULLSCREEN LIGHTBOX MODAL ── */
+        .btn-action:hover {
+            transform: scale(1.12) translateY(-2px) rotate(2deg);
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: #FFFFFF;
+            border-color: var(--accent-3);
+            box-shadow: 0 0 20px var(--accent-1), 6px 6px 0px var(--accent-2);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            margin-top: 70px;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            letter-spacing: 0.25em;
+            color: var(--accent-2);
+            text-shadow: 2px 2px 0px var(--accent-5);
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* ─── LIGHTBOX MODAL ─── */
         .modal-overlay {
-            position: fixed; inset: 0; z-index: 100; background: rgba(4,4,6,0.94);
-            backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center;
-            padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(13, 13, 26, 0.94);
+            backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
         }
-        .modal-overlay.open { opacity: 1; pointer-events: all; }
-        
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
         .modal {
-            background: rgba(8,6,16,0.98); border: 1px solid var(--border); border-radius: 4px;
-            max-width: 900px; width: 100%; position: relative;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.95), 0 0 60px rgba(0,224,184,0.05);
-            transform: translateY(30px) scale(0.96); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--muted-container);
+            border: 6px solid var(--accent-1);
+            border-radius: 32px;
+            max-width: 920px;
+            width: 100%;
+            position: relative;
+            box-shadow: 
+                0 0 50px rgba(255, 58, 242, 0.6),
+                12px 12px 0px var(--accent-3),
+                24px 24px 0px var(--accent-2);
+            transform: translateY(30px) scale(0.96);
+            transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             overflow: hidden;
         }
-        .modal-overlay.open .modal { transform: translateY(0) scale(1); }
-        
-        .modal-video-box { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
-        .modal-video-box video { width: 100%; height: 100%; object-fit: contain; display: block; }
-        
-        .modal-details { padding: 30px 35px; text-align: left; }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-video-box {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-bottom: 4px solid var(--accent-3);
+        }
+
+        .modal-video-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .modal-details {
+            padding: 30px 36px;
+            text-align: left;
+        }
+
         .modal-title {
-            font-family: 'Cinzel Decorative', serif; font-size: 1.7rem; font-weight: 700;
-            color: var(--teal); text-shadow: 0 0 15px rgba(0,224,184,0.3); margin-bottom: 12px;
+            font-family: var(--font-head);
+            font-size: 1.85rem;
+            font-weight: 900;
+            color: var(--fg);
+            text-shadow: 2px 2px 0px var(--accent-5), 4px 4px 0px var(--accent-1);
+            margin-bottom: 12px;
+            text-transform: uppercase;
         }
-        .modal-desc { font-size: 0.95rem; color: #a5a5af; line-height: 1.8; font-weight: 300; }
-        
+
+        .modal-desc {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.75;
+            font-weight: 400;
+        }
+
         .modal-close {
-            position: absolute; top: 16px; right: 20px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 50%; width: 36px; height: 36px; cursor: pointer; color: #fff;
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10;
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: var(--accent-3);
+            border: 3px solid var(--accent-1);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+            color: #0D0D1A;
+            font-weight: 900;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 3px 0px var(--accent-5);
+            transition: all 0.2s;
+            z-index: 10;
         }
-        .modal-close:hover { color: var(--teal); border-color: var(--teal); background: #000; }
+
+        .modal-close:hover {
+            transform: scale(1.15) rotate(90deg);
+            background: var(--accent-1);
+            color: #FFFFFF;
+        }
+
+        /* ─── ANIMATION KEYFRAMES ─── */
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-22px) rotate(8deg); } }
+        @keyframes float-reverse { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(22px) rotate(-8deg); } }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+        @keyframes bounce-subtle { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.06); } }
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* ─── RESPONSIVE BREAKPOINTS ─── */
+        @media (max-width: 900px) {
+            .system-showcase, .system-showcase:nth-child(even) {
+                flex-direction: column;
+                transform: none !important;
+            }
+            .media-container {
+                max-width: 100%;
+                min-width: 100%;
+                border-right: none !important;
+                border-left: none !important;
+                border-bottom: 4px solid var(--accent-1);
+            }
+            .info-container {
+                padding: 28px 22px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, .floating-shape, .bg-watermark, .hero-badge {
+                animation: none !important;
+                transition-duration: 0.15s !important;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="bg-layer"></div>
-<div class="fog" id="fog"></div>
-
-<svg class="sword-bg" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="#003d30"/>
-      <stop offset="40%"  stop-color="#00e0b8"/>
-      <stop offset="60%"  stop-color="#00e0b8"/>
-      <stop offset="100%" stop-color="#003d30"/>
-    </linearGradient>
-    <linearGradient id="runeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%"   stop-color="#00e0b8" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.2"/>
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-  </defs>
-  <polygon points="100,10 112,600 100,640 88,600" fill="url(#bladeGrad)" filter="url(#glow)" opacity="0.9"/>
-  <line x1="100" y1="10" x2="100" y2="620" stroke="#00e0b8" stroke-width="0.5" opacity="0.6"/>
-  <g fill="none" stroke="url(#runeGlow)" stroke-width="1.2" opacity="0.8" filter="url(#glow)">
-    <rect x="94" y="120" width="12" height="12" rx="1" transform="rotate(45 100 126)"/>
-    <rect x="94" y="200" width="10" height="10" rx="1" transform="rotate(45 100 205)"/>
-    <rect x="94" y="280" width="12" height="12" rx="1" transform="rotate(45 100 286)"/>
-    <rect x="94" y="360" width="10" height="10" rx="1" transform="rotate(45 100 365)"/>
-    <rect x="94" y="440" width="12" height="12" rx="1" transform="rotate(45 100 446)"/>
-  </g>
-  <path d="M40,640 Q100,620 160,640 L165,660 Q100,645 35,660 Z" fill="#00e0b8" opacity="0.7" filter="url(#glow)"/>
-  <ellipse cx="45"  cy="650" rx="5" ry="4" fill="#7c3aed" opacity="0.9"/>
-  <ellipse cx="155" cy="650" rx="5" ry="4" fill="#7c3aed" opacity="0.9"/>
-  <ellipse cx="100" cy="642" rx="7" ry="5" fill="#00e0b8" opacity="1" filter="url(#glow)"/>
-  <rect x="90" y="660" width="20" height="90" rx="3" fill="#1a0a2e" stroke="#7c3aed" stroke-width="1" opacity="0.9"/>
-  <g stroke="rgba(124,58,237,0.5)" stroke-width="1">
-    <line x1="90" y1="675" x2="110" y2="675"/>
-    <line x1="90" y1="690" x2="110" y2="690"/>
-    <line x1="90" y1="705" x2="110" y2="705"/>
-    <line x1="90" y1="720" x2="110" y2="720"/>
-    <line x1="90" y1="735" x2="110" y2="735"/>
-  </g>
-  <ellipse cx="100" cy="758" rx="18" ry="10" fill="#0d0d1a" stroke="#00e0b8" stroke-width="1.2" filter="url(#glow)"/>
-  <ellipse cx="100" cy="757" rx="8" ry="5" fill="#00e0b8" opacity="0.6"/>
-</svg>
-
-<div class="container">
-    <nav>
-        <a href="index.html"   class="nav-link">Home</a>
-        <a href="games.html"   class="nav-link">Games</a>
-        <a href="systems.html" class="nav-link active">Systems</a>
-    </nav>
-
-    <span class="rune-icon">⚜</span>
-    <h1>Systems</h1>
-    <p class="subtitle">&nbsp;·&nbsp; Roblox Studio</p>
-    <div class="divider"></div>
-
-    <div class="filter-container">
-        <button class="filter-btn active" onclick="filterSystems('all')">All Forge</button>
-        <button class="filter-btn" onclick="filterSystems('luau')">Luau</button>
-        <button class="filter-btn" onclick="filterSystems('combat')">Combat</button>
-        <button class="filter-btn" onclick="filterSystems('ai')">AI Systems</button>
-        <button class="filter-btn" onclick="filterSystems('commissioned')">Commissioned</button>
-        <button class="filter-btn" onclick="filterSystems('backend')">BackEnd</button>
+    <!-- Layered Background Patterns -->
+    <div class="bg-pattern-layer">
+        <div class="pattern-dots"></div>
+        <div class="pattern-stripes"></div>
+        <div class="pattern-mesh"></div>
     </div>
 
-    <div class="systems-stream">
+    <!-- Massive Background Watermark -->
+    <div class="bg-watermark" aria-hidden="true">SYSTEMS // FORGE</div>
 
-        <!-- NEW SYSTEM: Turf War / Color Control Map -->
-        <div class="system-showcase" data-tags="luau combat">
-            <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map System', 'A dynamic map control system where players or teams capture territory in real-time, dynamically shifting map zone colors and UI indicators.')">
-                <div class="media-overlay"><i class="fas fa-expand"></i></div>
-                <video autoplay loop muted playsinline>
-                    <source src="https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1" type="video/mp4">
-                </video>
-            </div>
-            <div class="info-container">
-                <span class="badge badge-live">● Live</span>
-                <div class="system-title">Turf War - Color Control Map</div>
-                <p class="system-desc">A dynamic territory control system in Luau that updates zone colors and map state in real-time as players fight for area control.</p>
-                <div class="tags">
-                    <span class="tag">Luau</span>
-                    <span class="tag">Combat</span>
-                </div>
-                <div class="action-tray">
-                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map System', 'A dynamic map control system where players or teams capture territory in real-time, dynamically shifting map zone colors and UI indicators.')"><i class="fas fa-eye"></i> Inspect</button>
-                </div>
-            </div>
-        </div>
+    <!-- Floating Shapes -->
+    <div class="floating-shape shape-1" aria-hidden="true">⚡</div>
+    <div class="floating-shape shape-2" aria-hidden="true">✨</div>
+    <div class="floating-shape shape-3" aria-hidden="true">💥</div>
+    <div class="floating-shape shape-4" aria-hidden="true">🔥</div>
+    <div class="floating-shape shape-5" aria-hidden="true">👾</div>
 
-        <!-- SYSTEM 6: GoogleDataSave -->
-        <div class="system-showcase" data-tags="luau backend">
-            <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'GoogleDataSave', 'A datasaving system that uses gmail api to store your data on your gmail itself.. and its flexible to use in every sort of data even if its items or wtv (: also uses replit as a server or connecting bridge')">
-                <div class="media-overlay"><i class="fas fa-expand"></i></div>
-                <video autoplay loop muted playsinline>
-                    <source src="https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1" type="video/mp4">
-                </video>
-            </div>
-            <div class="info-container">
-                <span class="badge badge-live">● Live</span>
-                <div class="system-title">GoogleDataSave</div>
-                <p class="system-desc">A datasaving system that uses gmail api to store your data on your gmail itself.</p>
-                <div class="tags">
-                    <span class="tag">Luau</span>
-                    <span class="tag">BackEnd</span>
-                </div>
-                <div class="action-tray">
-                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'GoogleDataSave', 'A datasaving system that uses gmail api to store your data on your gmail itself.. and its flexible to use in every sort of data even if its items or wtv (: also uses replit as a server or connecting bridge.')"><i class="fas fa-eye"></i> Inspect</button>
-                </div>
-            </div>
-        </div>
-                
-        <!-- SYSTEM 1: Daily Reward System -->
-        <div class="system-showcase" data-tags="luau">
-            <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&raw=1', 'Daily Reward System', 'A really simple daily reward system made inside Roblox Studio. This represents my foundational step into professional scripting.')">
-                <div class="media-overlay"><i class="fas fa-expand"></i></div>
-                <video autoplay loop muted playsinline>
-                    <source src="https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&raw=1" type="video/mp4">
-                </video>
-            </div>
-            <div class="info-container">
-                <span class="badge badge-live">● Live</span>
-                <div class="system-title">Daily Reward System</div>
-                <p class="system-desc">A really simple daily reward system i made inside roblox studio also this is my first project. (:</p>
-                <div class="tags">
-                    <span class="tag">Luau</span>
-                </div>
-                <div class="action-tray">
-                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&raw=1', 'Daily Reward System', 'A really simple daily reward system i made inside roblox studio also this is my first project.')"><i class="fas fa-eye"></i> Inspect</button>
-                </div>
-            </div>
+    <div class="container">
+        
+        <!-- Navigation Menu -->
+        <nav>
+            <a href="index.html" class="nav-link">
+                <i class="fa-solid fa-bolt"></i> Home
+            </a>
+            <a href="games.html" class="nav-link">
+                <i class="fa-solid fa-gamepad"></i> Games
+            </a>
+            <a href="systems.html" class="nav-link active">
+                <i class="fa-solid fa-gears"></i> Systems
+            </a>
+        </nav>
+
+        <!-- Header -->
+        <div class="hero-badge">
+            <span>⚙️ BACKEND & GAMEPLAY ARCHITECTURE</span>
         </div>
 
-        <!-- SYSTEM 2: Admin Announcement System -->
-        <div class="system-showcase" data-tags="luau commissioned backend">
-            <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Announcement System', 'A flexible Admin Announcement System built in Luau inside Roblox Studio. Allows admins to broadcast styled messages to all players instantly.')">
-                <div class="media-overlay"><i class="fas fa-expand"></i></div>
-                <video autoplay loop muted playsinline>
-                    <source src="https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1" type="video/mp4">
-                </video>
-            </div>
-            <div class="info-container">
-                <span class="badge badge-live">● Live</span>
-                <div class="system-title">Admin Announcement System</div>
-                <p class="system-desc">A flexible Admin Announcement System built in Luau inside Roblox Studio. Allows admins to broadcast styled messages to all players instantly.</p>
-                <div class="tags">
-                    <span class="tag">Luau</span>
-                    <span class="tag">Commissioned</span>
-                    <span class="tag">BackEnd</span>
-                </div>
-                <div class="action-tray">
-                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Announcement System', 'A flexible Admin Announcement System built in Luau inside Roblox Studio. Allows admins to broadcast styled messages to all players instantly.')"><i class="fas fa-eye"></i> Inspect</button>
-                </div>
-            </div>
+        <h1>
+            <span class="gradient-text">Systems</span>
+        </h1>
+        <p class="hero-subtitle">Roblox Studio // Luau Engineering</p>
+
+        <!-- Interactive Filter Bar -->
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterSystems('all')">⚡ All Forge</button>
+            <button class="filter-btn" onclick="filterSystems('luau')">Luau</button>
+            <button class="filter-btn" onclick="filterSystems('combat')">Combat</button>
+            <button class="filter-btn" onclick="filterSystems('ai')">AI Systems</button>
+            <button class="filter-btn" onclick="filterSystems('commissioned')">Commissioned</button>
+            <button class="filter-btn" onclick="filterSystems('backend')">BackEnd</button>
         </div>
 
-        <!-- SYSTEM 3: Advanced AI System -->
-        <div class="system-showcase" data-tags="luau ai backend">
-            <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Advanced AI System', 'An advanced AI NPC using GroqCloud API and Replit. The NPC answers and interacts based on what you say, even with a reputation system for every player. The NPC base logic is built in Luau — the AI responses are handled via Replit using an HTTP service.')">
-                <div class="media-overlay"><i class="fas fa-expand"></i></div>
-                <video autoplay loop muted playsinline>
-                    <source src="https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1" type="video/mp4">
-                </video>
-            </div>
-            <div class="info-container">
-                <span class="badge badge-live">● Live</span>
-                <div class="system-title">Advanced AI System</div>
-                <p class="system-desc">An advanced AI NPC using GroqCloud API and Replit. The NPC answers and interacts based on what you say, with a reputation system per player i made for fun.</p>
-                <div class="tags">
-                    <span class="tag">Luau</span>
-                    <span class="tag">GroqCloud</span>
-                    <span class="tag">AI System</span>
-                    <span class="tag">BackEnd</span>
+        <!-- Vertical Systems Stream -->
+        <div class="systems-stream">
+
+            <!-- SYSTEM 1: Turf War / Color Control Map -->
+            <div class="system-showcase" data-tags="luau combat">
+                <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map', 'A dynamic map control system where players or teams capture territory in real-time, dynamically shifting map zone colors and UI indicators.')">
+                    <div class="media-overlay"><i class="fas fa-expand"></i></div>
+                    <video autoplay loop muted playsinline>
+                        <source src="https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1" type="video/mp4">
+                    </video>
                 </div>
-                <div class="action-tray">
-                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Advanced AI System', 'An advanced AI NPC using GroqCloud API and Replit.')"><i class="fas fa-eye"></i> Inspect</button>
+                <div class="info-container">
+                    <span class="badge">● Live</span>
+                    <div class="system-title">Turf War - Color Control Map</div>
+                    <p class="system-desc">A dynamic territory control system in Luau that updates zone colors and map state in real-time as players fight for area control.</p>
+                    <div class="tags">
+                        <span class="tag">Luau</span>
+                        <span class="tag">Combat</span>
+                    </div>
+                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map', 'A dynamic map control system where players or teams capture territory in real-time, dynamically shifting map zone colors and UI indicators.')">
+                        <i class="fas fa-eye"></i> Inspect
+                    </button>
                 </div>
             </div>
+
+            <!-- SYSTEM 2: GoogleDataSave -->
+            <div class="system-showcase" data-tags="luau backend">
+                <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'GoogleDataSave', 'A datasaving system that uses gmail api to store your data on your gmail itself.. and its flexible to use in every sort of data even if its items or wtv (: also uses replit as a server or connecting bridge')">
+                    <div class="media-overlay"><i class="fas fa-expand"></i></div>
+                    <video autoplay loop muted playsinline>
+                        <source src="https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1" type="video/mp4">
+                    </video>
+                </div>
+                <div class="info-container">
+                    <span class="badge">● Live</span>
+                    <div class="system-title">GoogleDataSave</div>
+                    <p class="system-desc">A datasaving system that uses gmail api to store your data on your gmail itself.</p>
+                    <div class="tags">
+                        <span class="tag">Luau</span>
+                        <span class="tag">BackEnd</span>
+                    </div>
+                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'GoogleDataSave', 'A datasaving system that uses gmail api to store your data on your gmail itself.. and its flexible to use in every sort of data even if its items or wtv (: also uses replit as a server or connecting bridge.')">
+                        <i class="fas fa-eye"></i> Inspect
+                    </button>
+                </div>
+            </div>
+
+            <!-- SYSTEM 3: Daily Reward System -->
+            <div class="system-showcase" data-tags="luau">
+                <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&raw=1', 'Daily Reward System', 'A really simple daily reward system made inside Roblox Studio. This represents my foundational step into professional scripting.')">
+                    <div class="media-overlay"><i class="fas fa-expand"></i></div>
+                    <video autoplay loop muted playsinline>
+                        <source src="https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&raw=1" type="video/mp4">
+                    </video>
+                </div>
+                <div class="info-container">
+                    <span class="badge">● Live</span>
+                    <div class="system-title">Daily Reward System</div>
+                    <p class="system-desc">A really simple daily reward system i made inside roblox studio also this is my first project. (:</p>
+                    <div class="tags">
+                        <span class="tag">Luau</span>
+                    </div>
+                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/bgnsxcqot57uv3dzcb6wz/Robloxstudiobeta-Gtfs2ew1zq.mp4?rlkey=z3v3oxoznlc2ahjs3390fpe7f&raw=1', 'Daily Reward System', 'A really simple daily reward system made inside Roblox Studio. This represents my foundational step into professional scripting.')">
+                        <i class="fas fa-eye"></i> Inspect
+                    </button>
+                </div>
+            </div>
+
+            <!-- SYSTEM 4: Admin Announcement System -->
+            <div class="system-showcase" data-tags="luau commissioned backend">
+                <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Announcement System', 'A flexible Admin Announcement System built in Luau inside Roblox Studio. Allows admins to broadcast styled messages to all players instantly.')">
+                    <div class="media-overlay"><i class="fas fa-expand"></i></div>
+                    <video autoplay loop muted playsinline>
+                        <source src="https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1" type="video/mp4">
+                    </video>
+                </div>
+                <div class="info-container">
+                    <span class="badge">● Live</span>
+                    <div class="system-title">Admin Announcement System</div>
+                    <p class="system-desc">A flexible Admin Announcement System built in Luau inside Roblox Studio. Allows admins to broadcast styled messages to all players instantly.</p>
+                    <div class="tags">
+                        <span class="tag">Luau</span>
+                        <span class="tag">Commissioned</span>
+                        <span class="tag">BackEnd</span>
+                    </div>
+                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Announcement System', 'A flexible Admin Announcement System built in Luau inside Roblox Studio. Allows admins to broadcast styled messages to all players instantly.')">
+                        <i class="fas fa-eye"></i> Inspect
+                    </button>
+                </div>
+            </div>
+
+            <!-- SYSTEM 5: Advanced AI System -->
+            <div class="system-showcase" data-tags="luau ai backend">
+                <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Advanced AI System', 'An advanced AI NPC using GroqCloud API and Replit. The NPC answers and interacts based on what you say, even with a reputation system for every player. The NPC base logic is built in Luau — the AI responses are handled via Replit using an HTTP service.')">
+                    <div class="media-overlay"><i class="fas fa-expand"></i></div>
+                    <video autoplay loop muted playsinline>
+                        <source src="https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1" type="video/mp4">
+                    </video>
+                </div>
+                <div class="info-container">
+                    <span class="badge">● Live</span>
+                    <div class="system-title">Advanced AI System</div>
+                    <p class="system-desc">An advanced AI NPC using GroqCloud API and Replit. The NPC answers and interacts based on what you say, with a reputation system per player i made for fun.</p>
+                    <div class="tags">
+                        <span class="tag">Luau</span>
+                        <span class="tag">GroqCloud</span>
+                        <span class="tag">AI System</span>
+                        <span class="tag">BackEnd</span>
+                    </div>
+                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Advanced AI System', 'An advanced AI NPC using GroqCloud API and Replit.')">
+                        <i class="fas fa-eye"></i> Inspect
+                    </button>
+                </div>
+            </div>
+
+            <!-- SYSTEM 6: Flexible Combat System -->
+            <div class="system-showcase" data-tags="luau combat">
+                <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Flexible Combat System', 'A modular combo-based combat system built in Luau. Easily extendable with sword support, camera shake, sound effects, and unique knockback per combo.')">
+                    <div class="media-overlay"><i class="fas fa-expand"></i></div>
+                    <video autoplay loop muted playsinline>
+                        <source src="https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1" type="video/mp4">
+                    </video>
+                </div>
+                <div class="info-container">
+                    <span class="badge">● Live</span>
+                    <div class="system-title">Flexible Combat System</div>
+                    <p class="system-desc">A modular combo-based combat system built in Luau. Easily extendable with sword support, camera shake, sound effects, and unique knockback per combo.</p>
+                    <div class="tags">
+                        <span class="tag">Luau</span>
+                        <span class="tag">Combat</span>
+                    </div>
+                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Flexible Combat System', 'A modular combo-based combat system.')">
+                        <i class="fas fa-eye"></i> Inspect
+                    </button>
+                </div>
+            </div>
+
+            <!-- SYSTEM 7: Locking System -->
+            <div class="system-showcase" data-tags="luau combat">
+                <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Locking System', 'A locking system that allows you to lock onto anything, not just players, with a custom GUI layout.')">
+                    <div class="media-overlay"><i class="fas fa-expand"></i></div>
+                    <video autoplay loop muted playsinline>
+                        <source src="https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1" type="video/mp4">
+                    </video>
+                </div>
+                <div class="info-container">
+                    <span class="badge">● Live</span>
+                    <div class="system-title">Locking System</div>
+                    <p class="system-desc">A locking system that allows you to lock onto anything, not just players, with a custom GUI.</p>
+                    <div class="tags">
+                        <span class="tag">Luau</span>
+                        <span class="tag">Combat</span>
+                    </div>
+                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Locking System', 'A locking system that allows you to lock onto anything.')">
+                        <i class="fas fa-eye"></i> Inspect
+                    </button>
+                </div>
+            </div>
+
         </div>
 
-        <!-- SYSTEM 4: Flexible Combat System -->
-        <div class="system-showcase" data-tags="luau combat">
-            <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Flexible Combat System', 'A modular combo-based combat system built in Luau. Easily extendable with sword support, camera shake, sound effects, and unique knockback per combo.')">
-                <div class="media-overlay"><i class="fas fa-expand"></i></div>
-                <video autoplay loop muted playsinline>
-                    <source src="https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1" type="video/mp4">
-                </video>
-            </div>
-            <div class="info-container">
-                <span class="badge badge-live">● Live</span>
-                <div class="system-title">Flexible Combat System</div>
-                <p class="system-desc">A modular combo-based combat system built in Luau. Easily extendable with sword support, camera shake, sound effects, and unique knockback per combo.</p>
-                <div class="tags">
-                    <span class="tag">Luau</span>
-                    <span class="tag">Combat</span>
-                </div>
-                <div class="action-tray">
-                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Flexible Combat System', 'A modular combo-based combat system.')"><i class="fas fa-eye"></i> Inspect</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- SYSTEM 5: Locking System -->
-        <div class="system-showcase" data-tags="luau combat">
-            <div class="media-container" onclick="expandMedia('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Locking System', 'A locking system that allows you to lock onto anything, not just players, with a custom GUI layout.')">
-                <div class="media-overlay"><i class="fas fa-expand"></i></div>
-                <video autoplay loop muted playsinline>
-                    <source src="https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1" type="video/mp4">
-                </video>
-            </div>
-            <div class="info-container">
-                <span class="badge badge-live">● Live</span>
-                <div class="system-title">Locking System</div>
-                <p class="system-desc">A locking system that allows you to lock onto anything, not just players, with a custom GUI.</p>
-                <div class="tags">
-                    <span class="tag">Luau</span>
-                    <span class="tag">Combat</span>
-                </div>
-                <div class="action-tray">
-                    <button class="btn-action" onclick="expandMedia('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Locking System', 'A locking system that allows you to lock onto anything.')"><i class="fas fa-eye"></i> Inspect</button>
-                </div>
-            </div>
-        </div>
+        <!-- Footer -->
+        <footer>
+            <span>⚡ Crafted in Cairo, Egypt · Systems Live ⚡</span>
+        </footer>
 
     </div>
 
-    <p class="footer-rune">From &nbsp;·&nbsp; Egypt. Cairo</p>
-</div>
-
-<div class="modal-overlay" id="lightbox" onclick="closeLightboxOutside(event)">
-    <div class="modal">
-        <button class="modal-close" onclick="closeLightbox()">✕</button>
-        <div class="modal-video-box">
-            <video id="lightbox-video" autoplay loop controls muted playsinline></video>
-        </div>
-        <div class="modal-details">
-            <div class="modal-title" id="lightbox-title">System Focus</div>
-            <p class="modal-desc" id="lightbox-desc">Details loading...</p>
+    <!-- Fullscreen Lightbox Modal -->
+    <div class="modal-overlay" id="lightbox" onclick="closeLightboxOutside(event)">
+        <div class="modal">
+            <button class="modal-close" onclick="closeLightbox()">✕</button>
+            <div class="modal-video-box">
+                <video id="lightbox-video" autoplay loop controls muted playsinline></video>
+            </div>
+            <div class="modal-details">
+                <div class="modal-title" id="lightbox-title">System Focus</div>
+                <p class="modal-desc" id="lightbox-desc">Details loading...</p>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    // Fog Engine
-    const fog = document.getElementById('fog');
-    for (let i = 0; i < 18; i++) {
-        const p = document.createElement('div');
-        p.className = 'fog-particle';
-        const size = 40 + Math.random() * 120;
-        p.style.cssText = `
-            width:${size}px; height:${size}px;
-            left:${Math.random()*100}%;
-            animation-duration:${12+Math.random()*20}s;
-            animation-delay:${-Math.random()*25}s;
-            opacity:${0.2+Math.random()*0.4};
-        `;
-        fog.appendChild(p);
-    }
+    <script>
+        // Filtration Logic
+        function filterSystems(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
 
-    // Dynamic Filtration Logic
-    function filterSystems(category) {
-        // Active button toggle
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+            document.querySelectorAll('.system-showcase').forEach(card => {
+                const tags = card.getAttribute('data-tags').split(' ');
+                if (category === 'all' || tags.includes(category)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
 
-        // Cards visibility handler
-        document.querySelectorAll('.system-showcase').forEach(card => {
-            const tags = card.getAttribute('data-tags').split(' ');
-            if (category === 'all' || tags.includes(category)) {
-                card.classList.remove('hidden');
-            } else {
-                card.classList.add('hidden');
+        // Lightbox Engine
+        const lightbox = document.getElementById('lightbox');
+        const lightboxVideo = document.getElementById('lightbox-video');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxDesc = document.getElementById('lightbox-desc');
+
+        function expandMedia(videoSrc, title, description) {
+            lightboxVideo.src = videoSrc;
+            lightboxTitle.textContent = title;
+            lightboxDesc.textContent = description;
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            lightboxVideo.play();
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            lightboxVideo.pause();
+            lightboxVideo.src = "";
+            document.body.style.overflow = '';
+        }
+
+        function closeLightboxOutside(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeLightbox();
+            }
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+                closeLightbox();
             }
         });
-    }
-
-    // Lightbox Media Engine
-    const lightbox = document.getElementById('lightbox');
-    const lightboxVideo = document.getElementById('lightbox-video');
-    const lightboxTitle = document.getElementById('lightbox-title');
-    const lightboxDesc = document.getElementById('lightbox-desc');
-
-    function expandMedia(videoSrc, title, description) {
-        lightboxVideo.src = videoSrc;
-        lightboxTitle.textContent = title;
-        lightboxDesc.textContent = description;
-        lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        lightboxVideo.play();
-    }
-
-    function closeLightbox() {
-        lightbox.classList.remove('open');
-        lightboxVideo.pause();
-        lightboxVideo.src = "";
-        document.body.style.overflow = '';
-    }
-
-    function closeLightboxOutside(e) {
-        if (e.target.classList.contains('modal-overlay')) {
-            closeLightbox();
-        }
-    }
-
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && lightbox.classList.contains('open')) {
-            closeLightbox();
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
