@@ -3,567 +3,912 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Games | Ahmed Nabil</title>
+    <title>My Games | Carfota</title>
+    
+    <!-- Google Fonts for Dopamine/Maximalist Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         :root {
-            --teal: #00e0b8;
-            --teal-dim: rgba(0, 224, 184, 0.15);
-            --teal-glow: rgba(0, 224, 184, 0.5);
-            --purple: #7c3aed;
-            --dark: #050508;
-            --card: rgba(10, 8, 20, 0.88);
-            --border: rgba(0, 224, 184, 0.18);
+            /* Base Colors */
+            --bg: #0D0D1A;
+            --fg: #FFFFFF;
+            --muted-container: rgba(45, 27, 78, 0.88);
+            
+            /* The 5 Dopamine Accents */
+            --accent-1: #FF3AF2;  /* Electric Magenta */
+            --accent-2: #00F5D4;  /* Digital Cyan */
+            --accent-3: #FFE600;  /* Screaming Yellow */
+            --accent-4: #FF6B35;  /* Electric Orange */
+            --accent-5: #7B2FFF;  /* Vivid Purple */
+
+            /* Fonts */
+            --font-head: 'Outfit', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-display: 'Bungee', cursive;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Raleway', sans-serif;
-            background-color: var(--dark);
-            color: #ddd;
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
             min-height: 100vh;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
-        /* ── ANIMATED BACKGROUND ── */
-        .bg-layer { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
-        .bg-layer::before {
-            content: '';
-            position: absolute;
-            top: -20%; left: -10%;
-            width: 700px; height: 700px;
-            background: radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, transparent 70%);
-            animation: driftA 18s ease-in-out infinite alternate;
-        }
-        .bg-layer::after {
-            content: '';
-            position: absolute;
-            bottom: -20%; right: -10%;
-            width: 600px; height: 600px;
-            background: radial-gradient(ellipse, rgba(0,224,184,0.12) 0%, transparent 70%);
-            animation: driftB 14s ease-in-out infinite alternate;
-        }
-        @keyframes driftA { from { transform: translate(0,0) scale(1); } to { transform: translate(60px,80px) scale(1.15); } }
-        @keyframes driftB { from { transform: translate(0,0) scale(1); } to { transform: translate(-50px,-60px) scale(1.2); } }
-
-        .fog { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-        .fog-particle {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,224,184,0.3), transparent 60%);
-            animation: floatFog linear infinite;
-        }
-        @keyframes floatFog {
-            0%   { transform: translateY(110vh) scale(0.5); opacity: 0; }
-            10%  { opacity: 1; }
-            90%  { opacity: 0.4; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
-
-        /* ── SAME SWORD AS HOME ── */
-        .sword-bg {
+        /* ─── LAYERED PATTERNS ─── */
+        .bg-pattern-layer {
             position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
+            inset: 0;
             pointer-events: none;
-            opacity: 0.07;
-            width: min(600px, 90vw);
-            filter: drop-shadow(0 0 30px var(--teal));
-            animation: swordPulse 6s ease-in-out infinite;
-        }
-        @keyframes swordPulse {
-            0%, 100% { opacity: 0.07; filter: drop-shadow(0 0 25px var(--teal)); }
-            50%       { opacity: 0.13; filter: drop-shadow(0 0 55px var(--teal)); }
+            z-index: 0;
         }
 
-        /* ── LAYOUT ── */
+        .pattern-dots {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, var(--accent-1) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+            opacity: 0.15;
+        }
+
+        .pattern-stripes {
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 14px,
+                rgba(255, 230, 0, 0.05) 14px,
+                rgba(255, 230, 0, 0.05) 28px
+            );
+        }
+
+        .pattern-mesh {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(255, 58, 242, 0.22) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 30%, rgba(0, 245, 212, 0.18) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(123, 47, 255, 0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 70%, rgba(255, 107, 53, 0.15) 0%, transparent 50%);
+        }
+
+        /* ─── WATERMARK TYPOGRAPHY ─── */
+        .bg-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-10deg);
+            font-family: var(--font-display);
+            font-size: clamp(8rem, 18vw, 18rem);
+            line-height: 0.8;
+            color: rgba(255, 58, 242, 0.03);
+            text-shadow: 
+                4px 4px 0px rgba(0, 245, 212, 0.03),
+                -4px -4px 0px rgba(255, 230, 0, 0.03);
+            white-space: nowrap;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ─── FLOATING DECORATIONS ─── */
+        .floating-shape {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            filter: drop-shadow(0 0 15px currentColor);
+        }
+
+        .shape-1 { top: 6%; left: 4%; color: var(--accent-3); animation: wiggle 2s ease-in-out infinite; font-size: 2.8rem; }
+        .shape-2 { top: 18%; right: 5%; color: var(--accent-2); animation: float 5s ease-in-out infinite; font-size: 2.6rem; }
+        .shape-3 { top: 45%; left: 2%; color: var(--accent-1); animation: spin-slow 16s linear infinite; font-size: 3.2rem; }
+        .shape-4 { bottom: 15%; right: 4%; color: var(--accent-4); animation: bounce-subtle 2.5s ease-in-out infinite; font-size: 3rem; }
+        .shape-5 { bottom: 35%; left: 3%; color: var(--accent-5); animation: float-reverse 6s ease-in-out infinite; font-size: 2.4rem; }
+
+        /* ─── CONTAINER ─── */
         .container {
             position: relative;
             z-index: 10;
-            max-width: 960px;
+            max-width: 1100px;
             width: 100%;
-            padding: 50px 24px 80px;
-            text-align: center;
+            padding: 40px 24px 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* ── NAV — identical to home ── */
+        /* ─── NAVIGATION ─── */
         nav {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 70px;
-            animation: fadeDown 0.9s ease-out both;
-        }
-        .nav-link {
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #666;
-            text-decoration: none;
-            padding: 10px 28px;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 4px;
-            background: rgba(5,5,12,0.7);
-            backdrop-filter: blur(8px);
-            transition: all 0.35s;
-        }
-        .nav-link.active,
-        .nav-link:hover {
-            color: var(--teal);
-            border-color: var(--border);
-            background: var(--teal-dim);
-            box-shadow: 0 0 20px rgba(0,224,184,0.1), inset 0 0 10px rgba(0,224,184,0.05);
+            gap: 16px;
+            margin-bottom: 45px;
+            flex-wrap: wrap;
         }
 
-        /* ── PAGE HEADER — same structure as home ── */
-        .rune-icon {
-            font-size: 2.2rem;
-            line-height: 1;
-            margin-bottom: 18px;
-            display: block;
-            filter: drop-shadow(0 0 12px var(--teal));
-            animation: fadeDown 0.9s ease-out 0.2s both;
-            color: var(--teal);
-            opacity: 0.9;
+        .nav-link {
+            font-family: var(--font-head);
+            font-weight: 900;
+            font-size: 0.95rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--fg);
+            text-decoration: none;
+            padding: 12px 32px;
+            border-radius: 9999px;
+            background: var(--muted-container);
+            border: 4px solid var(--accent-1);
+            box-shadow: 4px 4px 0px var(--accent-5), 8px 8px 0px var(--accent-2);
+            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:nth-child(2) {
+            border-color: var(--accent-2);
+            box-shadow: 4px 4px 0px var(--accent-1), 8px 8px 0px var(--accent-3);
+        }
+
+        .nav-link:nth-child(3) {
+            border-color: var(--accent-3);
+            box-shadow: 4px 4px 0px var(--accent-4), 8px 8px 0px var(--accent-5);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            transform: scale(1.1) translateY(-4px) rotate(-1deg);
+            border-color: var(--accent-3);
+            background: var(--accent-1);
+            color: #0D0D1A;
+            box-shadow: 
+                0 0 25px rgba(255, 58, 242, 0.8),
+                6px 6px 0px var(--accent-3),
+                12px 12px 0px var(--accent-2);
+        }
+
+        /* ─── HEADER ─── */
+        .hero-badge {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            color: #0D0D1A;
+            background: var(--accent-4);
+            padding: 8px 24px;
+            border-radius: 9999px;
+            border: 4px dashed var(--accent-3);
+            transform: rotate(-2deg);
+            box-shadow: 4px 4px 0px var(--accent-1), 8px 8px 0px var(--accent-5);
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            animation: wiggle 3s ease-in-out infinite;
         }
 
         h1 {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-family: var(--font-head);
+            font-size: clamp(3.6rem, 9vw, 6.8rem);
             font-weight: 900;
-            letter-spacing: 0.04em;
-            line-height: 1.05;
-            background: linear-gradient(135deg, #fff 0%, var(--teal) 50%, #a78bfa 100%);
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            text-align: center;
+            color: var(--fg);
+            text-shadow: 
+                3px 3px 0px var(--accent-5),
+                6px 6px 0px var(--accent-1),
+                9px 9px 0px var(--accent-2),
+                12px 12px 0px var(--accent-3);
+            margin-bottom: 12px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--accent-4), var(--accent-3), var(--accent-1), var(--accent-2), var(--accent-4));
+            background-size: 300% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            filter: drop-shadow(0 0 25px rgba(0,224,184,0.3));
-            animation: fadeDown 0.9s ease-out 0.35s both;
+            animation: gradient-shift 4s ease infinite;
         }
 
-        .subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem;
-            letter-spacing: 0.4em;
+        .hero-subtitle {
+            font-family: var(--font-display);
+            font-size: clamp(0.95rem, 2vw, 1.25rem);
+            color: var(--accent-2);
+            text-shadow: 2px 2px 0px var(--accent-5), 4px 4px 0px var(--accent-1);
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            color: rgba(0,224,184,0.55);
-            margin-top: 12px;
-            animation: fadeDown 0.9s ease-out 0.5s both;
+            margin-bottom: 40px;
+            transform: rotate(1deg);
         }
 
-        /* ── DIVIDER — same as home ── */
-        .divider {
-            margin: 32px auto 48px;
-            width: 200px;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--teal), transparent);
-            position: relative;
-            animation: fadeDown 0.9s ease-out 0.55s both;
-        }
-        .divider::before {
-            content: '⬡';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--teal);
-            font-size: 0.6rem;
-            background: var(--dark);
-            padding: 0 6px;
+        /* ─── FILTER BAR ─── */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+            width: 100%;
         }
 
-        /* ── GAMES GRID ── */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-            gap: 28px;
+        .filter-btn {
+            font-family: var(--font-head);
+            font-weight: 900;
+            font-size: 0.82rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--fg);
+            background: var(--muted-container);
+            padding: 10px 22px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        /* ── GAME CARD ── */
-        .game-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 2px;
+        .filter-btn:nth-child(1) { border: 3px solid var(--accent-1); box-shadow: 3px 3px 0px var(--accent-5); }
+        .filter-btn:nth-child(2) { border: 3px dashed var(--accent-2); box-shadow: 3px 3px 0px var(--accent-1); }
+        .filter-btn:nth-child(3) { border: 3px solid var(--accent-3); box-shadow: 3px 3px 0px var(--accent-4); }
+        .filter-btn:nth-child(4) { border: 3px solid var(--accent-4); box-shadow: 3px 3px 0px var(--accent-2); }
+        .filter-btn:nth-child(5) { border: 3px dashed var(--accent-5); box-shadow: 3px 3px 0px var(--accent-3); }
+
+        .filter-btn:hover, .filter-btn.active {
+            transform: scale(1.12) translateY(-3px) rotate(-1deg);
+            background: var(--accent-3);
+            color: #0D0D1A;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 20px rgba(255, 230, 0, 0.8), 5px 5px 0px var(--accent-5);
+        }
+
+        /* ─── VERTICAL GAMES STREAM ─── */
+        .games-stream {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            width: 100%;
+        }
+
+        .game-showcase {
+            display: flex;
+            background: var(--muted-container);
+            border-radius: 32px;
             overflow: hidden;
             backdrop-filter: blur(16px);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,224,184,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             text-align: left;
-            animation: fadeDown 0.9s ease-out both;
+            position: relative;
         }
-        .game-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(0,224,184,0.45);
-            box-shadow: 0 30px 70px rgba(0,0,0,0.7), 0 0 40px rgba(0,224,184,0.1);
+
+        .game-showcase.hidden {
+            display: none !important;
         }
-        /* Corner accents — same style as home card */
-        .game-card::before,
-        .game-card::after {
-            content: '';
+
+        /* Card Alternating Styles & Borders */
+        .game-showcase:nth-child(odd) {
+            border: 5px solid var(--accent-1);
+            box-shadow: 8px 8px 0px var(--accent-3), 16px 16px 0px var(--accent-2), 24px 24px 0px var(--accent-5);
+            transform: rotate(-0.5deg);
+        }
+        .game-showcase:nth-child(even) {
+            flex-direction: row-reverse;
+            border: 5px dashed var(--accent-2);
+            box-shadow: 8px 8px 0px var(--accent-1), 16px 16px 0px var(--accent-4), 24px 24px 0px var(--accent-5);
+            transform: rotate(0.8deg);
+        }
+
+        .game-showcase:hover {
+            transform: scale(1.02) translateY(-6px) rotate(0deg) !important;
+            box-shadow: 
+                0 0 35px rgba(255, 58, 242, 0.5),
+                12px 12px 0px var(--accent-3),
+                24px 24px 0px var(--accent-2),
+                36px 36px 0px var(--accent-5) !important;
+        }
+
+        /* ─── MEDIA CONTAINER ─── */
+        .media-container {
+            flex: 1.25;
+            min-width: 50%;
+            max-width: 58%;
+            aspect-ratio: 16/9;
+            background: #000;
+            overflow: hidden;
+            position: relative;
+            cursor: zoom-in;
+            border-right: 4px solid var(--accent-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-showcase:nth-child(even) .media-container {
+            border-right: none;
+            border-left: 4px solid var(--accent-2);
+        }
+
+        .media-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.3, 1);
+        }
+
+        .game-showcase:hover .media-container video {
+            transform: scale(1.05);
+        }
+
+        .media-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(13, 13, 26, 0.9), rgba(45, 27, 78, 0.9)),
+                        radial-gradient(circle at center, var(--accent-1) 0%, transparent 70%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: var(--accent-3);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .media-placeholder i {
+            font-size: 3.5rem;
+            filter: drop-shadow(0 0 15px var(--accent-3));
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .media-placeholder span {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 0px var(--accent-5);
+        }
+
+        .media-overlay {
             position: absolute;
-            width: 24px; height: 24px;
-            border-color: var(--teal);
-            border-style: solid;
+            inset: 0;
+            background: rgba(13, 13, 26, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
-            transition: opacity 0.4s;
-            z-index: 5;
+            transition: opacity 0.25s ease;
+            z-index: 3;
         }
-        .game-card::before { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
-        .game-card::after  { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
-        .game-card:hover::before,
-        .game-card:hover::after { opacity: 0.5; }
 
-        /* Video */
-        .video-wrapper {
-            width: 100%; aspect-ratio: 16/9;
-            background: #000; overflow: hidden; position: relative;
+        .media-container:hover .media-overlay {
+            opacity: 1;
         }
-        .video-wrapper::after {
-            content: '';
-            position: absolute; inset: 0;
-            background: linear-gradient(to bottom, transparent 60%, rgba(10,8,20,0.95) 100%);
-            pointer-events: none; z-index: 2;
-        }
-        video {
-            width: 100%; height: 100%; object-fit: cover; display: block;
-            transition: transform 0.5s ease;
-        }
-        .game-card:hover video { transform: scale(1.04); }
 
-        /* Card body */
-        .card-body { padding: 24px 26px 28px; position: relative; }
+        .media-overlay i {
+            color: #0D0D1A;
+            background: var(--accent-3);
+            border: 3px solid var(--accent-1);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 0 25px var(--accent-3);
+            animation: bounce-subtle 1.5s ease-in-out infinite;
+        }
 
-        /* Badge */
+        /* ─── INFO BODY ─── */
+        .info-container {
+            flex: 1;
+            padding: 36px 34px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
         .badge {
-            display: inline-block;
-            font-family: 'Cinzel', serif;
-            font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
-            padding: 3px 10px; border-radius: 2px; margin-bottom: 10px;
+            font-family: var(--font-display);
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 9999px;
+            color: #0D0D1A;
         }
-        .badge-live  { background: rgba(0,224,184,0.12); color: var(--teal); border: 1px solid rgba(0,224,184,0.3); }
-        .badge-dev   { background: rgba(124,58,237,0.12); color: #a78bfa;    border: 1px solid rgba(124,58,237,0.3); }
-        .badge-soon  { background: rgba(255,180,0,0.1);   color: #fbbf24;    border: 1px solid rgba(251,191,36,0.3); }
+
+        .badge-wip {
+            background: var(--accent-3);
+            border: 2px solid var(--accent-1);
+            box-shadow: 3px 3px 0px var(--accent-5);
+        }
+
+        .badge-role {
+            background: var(--accent-2);
+            border: 2px solid var(--accent-5);
+            box-shadow: 3px 3px 0px var(--accent-4);
+        }
 
         .game-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.45rem; font-weight: 700;
-            color: var(--teal);
-            text-shadow: 0 0 12px rgba(0,224,184,0.3);
-            margin-bottom: 10px; line-height: 1.2;
-        }
-        .game-desc {
-            font-size: 0.92rem; color: #999; line-height: 1.75;
-            font-weight: 300; margin-bottom: 20px;
-        }
-
-        .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
-        .tag {
-            font-size: 0.65rem; letter-spacing: 0.12em;
-            font-family: 'Cinzel', serif;
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 2px; color: #666; text-transform: uppercase;
-        }
-
-        .card-footer {
-            display: flex; align-items: center; gap: 12px;
-            border-top: 1px solid rgba(0,224,184,0.08);
-            padding-top: 18px;
-        }
-        .btn-play {
-            display: inline-flex; align-items: center; gap: 8px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
-            color: var(--dark); background: var(--teal);
-            text-decoration: none; padding: 10px 22px;
-            border-radius: 2px; transition: all 0.3s; font-weight: 700;
-        }
-        .btn-play:hover {
-            background: #00ffce;
-            box-shadow: 0 0 25px rgba(0,224,184,0.4);
-            transform: translateY(-2px);
-        }
-        .btn-outline {
-            display: inline-flex; align-items: center; gap: 8px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
-            color: var(--teal); text-decoration: none;
-            padding: 10px 22px;
-            border: 1px solid var(--border); border-radius: 2px;
-            transition: all 0.3s; background: transparent;
-        }
-        .btn-outline:hover {
-            background: var(--teal-dim);
-            border-color: rgba(0,224,184,0.45);
-        }
-
-        /* ── FOOTER ── */
-        .footer-rune {
-            margin-top: 70px;
-            font-size: 0.7rem; letter-spacing: 0.35em;
-            color: rgba(0,224,184,0.2);
-            font-family: 'Cinzel', serif; text-transform: uppercase;
-            animation: fadeDown 0.9s ease-out 1s both;
-        }
-
-        @keyframes fadeDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 640px) {
-            .games-grid { grid-template-columns: 1fr; }
-        }
-
-        /* ── MODAL ── */
-        .modal-overlay {
-            position: fixed; inset: 0; z-index: 100;
-            background: rgba(5,5,8,0.85);
-            backdrop-filter: blur(10px);
-            display: flex; align-items: center; justify-content: center;
-            padding: 24px;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.35s ease;
-        }
-        .modal-overlay.open { opacity: 1; pointer-events: all; }
-        .modal {
-            background: rgba(10,8,20,0.97);
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            max-width: 620px; width: 100%;
-            position: relative;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.9), 0 0 0 1px rgba(0,224,184,0.08);
-            transform: translateY(24px) scale(0.97);
-            transition: transform 0.35s cubic-bezier(0.23,1,0.32,1);
-            overflow: hidden;
-        }
-        .modal-overlay.open .modal { transform: translateY(0) scale(1); }
-        .modal::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(to right, transparent, var(--teal), transparent);
-        }
-        .modal-corner-tl {
-            position: absolute; top: 12px; left: 12px;
-            width: 20px; height: 20px;
-            border-top: 1px solid rgba(0,224,184,0.4);
-            border-left: 1px solid rgba(0,224,184,0.4);
-            pointer-events: none;
-        }
-        .modal-corner-br {
-            position: absolute; bottom: 12px; right: 12px;
-            width: 20px; height: 20px;
-            border-bottom: 1px solid rgba(0,224,184,0.4);
-            border-right: 1px solid rgba(0,224,184,0.4);
-            pointer-events: none;
-        }
-        .modal-video { width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; }
-        .modal-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .modal-body { padding: 26px 28px 30px; }
-        .modal-badge {
-            display: inline-block;
-            font-family: 'Cinzel', serif;
-            font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
-            padding: 3px 10px; border-radius: 2px; margin-bottom: 12px;
-            background: rgba(0,224,184,0.12); color: var(--teal);
-            border: 1px solid rgba(0,224,184,0.3);
-        }
-        .modal-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.55rem; font-weight: 700;
-            color: var(--teal);
-            text-shadow: 0 0 15px rgba(0,224,184,0.3);
-            margin-bottom: 12px;
-        }
-        .modal-desc {
-            font-size: 0.95rem; color: #999; line-height: 1.8;
-            font-weight: 300; margin-bottom: 20px;
-        }
-        .modal-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 4px; }
-        .modal-tag {
-            font-size: 0.65rem; letter-spacing: 0.12em;
-            font-family: 'Cinzel', serif; text-transform: uppercase;
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 2px; color: #666;
-        }
-        .modal-close {
-            position: absolute; top: 12px; right: 14px;
-            background: none; border: none; cursor: pointer;
-            color: #444; font-size: 1rem;
-            font-family: 'Cinzel', serif; letter-spacing: 0.1em;
-            transition: color 0.2s; z-index: 10;
+            font-family: var(--font-head);
+            font-size: clamp(1.55rem, 2.5vw, 2.2rem);
+            font-weight: 900;
+            line-height: 1.15;
+            color: var(--fg);
+            text-shadow: 2px 2px 0px var(--accent-5), 4px 4px 0px var(--accent-1);
+            margin-bottom: 14px;
             text-transform: uppercase;
         }
-        .modal-close:hover { color: var(--teal); }
+
+        .game-desc {
+            font-size: 0.98rem;
+            color: rgba(255, 255, 255, 0.88);
+            line-height: 1.7;
+            font-weight: 400;
+            margin-bottom: 22px;
+            white-space: pre-line;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .tag {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 9999px;
+            background: rgba(13, 13, 26, 0.7);
+            color: var(--accent-3);
+            border: 2px solid var(--accent-3);
+            box-shadow: 2px 2px 0px var(--accent-5);
+        }
+
+        .tag:nth-child(2) { color: var(--accent-2); border-color: var(--accent-2); }
+        .tag:nth-child(3) { color: var(--accent-1); border-color: var(--accent-1); }
+        .tag:nth-child(4) { color: var(--accent-4); border-color: var(--accent-4); }
+
+        .action-tray {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            font-family: var(--font-head);
+            font-weight: 900;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #0D0D1A;
+            background: linear-gradient(90deg, var(--accent-3), var(--accent-4));
+            border: 3px solid var(--accent-1);
+            padding: 12px 26px;
+            border-radius: 9999px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--accent-5);
+            transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.1) translateY(-2px) rotate(2deg);
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: #FFFFFF;
+            border-color: var(--accent-3);
+            box-shadow: 0 0 20px var(--accent-1), 6px 6px 0px var(--accent-2);
+        }
+
+        .btn-discord-action {
+            background: linear-gradient(90deg, #5865F2, var(--accent-1));
+            color: #FFFFFF;
+            border-color: var(--accent-3);
+            box-shadow: 4px 4px 0px var(--accent-2);
+        }
+
+        .btn-discord-action:hover {
+            background: linear-gradient(90deg, var(--accent-2), #5865F2);
+            color: #0D0D1A;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.8), 6px 6px 0px var(--accent-3);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            margin-top: 70px;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            letter-spacing: 0.25em;
+            color: var(--accent-2);
+            text-shadow: 2px 2px 0px var(--accent-5);
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* ─── LIGHTBOX MODAL ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(13, 13, 26, 0.94);
+            backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--muted-container);
+            border: 6px solid var(--accent-1);
+            border-radius: 32px;
+            max-width: 920px;
+            width: 100%;
+            position: relative;
+            box-shadow: 
+                0 0 50px rgba(255, 58, 242, 0.6),
+                12px 12px 0px var(--accent-3),
+                24px 24px 0px var(--accent-2);
+            transform: translateY(30px) scale(0.96);
+            transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow: hidden;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-video-box {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-bottom: 4px solid var(--accent-3);
+            flex-shrink: 0;
+        }
+
+        .modal-video-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .modal-details {
+            padding: 28px 36px;
+            text-align: left;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-family: var(--font-head);
+            font-size: 1.85rem;
+            font-weight: 900;
+            color: var(--fg);
+            text-shadow: 2px 2px 0px var(--accent-5), 4px 4px 0px var(--accent-1);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .modal-desc {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.75;
+            font-weight: 400;
+            white-space: pre-line;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: var(--accent-3);
+            border: 3px solid var(--accent-1);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+            color: #0D0D1A;
+            font-weight: 900;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 3px 0px var(--accent-5);
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            transform: scale(1.15) rotate(90deg);
+            background: var(--accent-1);
+            color: #FFFFFF;
+        }
+
+        /* ─── KEYFRAME ANIMATIONS ─── */
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-22px) rotate(8deg); } }
+        @keyframes float-reverse { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(22px) rotate(-8deg); } }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+        @keyframes bounce-subtle { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.06); } }
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes pulse-glow { 0%, 100% { filter: drop-shadow(0 0 15px var(--accent-3)); } 50% { filter: drop-shadow(0 0 35px var(--accent-1)); } }
+
+        /* ─── RESPONSIVE BREAKPOINTS ─── */
+        @media (max-width: 900px) {
+            .game-showcase, .game-showcase:nth-child(even) {
+                flex-direction: column;
+                transform: none !important;
+            }
+            .media-container {
+                max-width: 100%;
+                min-width: 100%;
+                border-right: none !important;
+                border-left: none !important;
+                border-bottom: 4px solid var(--accent-1);
+            }
+            .info-container {
+                padding: 28px 22px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, .floating-shape, .bg-watermark, .hero-badge {
+                animation: none !important;
+                transition-duration: 0.15s !important;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="bg-layer"></div>
-<div class="fog" id="fog"></div>
+    <!-- Layered Background Patterns -->
+    <div class="bg-pattern-layer">
+        <div class="pattern-dots"></div>
+        <div class="pattern-stripes"></div>
+        <div class="pattern-mesh"></div>
+    </div>
 
-<!-- Same sword watermark as home -->
-<svg class="sword-bg" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="#003d30"/>
-      <stop offset="40%"  stop-color="#00e0b8"/>
-      <stop offset="60%"  stop-color="#00e0b8"/>
-      <stop offset="100%" stop-color="#003d30"/>
-    </linearGradient>
-    <linearGradient id="runeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%"   stop-color="#00e0b8" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.2"/>
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-  </defs>
-  <polygon points="100,10 112,600 100,640 88,600" fill="url(#bladeGrad)" filter="url(#glow)" opacity="0.9"/>
-  <line x1="100" y1="10" x2="100" y2="620" stroke="#00e0b8" stroke-width="0.5" opacity="0.6"/>
-  <g fill="none" stroke="url(#runeGlow)" stroke-width="1.2" opacity="0.8" filter="url(#glow)">
-    <rect x="94" y="120" width="12" height="12" rx="1" transform="rotate(45 100 126)"/>
-    <rect x="94" y="200" width="10" height="10" rx="1" transform="rotate(45 100 205)"/>
-    <rect x="94" y="280" width="12" height="12" rx="1" transform="rotate(45 100 286)"/>
-    <rect x="94" y="360" width="10" height="10" rx="1" transform="rotate(45 100 365)"/>
-    <rect x="94" y="440" width="12" height="12" rx="1" transform="rotate(45 100 446)"/>
-  </g>
-  <path d="M40,640 Q100,620 160,640 L165,660 Q100,645 35,660 Z" fill="#00e0b8" opacity="0.7" filter="url(#glow)"/>
-  <ellipse cx="45"  cy="650" rx="5" ry="4" fill="#7c3aed" opacity="0.9"/>
-  <ellipse cx="155" cy="650" rx="5" ry="4" fill="#7c3aed" opacity="0.9"/>
-  <ellipse cx="100" cy="642" rx="7" ry="5" fill="#00e0b8" opacity="1" filter="url(#glow)"/>
-  <rect x="90" y="660" width="20" height="90" rx="3" fill="#1a0a2e" stroke="#7c3aed" stroke-width="1" opacity="0.9"/>
-  <g stroke="rgba(124,58,237,0.5)" stroke-width="1">
-    <line x1="90" y1="675" x2="110" y2="675"/>
-    <line x1="90" y1="690" x2="110" y2="690"/>
-    <line x1="90" y1="705" x2="110" y2="705"/>
-    <line x1="90" y1="720" x2="110" y2="720"/>
-    <line x1="90" y1="735" x2="110" y2="735"/>
-  </g>
-  <ellipse cx="100" cy="758" rx="18" ry="10" fill="#0d0d1a" stroke="#00e0b8" stroke-width="1.2" filter="url(#glow)"/>
-  <ellipse cx="100" cy="757" rx="8" ry="5" fill="#00e0b8" opacity="0.6"/>
-</svg>
+    <!-- Massive Background Watermark -->
+    <div class="bg-watermark" aria-hidden="true">GAMES // PLAY</div>
 
-<div class="container">
-    <nav>
-        <a href="index.html"   class="nav-link">Home</a>
-        <a href="games.html"   class="nav-link active">Games</a>
-        <a href="systems.html" class="nav-link">Systems</a>
-    </nav>
+    <!-- Floating Shapes -->
+    <div class="floating-shape shape-1" aria-hidden="true">🎮</div>
+    <div class="floating-shape shape-2" aria-hidden="true">⚡</div>
+    <div class="floating-shape shape-3" aria-hidden="true">💥</div>
+    <div class="floating-shape shape-4" aria-hidden="true">🔥</div>
+    <div class="floating-shape shape-5" aria-hidden="true">👾</div>
 
-    <!-- Same header structure as home -->
-    <span class="rune-icon">⚜</span>
-    <h1>My Games</h1>
-    <p class="subtitle">&nbsp;·&nbsp; Roblox Studio</p>
-    <div class="divider"></div>
+    <div class="container">
+        
+        <!-- Navigation Menu -->
+        <nav>
+            <a href="index.html" class="nav-link">
+                <i class="fa-solid fa-bolt"></i> Home
+            </a>
+            <a href="games.html" class="nav-link active">
+                <i class="fa-solid fa-gamepad"></i> Games
+            </a>
+            <a href="systems.html" class="nav-link">
+                <i class="fa-solid fa-gears"></i> Systems
+            </a>
+        </nav>
 
-    <div class="games-grid">
-
-        <!-- ── CARD 1 ── -->
-        <div class="game-card" style="animation-delay: 0.7s">
-            <div class="video-wrapper">
-                <video autoplay loop muted playsinline>
-                    <source src="" type="video/mp4">
-                </video>
-            </div>
-            <div class="card-body">
-                <span class="badge badge-live">● WIP</span>
-                <div class="game-title">Obstacles</div>
-                <p class="game-desc">A SIMPLE GAME IAM WORKING ON IT BUT ITS STILL NOT FINISHED</p>
-                <div class="tags">
-                    <span class="tag">Ranked System</span>
-                    <span class="tag">Obby</span>
-                    <span class="tag">Competitive</span>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn-play"><i class="fas fa-gamepad"></i> Play Now</a>
-                    <button onclick="openModal('modal-obstacles')" class="btn-outline"><i class="fas fa-external-link-alt"></i> View</button>
-                </div>
-            </div>
+        <!-- Header Badge -->
+        <div class="hero-badge">
+            <span>🕹️ ROBLOX EXPERIENCES & WORLDS</span>
         </div>
 
-        <!-- ── ADD MORE CARDS BELOW THIS LINE ── -->
-        <!-- Copy the block above, swap the video src, title, description, tags, and links -->
+        <h1>
+            <span class="gradient-text">My Games</span>
+        </h1>
+        <p class="hero-subtitle">Multiplayer Worlds // Scripter Portfolio</p>
+
+        <!-- Filter Bar -->
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterGames('all')">⚡ All Projects</button>
+            <button class="filter-btn" onclick="filterGames('wip')">🛠️ WIP Games</button>
+            <button class="filter-btn" onclick="filterGames('released')">🚀 Released</button>
+            <button class="filter-btn" onclick="filterGames('main-scripter')">👑 Main Scripter</button>
+            <button class="filter-btn" onclick="filterGames('secondary-scripter')">⚙️ Secondary Scripter</button>
+        </div>
+
+        <!-- Vertical Games Stream -->
+        <div class="games-stream">
+
+            <!-- GAME 1: BLACKGATE: BREAKPOINT -->
+            <div class="game-showcase" data-tags="wip main-scripter">
+                <div class="media-container" onclick="expandGameModal('', 'BLACKGATE: BREAKPOINT', `Welcome to Blackgate: Breakpoint — a new multiplayer experience built around a prison that was never meant to be escaped from.\n\nBlackgate is an isolated correctional complex where every escape has consequences. Break out, regroup, and decide what comes next. The prison doesn't simply end when you reach the outside.\n\nThe Wall is waiting.\n\nWe’re currently building Blackgate into a unique, immersive experience with its own world, lore, and gameplay.\n\nEscape Blackgate. Break the system.`)">
+                    <div class="media-placeholder">
+                        <i class="fa-solid fa-dungeon"></i>
+                        <span>BLACKGATE: BREAKPOINT<br><small style="color:var(--accent-2); font-size: 0.8rem;">IN ACTIVE DEVELOPMENT</small></span>
+                    </div>
+                    <div class="media-overlay"><i class="fas fa-expand"></i></div>
+                </div>
+                <div class="info-container">
+                    <div class="badge-row">
+                        <span class="badge badge-wip">● WIP / IN DEV</span>
+                        <span class="badge badge-role">👑 Main Scripter</span>
+                    </div>
+                    <div class="game-title">BLACKGATE: BREAKPOINT</div>
+                    <p class="game-desc">Welcome to Blackgate: Breakpoint — a new multiplayer experience built around a prison that was never meant to be escaped from. 
+
+Blackgate is an isolated correctional complex where every escape has consequences. Break out, regroup, and decide what comes next. The prison doesn't simply end when you reach the outside.
+
+<strong>The Wall is waiting.</strong> Escape Blackgate. Break the system.</p>
+                    <div class="tags">
+                        <span class="tag">Main Scripter</span>
+                        <span class="tag">Multiplayer Prison</span>
+                        <span class="tag">Survival / Escape</span>
+                        <span class="tag">WIP</span>
+                    </div>
+                    <div class="action-tray">
+                        <a href="https://discord.gg/EKU3tUeQ3" target="_blank" class="btn-action btn-discord-action">
+                            <i class="fa-brands fa-discord"></i> Join Discord
+                        </a>
+                        <button class="btn-action" onclick="expandGameModal('', 'BLACKGATE: BREAKPOINT', `Welcome to Blackgate: Breakpoint — a new multiplayer experience built around a prison that was never meant to be escaped from.\n\nBlackgate is an isolated correctional complex where every escape has consequences. Break out, regroup, and decide what comes next. The prison doesn't simply end when you reach the outside.\n\nThe Wall is waiting.\n\nWe’re currently building Blackgate into a unique, immersive experience with its own world, lore, and gameplay.\n\nEscape Blackgate. Break the system.`)">
+                            <i class="fas fa-eye"></i> Lore & Info
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GAME 2: OBSTACLES -->
+            <div class="game-showcase" data-tags="wip main-scripter">
+                <div class="media-container" onclick="expandGameModal('https://www.dropbox.com/scl/fi/mwj5sewh98qvl3slrrrx9/RobloxStudioBeta_nwi1cUYzGq.mp4?rlkey=g0oekbyojfudlbnihuw5nodam&raw=1', 'OBSTACLES', 'A competitive obstacle course game featuring a custom ranked matchmaking system built in Roblox Studio.')">
+                    <div class="media-overlay"><i class="fas fa-expand"></i></div>
+                    <video autoplay loop muted playsinline>
+                        <source src="https://www.dropbox.com/scl/fi/mwj5sewh98qvl3slrrrx9/RobloxStudioBeta_nwi1cUYzGq.mp4?rlkey=g0oekbyojfudlbnihuw5nodam&raw=1" type="video/mp4">
+                    </video>
+                </div>
+                <div class="info-container">
+                    <div class="badge-row">
+                        <span class="badge badge-wip">● WIP</span>
+                        <span class="badge badge-role">👑 Main Scripter</span>
+                    </div>
+                    <div class="game-title">Obstacles</div>
+                    <p class="game-desc">A simple ranked obstacle course game currently in development featuring real-time competitive matchmaking and leaderboards.</p>
+                    <div class="tags">
+                        <span class="tag">Main Scripter</span>
+                        <span class="tag">Ranked Matchmaking</span>
+                        <span class="tag">Obby</span>
+                        <span class="tag">Competitive</span>
+                    </div>
+                    <div class="action-tray">
+                        <button class="btn-action" onclick="expandGameModal('https://www.dropbox.com/scl/fi/mwj5sewh98qvl3slrrrx9/RobloxStudioBeta_nwi1cUYzGq.mp4?rlkey=g0oekbyojfudlbnihuw5nodam&raw=1', 'OBSTACLES', 'A competitive obstacle course game featuring a custom ranked matchmaking system built in Roblox Studio.')">
+                            <i class="fas fa-eye"></i> Inspect
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <span>⚡ Crafted in Cairo, Egypt · Roblox Worlds Live ⚡</span>
+        </footer>
 
     </div>
 
-    <p class="footer-rune">From &nbsp;·&nbsp; Egypt. Cairo</p>
-</div>
-
-<!-- ── MODAL: Obstacles ── -->
-<div class="modal-overlay" id="modal-obstacles" onclick="closeModalOutside(event)">
-    <div class="modal">
-        <div class="modal-corner-tl"></div>
-        <div class="modal-corner-br"></div>
-        <button class="modal-close" onclick="closeModal('modal-obstacles')">✕ Close</button>
-        <div class="modal-video">
-            <video autoplay loop muted playsinline>
-                <source src="" type="video/mp4">
-            </video>
-        </div>
-        <div class="modal-body">
-            <span class="modal-badge">WIP</span>
-            <div class="modal-title">Obstacles</div>
-            <p class="modal-desc">
-                A SIMPLE GAME IAM WORKING ON IT BUT ITS STILL NOT FINISHED
-            </p>
-            <div class="modal-tags">
-                <span class="modal-tag">Ranked System</span>
-                <span class="modal-tag">Obby</span>
-                <span class="modal-tag">Competitive</span>
+    <!-- Fullscreen Lightbox Modal -->
+    <div class="modal-overlay" id="lightbox" onclick="closeLightboxOutside(event)">
+        <div class="modal">
+            <button class="modal-close" onclick="closeLightbox()">✕</button>
+            <div class="modal-video-box" id="lightbox-video-box">
+                <video id="lightbox-video" autoplay loop controls muted playsinline></video>
+            </div>
+            <div class="modal-details">
+                <div class="modal-title" id="lightbox-title">Game Focus</div>
+                <p class="modal-desc" id="lightbox-desc">Details loading...</p>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    const fog = document.getElementById('fog');
-    for (let i = 0; i < 18; i++) {
-        const p = document.createElement('div');
-        p.className = 'fog-particle';
-        const size = 40 + Math.random() * 120;
-        p.style.cssText = `
-            width:${size}px; height:${size}px;
-            left:${Math.random()*100}%;
-            animation-duration:${12+Math.random()*20}s;
-            animation-delay:${-Math.random()*25}s;
-            opacity:${0.2+Math.random()*0.4};
-        `;
-        fog.appendChild(p);
-    }
+    <script>
+        // Filtration Logic
+        function filterGames(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
 
-    function openModal(id) {
-        document.getElementById(id).classList.add('open');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeModal(id) {
-        document.getElementById(id).classList.remove('open');
-        document.body.style.overflow = '';
-    }
-    function closeModalOutside(e) {
-        if (e.target.classList.contains('modal-overlay')) {
-            e.target.classList.remove('open');
+            document.querySelectorAll('.game-showcase').forEach(card => {
+                const tags = card.getAttribute('data-tags').split(' ');
+                if (category === 'all' || tags.includes(category)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Lightbox Engine
+        const lightbox = document.getElementById('lightbox');
+        const lightboxVideo = document.getElementById('lightbox-video');
+        const lightboxVideoBox = document.getElementById('lightbox-video-box');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxDesc = document.getElementById('lightbox-desc');
+
+        function expandGameModal(videoSrc, title, description) {
+            if (videoSrc && videoSrc.trim() !== '') {
+                lightboxVideo.src = videoSrc;
+                lightboxVideoBox.style.display = 'block';
+                lightboxVideo.play();
+            } else {
+                lightboxVideo.pause();
+                lightboxVideo.src = "";
+                lightboxVideoBox.style.display = 'none';
+            }
+
+            lightboxTitle.textContent = title;
+            lightboxDesc.textContent = description;
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            lightboxVideo.pause();
+            lightboxVideo.src = "";
             document.body.style.overflow = '';
         }
-    }
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.modal-overlay.open')
-                .forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; });
+
+        function closeLightboxOutside(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeLightbox();
+            }
         }
-    });
-</script>
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+                closeLightbox();
+            }
+        });
+    </script>
 </body>
 </html>
