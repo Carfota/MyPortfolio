@@ -1,7 +1,8 @@
-/* ─── DOPAMINE PROCEDURAL SOUND FX & HAPTIC ENGINE ─── */
+/* ─── DOPAMINE PROCEDURAL SOUND FX & HAPTIC ENGINE (FIXED & DEBOUNCED) ─── */
 const DopamineAudio = (() => {
     let audioCtx = null;
-    let sfxEnabled = localStorage.getItem('vibe_sfx') !== 'false'; // Default ON
+    let sfxEnabled = localStorage.getItem('vibe_sfx') !== 'false';
+    let lastHoverTime = 0;
 
     function getAudioContext() {
         if (!audioCtx) {
@@ -14,110 +15,79 @@ const DopamineAudio = (() => {
         return audioCtx;
     }
 
-    // 1. Playful Bubbly Hover Sound (Subtle High-Pitch Sine Blip)
+    // 1. Playful Bubbly Hover Sound (Anti-Spam Debounced)
     function playHover() {
         if (!sfxEnabled) return;
+        const now = performance.now();
+        if (now - lastHoverTime < 110) return; // Strict cooldown to kill looping/repeating
+        lastHoverTime = now;
+
         try {
             const ctx = getAudioContext();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-
             const startTime = ctx.currentTime;
-            const duration = 0.06;
+            const duration = 0.04;
 
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(480, startTime);
-            osc.frequency.exponentialRampToValueAtTime(780, startTime + duration);
+            osc.frequency.setValueAtTime(500, startTime);
+            osc.frequency.exponentialRampToValueAtTime(800, startTime + duration);
 
-            gain.gain.setValueAtTime(0.04, startTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+            gain.gain.setValueAtTime(0.025, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
             osc.connect(gain);
             gain.connect(ctx.destination);
-
             osc.start(startTime);
             osc.stop(startTime + duration);
         } catch (e) {}
     }
 
-    // 2. Snappy Arcade Click Sound (Multi-Tone Dopamine Pop)
+    // 2. Snappy Click Sound
     function playClick() {
         if (!sfxEnabled) return;
         try {
             const ctx = getAudioContext();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-
             const startTime = ctx.currentTime;
-            const duration = 0.08;
+            const duration = 0.07;
 
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(800, startTime);
-            osc.frequency.exponentialRampToValueAtTime(1400, startTime + 0.03);
-            osc.frequency.exponentialRampToValueAtTime(300, startTime + duration);
+            osc.frequency.setValueAtTime(850, startTime);
+            osc.frequency.exponentialRampToValueAtTime(1400, startTime + 0.025);
+            osc.frequency.exponentialRampToValueAtTime(280, startTime + duration);
 
-            gain.gain.setValueAtTime(0.08, startTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+            gain.gain.setValueAtTime(0.06, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
             osc.connect(gain);
             gain.connect(ctx.destination);
-
             osc.start(startTime);
             osc.stop(startTime + duration);
 
-            // Optional Native Mobile Haptic Feedback
-            if (navigator.vibrate) {
-                navigator.vibrate(12);
-            }
+            if (navigator.vibrate) navigator.vibrate(10);
         } catch (e) {}
     }
 
-    // 3. Slider Step Tick Sound
+    // 3. Slider Tick
     function playTick() {
         if (!sfxEnabled) return;
         try {
             const ctx = getAudioContext();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-
             const startTime = ctx.currentTime;
-            const duration = 0.03;
+            const duration = 0.02;
 
             osc.type = 'square';
-            osc.frequency.setValueAtTime(1200, startTime);
+            osc.frequency.setValueAtTime(1100, startTime);
 
-            gain.gain.setValueAtTime(0.02, startTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc.start(startTime);
-            osc.stop(startTime + duration);
-        } catch (e) {}
-    }
-
-    // 4. Modal Open / Action Swoosh
-    function playSwoosh() {
-        if (!sfxEnabled) return;
-        try {
-            const ctx = getAudioContext();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-
-            const startTime = ctx.currentTime;
-            const duration = 0.15;
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(250, startTime);
-            osc.frequency.exponentialRampToValueAtTime(950, startTime + duration);
-
-            gain.gain.setValueAtTime(0.07, startTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+            gain.gain.setValueAtTime(0.015, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
             osc.connect(gain);
             gain.connect(ctx.destination);
-
             osc.start(startTime);
             osc.stop(startTime + duration);
         } catch (e) {}
@@ -134,9 +104,7 @@ const DopamineAudio = (() => {
         return sfxEnabled;
     }
 
-    // Auto-attach listeners to interactive elements
     function attachGlobalListeners() {
-        // Unlock Web Audio on first gesture anywhere
         const unlock = () => {
             getAudioContext();
             document.removeEventListener('pointerdown', unlock);
@@ -145,7 +113,7 @@ const DopamineAudio = (() => {
         document.addEventListener('pointerdown', unlock);
         document.addEventListener('keydown', unlock);
 
-        // Hover & Click sounds on buttons, links, cards, tabs
+        // Targeted buttons & links only (no big wrapper cards)
         const interactiveSelector = `
             .nav-link, 
             .btn-action, 
@@ -154,56 +122,24 @@ const DopamineAudio = (() => {
             .filter-btn, 
             .preset-btn, 
             .inline-pill-link, 
-            .skill-pill,
+            .skill-pill, 
             .vibe-controller-toggle,
-            .modal-close,
-            .media-container,
-            .game-showcase,
-            .system-showcase
+            .modal-close
         `;
 
-        document.addEventListener('mouseover', (e) => {
-            const target = e.target.closest(interactiveSelector);
-            if (target && !target.dataset.sfxHoverBound) {
-                target.dataset.sfxHoverBound = "true";
-                playHover();
-            }
+        document.querySelectorAll(interactiveSelector).forEach(el => {
+            el.addEventListener('mouseenter', () => playHover());
+            el.addEventListener('click', () => playClick());
         });
 
-        document.addEventListener('mouseout', (e) => {
-            const target = e.target.closest(interactiveSelector);
-            if (target) {
-                delete target.dataset.sfxHoverBound;
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            const target = e.target.closest(interactiveSelector);
-            if (target) {
-                playClick();
-            }
-        });
-
-        // Sliders input tick
         document.addEventListener('input', (e) => {
-            if (e.target.type === 'range') {
-                playTick();
-            }
+            if (e.target.type === 'range') playTick();
         });
     }
 
-    return {
-        playHover,
-        playClick,
-        playTick,
-        playSwoosh,
-        toggleSFX,
-        isEnabled,
-        attachGlobalListeners
-    };
+    return { playHover, playClick, playTick, toggleSFX, isEnabled, attachGlobalListeners };
 })();
 
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     DopamineAudio.attachGlobalListeners();
 });
