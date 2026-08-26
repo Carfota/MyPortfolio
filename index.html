@@ -129,9 +129,7 @@
         .nav-link:hover, .nav-link.active {
             transform: scale(calc(1 + (0.1 * var(--boom-tilt)))) translateY(-4px) rotate(calc(-1deg * var(--boom-tilt)));
             border-color: var(--accent-3); background: var(--accent-1); color: #0D0D1A;
-            box-shadow: 
-                0 0 calc(25px * var(--glow-intensity)) rgba(255, 58, 242, 0.8),
-                6px 6px 0px var(--accent-3), 12px 12px 0px var(--accent-2);
+            box-shadow: 0 0 calc(25px * var(--glow-intensity)) rgba(255, 58, 242, 0.8), 6px 6px 0px var(--accent-3), 12px 12px 0px var(--accent-2);
         }
 
         .hero-badge {
@@ -338,7 +336,6 @@
 
         .preset-btn:hover { background: var(--accent-3); color: #0D0D1A; }
 
-        /* Keyframes */
         @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-22px) rotate(8deg); } }
         @keyframes float-reverse { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(22px) rotate(-8deg); } }
         @keyframes wiggle { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
@@ -501,151 +498,18 @@
         </div>
     </div>
 
+    <!-- External Sound Effects Engine -->
+    <script src="sfx.js"></script>
+
     <script>
-        /* ─── PROCEDURAL DOPAMINE AUDIO & HAPTIC ENGINE ─── */
-        const DopamineAudio = (() => {
-            let audioCtx = null;
-            let sfxEnabled = localStorage.getItem('vibe_sfx') !== 'false';
-
-            function getAudioContext() {
-                if (!audioCtx) {
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    audioCtx = new AudioContext();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-                return audioCtx;
-            }
-
-            function playHover() {
-                if (!sfxEnabled) return;
-                try {
-                    const ctx = getAudioContext();
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    const startTime = ctx.currentTime;
-                    const duration = 0.05;
-
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(450, startTime);
-                    osc.frequency.exponentialRampToValueAtTime(750, startTime + duration);
-
-                    gain.gain.setValueAtTime(0.03, startTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(startTime);
-                    osc.stop(startTime + duration);
-                } catch (e) {}
-            }
-
-            function playClick() {
-                if (!sfxEnabled) return;
-                try {
-                    const ctx = getAudioContext();
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    const startTime = ctx.currentTime;
-                    const duration = 0.08;
-
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(800, startTime);
-                    osc.frequency.exponentialRampToValueAtTime(1400, startTime + 0.03);
-                    osc.frequency.exponentialRampToValueAtTime(300, startTime + duration);
-
-                    gain.gain.setValueAtTime(0.07, startTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(startTime);
-                    osc.stop(startTime + duration);
-
-                    if (navigator.vibrate) navigator.vibrate(10);
-                } catch (e) {}
-            }
-
-            function playTick() {
-                if (!sfxEnabled) return;
-                try {
-                    const ctx = getAudioContext();
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    const startTime = ctx.currentTime;
-                    const duration = 0.025;
-
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(1100, startTime);
-
-                    gain.gain.setValueAtTime(0.015, startTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(startTime);
-                    osc.stop(startTime + duration);
-                } catch (e) {}
-            }
-
-            function toggleSFX() {
-                sfxEnabled = !sfxEnabled;
-                localStorage.setItem('vibe_sfx', sfxEnabled);
-                if (sfxEnabled) playClick();
-                return sfxEnabled;
-            }
-
-            function isEnabled() { return sfxEnabled; }
-
-            function attachGlobalListeners() {
-                const unlock = () => {
-                    getAudioContext();
-                    document.removeEventListener('pointerdown', unlock);
-                    document.removeEventListener('keydown', unlock);
-                };
-                document.addEventListener('pointerdown', unlock);
-                document.addEventListener('keydown', unlock);
-
-                const interactiveSelector = `
-                    .nav-link, .btn-action, .btn-dopamine, .btn-order, .filter-btn, 
-                    .preset-btn, .inline-pill-link, .skill-pill, .vibe-controller-toggle,
-                    .modal-close, .media-container
-                `;
-
-                document.addEventListener('mouseover', (e) => {
-                    const target = e.target.closest(interactiveSelector);
-                    if (target && !target.dataset.sfxHoverBound) {
-                        target.dataset.sfxHoverBound = "true";
-                        playHover();
-                    }
-                });
-
-                document.addEventListener('mouseout', (e) => {
-                    const target = e.target.closest(interactiveSelector);
-                    if (target) delete target.dataset.sfxHoverBound;
-                });
-
-                document.addEventListener('click', (e) => {
-                    const target = e.target.closest(interactiveSelector);
-                    if (target) playClick();
-                });
-
-                document.addEventListener('input', (e) => {
-                    if (e.target.type === 'range') playTick();
-                });
-            }
-
-            return { playHover, playClick, playTick, toggleSFX, isEnabled, attachGlobalListeners };
-        })();
-
-        // Global UI handlers
         function handleSFXToggle() {
-            const enabled = DopamineAudio.toggleSFX();
-            const btn = document.getElementById('sfx-toggle-btn');
-            if (btn) {
-                btn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
-                btn.style.borderColor = enabled ? 'var(--accent-2)' : '#555';
+            if (typeof DopamineAudio !== 'undefined') {
+                const enabled = DopamineAudio.toggleSFX();
+                const btn = document.getElementById('sfx-toggle-btn');
+                if (btn) {
+                    btn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
+                    btn.style.borderColor = enabled ? 'var(--accent-2)' : '#555';
+                }
             }
         }
 
@@ -680,17 +544,13 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            DopamineAudio.attachGlobalListeners();
-
-            // Sync SFX Button
             const sfxBtn = document.getElementById('sfx-toggle-btn');
-            if (sfxBtn) {
+            if (sfxBtn && typeof DopamineAudio !== 'undefined') {
                 const enabled = DopamineAudio.isEnabled();
                 sfxBtn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
                 sfxBtn.style.borderColor = enabled ? 'var(--accent-2)' : '#555';
             }
 
-            // Restore Vibe Sliders
             const savedGlow = localStorage.getItem('vibe_glow') || '100';
             const savedBoom = localStorage.getItem('vibe_boom') || '100';
             const savedPattern = localStorage.getItem('vibe_pattern') || '100';
