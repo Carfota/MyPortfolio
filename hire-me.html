@@ -1,81 +1,488 @@
-<!-- ─── COMMISSIONS & PRICING SHEET ─── -->
-<div class="welcome-card" style="margin-top: 40px; text-align: left;">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
-        <h2 style="font-family: var(--font-head); font-size: 2.2rem; font-weight: 900; color: var(--fg); text-shadow: 2px 2px 0px var(--accent-5), 4px 4px 0px var(--accent-1); margin: 0;">
-            COMMISSIONS & RATES
-        </h2>
-        <span style="font-family: var(--font-display); font-size: 0.8rem; background: var(--accent-2); color: #0D0D1A; padding: 6px 16px; border-radius: 9999px; border: 2px solid var(--accent-1); box-shadow: 3px 3px 0px var(--accent-3);">
-            ● COMMISSIONS OPEN
-        </span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commissions & Pricing | Carfota</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #0D0D1A;
+            --fg: #FFFFFF;
+            --muted-container: rgba(45, 27, 78, 0.88);
+            
+            --accent-1: #FF3AF2;
+            --accent-2: #00F5D4;
+            --accent-3: #FFE600;
+            --accent-4: #FF6B35;
+            --accent-5: #7B2FFF;
+
+            --font-head: 'Outfit', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-display: 'Bungee', cursive;
+
+            --glow-intensity: 1;
+            --boom-tilt: 1;
+            --pattern-opacity: 1;
+            --anim-speed-mult: 1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            filter: saturate(calc(0.5 + (0.5 * var(--glow-intensity))));
+        }
+
+        .bg-pattern-layer {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+            opacity: var(--pattern-opacity);
+            transition: opacity 0.3s ease;
+        }
+
+        .pattern-dots {
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, var(--accent-1) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+            opacity: 0.15;
+        }
+
+        .pattern-stripes {
+            position: absolute; inset: 0;
+            background-image: repeating-linear-gradient(
+                45deg, transparent, transparent 14px,
+                rgba(255, 230, 0, 0.05) 14px, rgba(255, 230, 0, 0.05) 28px
+            );
+        }
+
+        .pattern-mesh {
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(255, 58, 242, 0.22) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 30%, rgba(0, 245, 212, 0.18) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(123, 47, 255, 0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 70%, rgba(255, 107, 53, 0.15) 0%, transparent 50%);
+        }
+
+        .bg-watermark {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(calc(-10deg * var(--boom-tilt)));
+            font-family: var(--font-display);
+            font-size: clamp(7rem, 16vw, 16rem);
+            line-height: 0.8;
+            color: rgba(255, 230, 0, calc(0.03 * var(--pattern-opacity)));
+            text-shadow: 4px 4px 0px rgba(255, 58, 242, calc(0.03 * var(--pattern-opacity))), -4px -4px 0px rgba(0, 245, 212, calc(0.03 * var(--pattern-opacity)));
+            white-space: nowrap; user-select: none; pointer-events: none; z-index: 1;
+        }
+
+        .floating-shape {
+            position: absolute; pointer-events: none; z-index: 2;
+            filter: drop-shadow(0 0 calc(15px * var(--glow-intensity)) currentColor);
+            opacity: calc(0.2 + (0.8 * var(--pattern-opacity)));
+        }
+
+        .shape-1 { top: 6%; left: 4%; color: var(--accent-3); animation: wiggle calc(2s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 2.8rem; }
+        .shape-2 { top: 18%; right: 5%; color: var(--accent-2); animation: float calc(5s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 2.6rem; }
+        .shape-3 { top: 45%; left: 2%; color: var(--accent-1); animation: spin-slow calc(16s / var(--anim-speed-mult)) linear infinite; font-size: 3.2rem; }
+        .shape-4 { bottom: 15%; right: 4%; color: var(--accent-4); animation: bounce-subtle calc(2.5s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 3rem; }
+
+        .container {
+            position: relative; z-index: 10; max-width: 1100px; width: 100%;
+            padding: 40px 24px 80px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        nav { display: flex; justify-content: center; gap: 14px; margin-bottom: 45px; flex-wrap: wrap; }
+
+        .nav-link {
+            font-family: var(--font-head); font-weight: 900; font-size: 0.95rem;
+            letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg); text-decoration: none;
+            padding: 12px 30px; border-radius: 9999px; background: var(--muted-container);
+            border: 4px solid var(--accent-1);
+            box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-5), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-2);
+            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+
+        .nav-link:nth-child(2) { border-color: var(--accent-2); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-1), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-3); }
+        .nav-link:nth-child(3) { border-color: var(--accent-3); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-4), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-5); }
+        .nav-link:nth-child(4) { border-color: var(--accent-4); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-2), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-1); }
+
+        .nav-link:hover, .nav-link.active {
+            transform: scale(calc(1 + (0.1 * var(--boom-tilt)))) translateY(-4px) rotate(calc(-1deg * var(--boom-tilt)));
+            border-color: var(--accent-3); background: var(--accent-1); color: #0D0D1A;
+            box-shadow: 0 0 calc(25px * var(--glow-intensity)) rgba(255, 58, 242, 0.8), 6px 6px 0px var(--accent-3), 12px 12px 0px var(--accent-2);
+        }
+
+        .hero-badge {
+            font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 0.15em; color: #0D0D1A;
+            background: var(--accent-2); padding: 8px 24px; border-radius: 9999px;
+            border: 4px dashed var(--accent-1); transform: rotate(calc(-2deg * var(--boom-tilt)));
+            box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-3), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-5);
+            margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px;
+            animation: wiggle calc(3s / var(--anim-speed-mult)) ease-in-out infinite;
+        }
+
+        h1 {
+            font-family: var(--font-head); font-size: clamp(3.2rem, 8vw, 6.2rem); font-weight: 900;
+            line-height: 0.95; letter-spacing: -0.04em; text-transform: uppercase; text-align: center; color: var(--fg);
+            text-shadow: calc(3px * var(--boom-tilt)) calc(3px * var(--boom-tilt)) 0px var(--accent-5), calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-1), calc(9px * var(--boom-tilt)) calc(9px * var(--boom-tilt)) 0px var(--accent-2), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-3);
+            margin-bottom: 12px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--accent-3), var(--accent-1), var(--accent-2), var(--accent-4), var(--accent-3));
+            background-size: 300% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: gradient-shift 4s ease infinite;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-display); font-size: clamp(0.95rem, 2vw, 1.25rem); color: var(--accent-3);
+            text-shadow: calc(2px * var(--boom-tilt)) calc(2px * var(--boom-tilt)) 0px var(--accent-5), calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-1);
+            letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 40px; transform: rotate(calc(1deg * var(--boom-tilt)));
+        }
+
+        /* ─── PRICING CARDS ─── */
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px; width: 100%; margin-bottom: 40px;
+        }
+
+        .price-card {
+            background: var(--muted-container); border-radius: 28px; padding: 36px 28px;
+            backdrop-filter: blur(16px); transition: all 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: left; position: relative;
+        }
+
+        .price-card:nth-child(1) {
+            border: 4px solid var(--accent-2);
+            box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-5), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-1);
+            transform: rotate(calc(-1deg * var(--boom-tilt)));
+        }
+
+        .price-card:nth-child(2) {
+            border: 5px solid var(--accent-1);
+            box-shadow: calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-3), calc(16px * var(--boom-tilt)) calc(16px * var(--boom-tilt)) 0px var(--accent-4);
+            transform: scale(calc(1 + (0.03 * var(--boom-tilt)))) rotate(calc(1deg * var(--boom-tilt)));
+        }
+
+        .price-card:nth-child(3) {
+            border: 4px dashed var(--accent-4);
+            box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-2), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-3);
+            transform: rotate(calc(-0.5deg * var(--boom-tilt)));
+        }
+
+        .price-card:hover {
+            transform: scale(1.05) translateY(-8px) rotate(0deg) !important;
+            box-shadow: 0 0 calc(30px * var(--glow-intensity)) var(--accent-1), 10px 10px 0px var(--accent-3) !important;
+        }
+
+        .tier-tag {
+            font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.15em;
+            display: inline-block; padding: 4px 12px; border-radius: 9999px; margin-bottom: 12px;
+            color: #0D0D1A;
+        }
+
+        .price-card:nth-child(1) .tier-tag { background: var(--accent-2); }
+        .price-card:nth-child(2) .tier-tag { background: var(--accent-1); color: #FFF; }
+        .price-card:nth-child(3) .tier-tag { background: var(--accent-4); }
+
+        .tier-title {
+            font-family: var(--font-head); font-size: 1.7rem; font-weight: 900;
+            color: #FFF; margin-bottom: 10px; text-transform: uppercase;
+        }
+
+        .price-amount {
+            font-family: var(--font-head); font-size: 2.2rem; font-weight: 900;
+            color: var(--accent-3); line-height: 1.1; margin-bottom: 8px;
+            text-shadow: 2px 2px 0px var(--accent-5);
+        }
+
+        .price-sub { font-size: 1.1rem; color: var(--accent-2); font-weight: 700; margin-bottom: 20px; }
+
+        .feature-list { list-style: none; padding: 0; margin: 0 0 24px 0; display: flex; flex-direction: column; gap: 10px; }
+
+        .feature-list li {
+            font-size: 0.95rem; color: #ddd; display: flex; align-items: center; gap: 10px;
+        }
+
+        .feature-list li i { color: var(--accent-2); font-size: 0.85rem; }
+
+        /* ─── TOS CONTAINER ─── */
+        .tos-box {
+            background: rgba(13, 13, 26, 0.9); border: 3px dashed var(--accent-3);
+            border-radius: 20px; padding: 28px 32px; width: 100%; text-align: left;
+            box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-1);
+            margin-bottom: 40px;
+        }
+
+        .tos-title {
+            font-family: var(--font-head); font-weight: 900; font-size: 1.25rem;
+            color: var(--accent-3); text-transform: uppercase; margin-bottom: 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .tos-list { padding-left: 20px; color: #ccc; font-size: 0.92rem; line-height: 1.8; margin: 0; }
+        .tos-list strong { color: var(--accent-2); }
+
+        .btn-order {
+            font-family: var(--font-head); font-weight: 900; font-size: 1.1rem; letter-spacing: 0.15em;
+            text-transform: uppercase; text-decoration: none; color: #FFFFFF;
+            background: linear-gradient(90deg, #5865F2, var(--accent-1)); border: 4px solid var(--accent-3);
+            padding: 16px 42px; border-radius: 9999px; cursor: pointer;
+            box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-2), 0 0 calc(25px * var(--glow-intensity)) rgba(88, 101, 242, 0.6);
+            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-flex; align-items: center; gap: 12px;
+        }
+
+        .btn-order:hover {
+            transform: scale(1.1) translateY(-4px) rotate(calc(1.5deg * var(--boom-tilt)));
+            background: linear-gradient(90deg, var(--accent-2), #5865F2); color: #0D0D1A;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 35px rgba(0, 245, 212, 0.8), 10px 10px 0px var(--accent-3);
+        }
+
+        footer { margin-top: 70px; font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.25em; color: var(--accent-2); text-shadow: 2px 2px 0px var(--accent-5); text-transform: uppercase; text-align: center; }
+
+        /* VIBE TUNER */
+        .vibe-controller-toggle {
+            position: fixed; bottom: 24px; right: 24px; z-index: 99;
+            background: var(--accent-3); color: #0D0D1A; border: 4px solid var(--accent-1);
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 4px 4px 0px var(--accent-5), 0 0 20px var(--accent-3);
+            font-size: 1.5rem; transition: transform 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); background: var(--accent-2); }
+        .vibe-panel {
+            position: fixed; bottom: 95px; right: 24px; z-index: 100;
+            background: rgba(13, 13, 26, 0.96); border: 5px solid var(--accent-2);
+            box-shadow: 0 0 40px rgba(0, 245, 212, 0.4), 8px 8px 0px var(--accent-1);
+            border-radius: 24px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
+            display: none; flex-direction: column; gap: 16px;
+        }
+        .vibe-panel.open { display: flex; }
+        .vibe-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed rgba(255, 255, 255, 0.15); padding-bottom: 10px; }
+        .vibe-title { font-family: var(--font-display); font-size: 1.05rem; color: var(--accent-3); }
+        .vibe-tip { font-size: 0.78rem; line-height: 1.4; color: #bbb; background: rgba(255, 58, 242, 0.1); border-left: 3px solid var(--accent-1); padding: 8px 10px; border-radius: 4px; }
+        .vibe-row { display: flex; flex-direction: column; gap: 6px; }
+        .vibe-row label { font-family: var(--font-head); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: var(--accent-2); display: flex; justify-content: space-between; }
+        .vibe-row input[type="range"] { accent-color: var(--accent-1); height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.15); cursor: pointer; }
+        .preset-buttons { display: flex; gap: 6px; margin-top: 4px; }
+        .preset-btn { flex: 1; font-family: var(--font-head); font-weight: 900; font-size: 0.7rem; padding: 6px 4px; border-radius: 8px; border: 2px solid var(--accent-3); background: var(--muted-container); color: #FFFFFF; cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; }
+        .preset-btn:hover { background: var(--accent-3); color: #0D0D1A; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-22px) rotate(8deg); } }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+        @keyframes bounce-subtle { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.06); } }
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        @media (max-width: 768px) {
+            .pricing-grid { grid-template-columns: 1fr; }
+            .vibe-panel { width: calc(100vw - 48px); right: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern-layer">
+        <div class="pattern-dots"></div>
+        <div class="pattern-stripes"></div>
+        <div class="pattern-mesh"></div>
     </div>
 
-    <!-- Pricing Tiers Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px;">
+    <div class="bg-watermark" aria-hidden="true">HIRE // RATES</div>
+
+    <div class="floating-shape shape-1" aria-hidden="true">💰</div>
+    <div class="floating-shape shape-2" aria-hidden="true">⚡</div>
+    <div class="floating-shape shape-3" aria-hidden="true">💎</div>
+    <div class="floating-shape shape-4" aria-hidden="true">🔥</div>
+
+    <div class="container">
         
-        <!-- Tier 1: Small -->
-        <div style="background: rgba(13, 13, 26, 0.7); border: 3px solid var(--accent-2); border-radius: 20px; padding: 20px; box-shadow: 4px 4px 0px var(--accent-5);">
-            <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--accent-3); margin-bottom: 6px;">TIER 1 // BASIC</div>
-            <div style="font-family: var(--font-head); font-size: 1.6rem; font-weight: 900; color: #FFF; margin-bottom: 10px;">
-                5K - 10K <span style="font-size: 0.9rem; color: var(--accent-2);">R$</span> <br>
-                <span style="font-size: 1.1rem; color: var(--accent-1);">$20 - $40 USD</span>
+        <!-- Navigation Menu -->
+        <nav>
+            <a href="index.html" class="nav-link">
+                <i class="fa-solid fa-bolt"></i> Home
+            </a>
+            <a href="games.html" class="nav-link">
+                <i class="fa-solid fa-gamepad"></i> Games
+            </a>
+            <a href="systems.html" class="nav-link">
+                <i class="fa-solid fa-gears"></i> Systems
+            </a>
+            <a href="hire-me.html" class="nav-link active">
+                <i class="fa-solid fa-handshake"></i> Hire Me
+            </a>
+        </nav>
+
+        <div class="hero-badge">
+            <span>🟢 COMMISSIONS CURRENTLY OPEN</span>
+        </div>
+
+        <h1>
+            <span class="gradient-text">Pricing & Rates</span>
+        </h1>
+        <p class="hero-subtitle">Luau Scripting // Systems Engineering</p>
+
+        <!-- Pricing Tiers -->
+        <div class="pricing-grid">
+            
+            <!-- Tier 1 -->
+            <div class="price-card">
+                <span class="tier-tag">TIER 1 // BASIC</span>
+                <div class="tier-title">Small Systems</div>
+                <div class="price-amount">5K – 10K R$</div>
+                <div class="price-sub">$20 – $40 USD</div>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> Single mechanic / standalone script</li>
+                    <li><i class="fa-solid fa-check"></i> Daily Rewards / Leaderboards</li>
+                    <li><i class="fa-solid fa-check"></i> Bug fixes & optimization</li>
+                    <li><i class="fa-solid fa-check"></i> Turnaround: 1–2 Days</li>
+                </ul>
             </div>
-            <ul style="font-size: 0.9rem; color: #ccc; line-height: 1.6; padding-left: 18px; margin: 0;">
-                <li>Single Mechanic / Script</li>
-                <li>Daily Rewards / Leaderboard</li>
-                <li>Bug fixing & Optimization</li>
-                <li>Delivery: 1–2 Days</li>
+
+            <!-- Tier 2 (Highlighted) -->
+            <div class="price-card">
+                <span class="tier-tag">TIER 2 // POPULAR</span>
+                <div class="tier-title">Advanced Mechanics</div>
+                <div class="price-amount">15K – 35K R$</div>
+                <div class="price-sub">$60 – $140 USD</div>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> Full Combat / Hitbox Frameworks</li>
+                    <li><i class="fa-solid fa-check"></i> Territory & Map Control Systems</li>
+                    <li><i class="fa-solid fa-check"></i> Inventory / Custom Shiftlock UI</li>
+                    <li><i class="fa-solid fa-check"></i> Turnaround: 3–5 Days</li>
+                </ul>
+            </div>
+
+            <!-- Tier 3 -->
+            <div class="price-card">
+                <span class="tier-tag">TIER 3 // FULL SUITE</span>
+                <div class="tier-title">Custom Backend</div>
+                <div class="price-amount">40K – 100K+ R$</div>
+                <div class="price-sub">$160 – $400+ USD</div>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> External API Bridges (AI / Webhooks)</li>
+                    <li><i class="fa-solid fa-check"></i> Secure Custom DataStore architecture</li>
+                    <li><i class="fa-solid fa-check"></i> Full Game Core Loop Framework</li>
+                    <li><i class="fa-solid fa-check"></i> Turnaround: 1–2 Weeks</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Terms of Service (TOS) -->
+        <div class="tos-box">
+            <div class="tos-title">
+                <i class="fa-solid fa-scroll"></i> Terms of Service (TOS)
+            </div>
+            <ul class="tos-list">
+                <li><strong>50% upfront deposit</strong> is required before development begins.</li>
+                <li>Work is demonstrated inside a live private test place before final payment & file delivery.</li>
+                <li>If paying with Robux via Gamepass/T-Shirt, client covers the <strong>30% Roblox market tax</strong> (or pays via clean Group Payout).</li>
+                <li>Includes <strong>7 days of free bug fixes</strong> for delivered code.</li>
             </ul>
         </div>
 
-        <!-- Tier 2: Advanced (Highlighted) -->
-        <div style="background: rgba(45, 27, 78, 0.9); border: 4px solid var(--accent-1); border-radius: 20px; padding: 20px; box-shadow: 6px 6px 0px var(--accent-3); transform: scale(1.03);">
-            <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--accent-1); margin-bottom: 6px;">TIER 2 // ADVANCED</div>
-            <div style="font-family: var(--font-head); font-size: 1.6rem; font-weight: 900; color: #FFF; margin-bottom: 10px;">
-                15K - 35K <span style="font-size: 0.9rem; color: var(--accent-2);">R$</span> <br>
-                <span style="font-size: 1.1rem; color: var(--accent-3);">$60 - $140 USD</span>
-            </div>
-            <ul style="font-size: 0.9rem; color: #fff; line-height: 1.6; padding-left: 18px; margin: 0;">
-                <li>Full Combat / Hitbox System</li>
-                <li>Territory / Map Control</li>
-                <li>Custom Inventory / UI Systems</li>
-                <li>Delivery: 3–5 Days</li>
-            </ul>
-        </div>
-
-        <!-- Tier 3: Custom / Full Stack -->
-        <div style="background: rgba(13, 13, 26, 0.7); border: 3px solid var(--accent-4); border-radius: 20px; padding: 20px; box-shadow: 4px 4px 0px var(--accent-2);">
-            <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--accent-4); margin-bottom: 6px;">TIER 3 // BACKEND & SUITE</div>
-            <div style="font-family: var(--font-head); font-size: 1.6rem; font-weight: 900; color: #FFF; margin-bottom: 10px;">
-                40K - 100K+ <span style="font-size: 0.9rem; color: var(--accent-2);">R$</span> <br>
-                <span style="font-size: 1.1rem; color: var(--accent-4);">$160 - $400+ USD</span>
-            </div>
-            <ul style="font-size: 0.9rem; color: #ccc; line-height: 1.6; padding-left: 18px; margin: 0;">
-                <li>External API Bridges (AI / Webhooks)</li>
-                <li>Secure Custom DataStores</li>
-                <li>Full Game Core Loop Framework</li>
-                <li>Delivery: 1–2 Weeks</li>
-            </ul>
-        </div>
-
-    </div>
-
-    <!-- Terms of Service (TOS) Collapsible/Box -->
-    <div style="background: rgba(0,0,0,0.5); border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 16px 20px; margin-bottom: 24px;">
-        <div style="font-family: var(--font-head); font-weight: 900; color: var(--accent-3); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 8px;">
-            📜 Terms of Service (TOS)
-        </div>
-        <ul style="font-size: 0.85rem; color: #aaa; line-height: 1.6; padding-left: 18px; margin: 0;">
-            <li><strong>50% upfront deposit</strong> required before scripting begins.</li>
-            <li>Client tests the system in a live test place before final payment & file delivery.</li>
-            <li>Robux via Gamepass/T-Shirt requires covering the 30% Roblox market tax.</li>
-            <li>Includes 7 days of free bug fixes for delivered code.</li>
-        </ul>
-    </div>
-
-    <!-- CTA Button -->
-    <div style="text-align: center;">
-        <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-dopamine btn-discord" style="font-size: 1rem; padding: 14px 32px;">
-            <i class="fa-brands fa-discord"></i> Order a Commission via Discord
+        <!-- Order Button -->
+        <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-order">
+            <i class="fa-brands fa-discord" style="font-size: 1.4rem;"></i> Order via Discord DM
         </a>
+
+        <footer>
+            <span>⚡ Crafted in Cairo, Egypt · Commissions Open ⚡</span>
+        </footer>
+
     </div>
-</div>
+
+    <!-- VIBE TUNER -->
+    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Tune Brightness & Boomness">
+        <i class="fa-solid fa-sliders"></i>
+    </button>
+
+    <div class="vibe-panel" id="vibe-panel">
+        <div class="vibe-header">
+            <span class="vibe-title">🎛️ VIBE TUNER</span>
+            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:#FFF; cursor:pointer; font-size:1.1rem;">✕</button>
+        </div>
+        
+        <div class="vibe-tip">
+            💡 <strong>Tip:</strong> If the site feels too shiny or too playful, use these sliders to tone down the glow & boomness!
+        </div>
+
+        <div class="vibe-row">
+            <label><span>Glow & Brightness</span> <span id="val-glow">100%</span></label>
+            <input type="range" id="slider-glow" min="0" max="100" value="100" oninput="updateVibeSettings()">
+        </div>
+
+        <div class="vibe-row">
+            <label><span>Boomness & Tilt</span> <span id="val-boom">100%</span></label>
+            <input type="range" id="slider-boom" min="0" max="100" value="100" oninput="updateVibeSettings()">
+        </div>
+
+        <div class="vibe-row">
+            <label><span>Pattern Contrast</span> <span id="val-pattern">100%</span></label>
+            <input type="range" id="slider-pattern" min="0" max="100" value="100" oninput="updateVibeSettings()">
+        </div>
+
+        <div class="preset-buttons">
+            <button class="preset-btn" onclick="applyPreset(100, 100, 100)">⚡ Max</button>
+            <button class="preset-btn" onclick="applyPreset(50, 40, 40)">🛡️ Balanced</button>
+            <button class="preset-btn" onclick="applyPreset(10, 0, 15)">🌙 Chill</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleVibeMenu() {
+            document.getElementById('vibe-panel').classList.toggle('open');
+        }
+
+        function updateVibeSettings() {
+            const glow = document.getElementById('slider-glow').value;
+            const boom = document.getElementById('slider-boom').value;
+            const pattern = document.getElementById('slider-pattern').value;
+
+            document.getElementById('val-glow').textContent = glow + '%';
+            document.getElementById('val-boom').textContent = boom + '%';
+            document.getElementById('val-pattern').textContent = pattern + '%';
+
+            document.documentElement.style.setProperty('--glow-intensity', glow / 100);
+            document.documentElement.style.setProperty('--boom-tilt', boom / 100);
+            document.documentElement.style.setProperty('--pattern-opacity', pattern / 100);
+            document.documentElement.style.setProperty('--anim-speed-mult', Math.max(0.2, boom / 100));
+
+            localStorage.setItem('vibe_glow', glow);
+            localStorage.setItem('vibe_boom', boom);
+            localStorage.setItem('vibe_pattern', pattern);
+        }
+
+        function applyPreset(glow, boom, pattern) {
+            document.getElementById('slider-glow').value = glow;
+            document.getElementById('slider-boom').value = boom;
+            document.getElementById('slider-pattern').value = pattern;
+            updateVibeSettings();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedGlow = localStorage.getItem('vibe_glow') || '100';
+            const savedBoom = localStorage.getItem('vibe_boom') || '100';
+            const savedPattern = localStorage.getItem('vibe_pattern') || '100';
+
+            applyPreset(savedGlow, savedBoom, savedPattern);
+        });
+    </script>
+</body>
+</html>
