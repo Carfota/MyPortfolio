@@ -26,7 +26,6 @@
             --font-body: 'DM Sans', sans-serif;
             --font-display: 'Bungee', cursive;
 
-            /* Dynamic Control Variables */
             --glow-intensity: 1;
             --boom-tilt: 1;
             --pattern-opacity: 1;
@@ -109,12 +108,12 @@
             padding: 40px 24px 80px; display: flex; flex-direction: column; align-items: center;
         }
 
-        nav { display: flex; justify-content: center; gap: 16px; margin-bottom: 50px; flex-wrap: wrap; }
+        nav { display: flex; justify-content: center; gap: 14px; margin-bottom: 50px; flex-wrap: wrap; }
 
         .nav-link {
             font-family: var(--font-head); font-weight: 900; font-size: 0.95rem;
             letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg); text-decoration: none;
-            padding: 12px 32px; border-radius: 9999px; background: var(--muted-container);
+            padding: 12px 30px; border-radius: 9999px; background: var(--muted-container);
             border: 4px solid var(--accent-1);
             box-shadow: 
                 calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-5),
@@ -125,6 +124,7 @@
 
         .nav-link:nth-child(2) { border-color: var(--accent-2); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-1), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-3); }
         .nav-link:nth-child(3) { border-color: var(--accent-3); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-4), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-5); }
+        .nav-link:nth-child(4) { border-color: var(--accent-4); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-2), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-1); }
 
         .nav-link:hover, .nav-link.active {
             transform: scale(calc(1 + (0.1 * var(--boom-tilt)))) translateY(-4px) rotate(calc(-1deg * var(--boom-tilt)));
@@ -245,7 +245,7 @@
         .skill-pill {
             font-family: var(--font-head); font-weight: 800; font-size: 0.9rem; text-transform: uppercase;
             letter-spacing: 0.05em; padding: 8px 20px; border-radius: 9999px; background: var(--muted-container);
-            transition: all 0.25s ease;
+            transition: all 0.25s ease; cursor: pointer;
         }
 
         .skill-pill:nth-child(1) { border: 3px solid var(--accent-1); color: var(--accent-1); transform: rotate(calc(-2deg * var(--boom-tilt))); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-5); }
@@ -280,7 +280,7 @@
 
         footer { font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.25em; color: var(--accent-2); text-shadow: 2px 2px 0px var(--accent-5); text-transform: uppercase; text-align: center; }
 
-        /* ─── FLOATING SETTINGS CONTROLLER (VIBE TUNER) ─── */
+        /* ─── VIBE CONTROLLER PANEL ─── */
         .vibe-controller-toggle {
             position: fixed; bottom: 24px; right: 24px; z-index: 99;
             background: var(--accent-3); color: #0D0D1A; border: 4px solid var(--accent-1);
@@ -382,8 +382,8 @@
                 <i class="fa-solid fa-gears"></i> Systems
             </a>
             <a href="hire-me.html" class="nav-link">
-    <i class="fa-solid fa-handshake"></i> Hire Me
-</a>
+                <i class="fa-solid fa-handshake"></i> Hire Me
+            </a>
         </nav>
 
         <div class="hero-badge">
@@ -454,8 +454,8 @@
 
     </div>
 
-    <!-- ── VIBE & INTENSITY TUNER ── -->
-    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Tune Brightness & Boomness">
+    <!-- ── VIBE TUNER & SFX CONTROLLER ── -->
+    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Tune Brightness & Audio">
         <i class="fa-solid fa-sliders"></i>
     </button>
 
@@ -466,7 +466,17 @@
         </div>
         
         <div class="vibe-tip">
-            💡 <strong>Tip:</strong> If the site feels too shiny or too playful, use these sliders to tone down the glow & boomness!
+            💡 <strong>Tip:</strong> You can tune down visual intensity or toggle interactive sound FX!
+        </div>
+
+        <!-- Audio Toggle Control -->
+        <div class="vibe-row" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
+            <span style="font-family: var(--font-head); font-weight: 800; font-size: 0.85rem; color: var(--accent-3); text-transform: uppercase;">
+                <i class="fa-solid fa-volume-high"></i> Sound FX
+            </span>
+            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="preset-btn" style="flex: unset; width: 85px; padding: 6px 10px;">
+                ON 🔊
+            </button>
         </div>
 
         <div class="vibe-row">
@@ -492,6 +502,153 @@
     </div>
 
     <script>
+        /* ─── PROCEDURAL DOPAMINE AUDIO & HAPTIC ENGINE ─── */
+        const DopamineAudio = (() => {
+            let audioCtx = null;
+            let sfxEnabled = localStorage.getItem('vibe_sfx') !== 'false';
+
+            function getAudioContext() {
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                return audioCtx;
+            }
+
+            function playHover() {
+                if (!sfxEnabled) return;
+                try {
+                    const ctx = getAudioContext();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    const startTime = ctx.currentTime;
+                    const duration = 0.05;
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(450, startTime);
+                    osc.frequency.exponentialRampToValueAtTime(750, startTime + duration);
+
+                    gain.gain.setValueAtTime(0.03, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+                } catch (e) {}
+            }
+
+            function playClick() {
+                if (!sfxEnabled) return;
+                try {
+                    const ctx = getAudioContext();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    const startTime = ctx.currentTime;
+                    const duration = 0.08;
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(800, startTime);
+                    osc.frequency.exponentialRampToValueAtTime(1400, startTime + 0.03);
+                    osc.frequency.exponentialRampToValueAtTime(300, startTime + duration);
+
+                    gain.gain.setValueAtTime(0.07, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+
+                    if (navigator.vibrate) navigator.vibrate(10);
+                } catch (e) {}
+            }
+
+            function playTick() {
+                if (!sfxEnabled) return;
+                try {
+                    const ctx = getAudioContext();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    const startTime = ctx.currentTime;
+                    const duration = 0.025;
+
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(1100, startTime);
+
+                    gain.gain.setValueAtTime(0.015, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+                } catch (e) {}
+            }
+
+            function toggleSFX() {
+                sfxEnabled = !sfxEnabled;
+                localStorage.setItem('vibe_sfx', sfxEnabled);
+                if (sfxEnabled) playClick();
+                return sfxEnabled;
+            }
+
+            function isEnabled() { return sfxEnabled; }
+
+            function attachGlobalListeners() {
+                const unlock = () => {
+                    getAudioContext();
+                    document.removeEventListener('pointerdown', unlock);
+                    document.removeEventListener('keydown', unlock);
+                };
+                document.addEventListener('pointerdown', unlock);
+                document.addEventListener('keydown', unlock);
+
+                const interactiveSelector = `
+                    .nav-link, .btn-action, .btn-dopamine, .btn-order, .filter-btn, 
+                    .preset-btn, .inline-pill-link, .skill-pill, .vibe-controller-toggle,
+                    .modal-close, .media-container
+                `;
+
+                document.addEventListener('mouseover', (e) => {
+                    const target = e.target.closest(interactiveSelector);
+                    if (target && !target.dataset.sfxHoverBound) {
+                        target.dataset.sfxHoverBound = "true";
+                        playHover();
+                    }
+                });
+
+                document.addEventListener('mouseout', (e) => {
+                    const target = e.target.closest(interactiveSelector);
+                    if (target) delete target.dataset.sfxHoverBound;
+                });
+
+                document.addEventListener('click', (e) => {
+                    const target = e.target.closest(interactiveSelector);
+                    if (target) playClick();
+                });
+
+                document.addEventListener('input', (e) => {
+                    if (e.target.type === 'range') playTick();
+                });
+            }
+
+            return { playHover, playClick, playTick, toggleSFX, isEnabled, attachGlobalListeners };
+        })();
+
+        // Global UI handlers
+        function handleSFXToggle() {
+            const enabled = DopamineAudio.toggleSFX();
+            const btn = document.getElementById('sfx-toggle-btn');
+            if (btn) {
+                btn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
+                btn.style.borderColor = enabled ? 'var(--accent-2)' : '#555';
+            }
+        }
+
         function toggleVibeMenu() {
             document.getElementById('vibe-panel').classList.toggle('open');
         }
@@ -510,7 +667,6 @@
             document.documentElement.style.setProperty('--pattern-opacity', pattern / 100);
             document.documentElement.style.setProperty('--anim-speed-mult', Math.max(0.2, boom / 100));
 
-            // Save to localStorage across all pages
             localStorage.setItem('vibe_glow', glow);
             localStorage.setItem('vibe_boom', boom);
             localStorage.setItem('vibe_pattern', pattern);
@@ -523,12 +679,21 @@
             updateVibeSettings();
         }
 
-        // Restore user settings automatically
         window.addEventListener('DOMContentLoaded', () => {
+            DopamineAudio.attachGlobalListeners();
+
+            // Sync SFX Button
+            const sfxBtn = document.getElementById('sfx-toggle-btn');
+            if (sfxBtn) {
+                const enabled = DopamineAudio.isEnabled();
+                sfxBtn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
+                sfxBtn.style.borderColor = enabled ? 'var(--accent-2)' : '#555';
+            }
+
+            // Restore Vibe Sliders
             const savedGlow = localStorage.getItem('vibe_glow') || '100';
             const savedBoom = localStorage.getItem('vibe_boom') || '100';
             const savedPattern = localStorage.getItem('vibe_pattern') || '100';
-
             applyPreset(savedGlow, savedBoom, savedPattern);
         });
     </script>
