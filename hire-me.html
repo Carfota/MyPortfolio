@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commissions & Pricing | Carfota</title>
+    <title>Commissions & Services | Carfota</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,7 +135,6 @@
             animation: wiggle calc(3s / var(--anim-speed-mult)) ease-in-out infinite;
         }
 
-        /* ─── PAYMENT STATUS BANNER ─── */
         .payment-status-banner {
             width: 100%;
             background: rgba(255, 107, 53, 0.18);
@@ -182,7 +181,7 @@
             letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 30px; transform: rotate(calc(1deg * var(--boom-tilt)));
         }
 
-        /* ─── PRICING CARDS ─── */
+        /* ─── SERVICE TIERS ─── */
         .pricing-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 28px; width: 100%; margin-bottom: 40px;
@@ -229,34 +228,17 @@
 
         .tier-title {
             font-family: var(--font-head); font-size: 1.7rem; font-weight: 900;
-            color: #FFF; margin-bottom: 10px; text-transform: uppercase;
+            color: #FFF; margin-bottom: 8px; text-transform: uppercase;
         }
 
-        /* Robux & USD Pricing Styles */
-        .price-robux {
-            font-family: var(--font-head); font-size: 2rem; font-weight: 900;
-            color: var(--accent-3); line-height: 1.1; margin-bottom: 4px;
-            text-shadow: 2px 2px 0px var(--accent-5);
-            transition: all 0.3s ease;
+        .service-rate-label {
+            font-family: var(--font-head); font-size: 1.25rem; font-weight: 900;
+            color: var(--accent-3); text-shadow: 2px 2px 0px var(--accent-5);
+            text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
         }
 
-        .price-usd {
-            font-size: 1.45rem; color: var(--accent-2); font-weight: 900;
-            font-family: var(--font-head); margin-bottom: 18px;
-            transition: all 0.3s ease;
-        }
-
-        /* USD Only Override Styles */
-        body.usd-only-mode .price-robux {
-            text-decoration: line-through;
-            opacity: 0.35;
-            font-size: 1.3rem;
-        }
-
-        body.usd-only-mode .price-usd {
-            font-size: 2.2rem;
-            color: var(--accent-3);
-            text-shadow: 2px 2px 0px var(--accent-5);
+        .service-note {
+            font-size: 0.9rem; color: var(--accent-2); font-weight: 700; margin-bottom: 20px;
         }
 
         .feature-list { list-style: none; padding: 0; margin: 0 0 24px 0; display: flex; flex-direction: column; gap: 10px; }
@@ -350,7 +332,7 @@
         <div class="pattern-mesh"></div>
     </div>
 
-    <div class="bg-watermark" aria-hidden="true">HIRE // RATES</div>
+    <div class="bg-watermark" aria-hidden="true">HIRE // SERVICES</div>
 
     <div class="floating-shape shape-1" aria-hidden="true">💵</div>
     <div class="floating-shape shape-2" aria-hidden="true">⚡</div>
@@ -386,19 +368,19 @@
         </div>
 
         <h1>
-            <span class="gradient-text">Pricing & Rates</span>
+            <span class="gradient-text">Commission Services</span>
         </h1>
         <p class="hero-subtitle">Luau Scripting // Systems Engineering</p>
 
-        <!-- Pricing Tiers -->
+        <!-- Service Tiers -->
         <div class="pricing-grid">
             
             <!-- Tier 1 -->
             <div class="price-card">
                 <span class="tier-tag">TIER 1 // BASIC</span>
                 <div class="tier-title">Small Systems</div>
-                <div class="price-robux">5K – 10K R$</div>
-                <div class="price-usd">$20 – $40 USD</div>
+                <div class="service-rate-label">Quote On Scope</div>
+                <div class="service-note">Fast turnaround & custom pricing</div>
                 <ul class="feature-list">
                     <li><i class="fa-solid fa-check"></i> Single mechanic / standalone script</li>
                     <li><i class="fa-solid fa-check"></i> Daily Rewards / Leaderboards</li>
@@ -411,8 +393,8 @@
             <div class="price-card">
                 <span class="tier-tag">TIER 2 // POPULAR</span>
                 <div class="tier-title">Advanced Mechanics</div>
-                <div class="price-robux">15K – 35K R$</div>
-                <div class="price-usd">$60 – $140 USD</div>
+                <div class="service-rate-label">Quote On Scope</div>
+                <div class="service-note">Custom combat & gameplay loops</div>
                 <ul class="feature-list">
                     <li><i class="fa-solid fa-check"></i> Full Combat / Hitbox Frameworks</li>
                     <li><i class="fa-solid fa-check"></i> Territory & Map Control Systems</li>
@@ -425,8 +407,8 @@
             <div class="price-card">
                 <span class="tier-tag">TIER 3 // FULL SUITE</span>
                 <div class="tier-title">Custom Backend</div>
-                <div class="price-robux">40K – 100K+ R$</div>
-                <div class="price-usd">$160 – $400+ USD</div>
+                <div class="service-rate-label">Quote On Scope</div>
+                <div class="service-note">Full-stack & long-term development</div>
                 <ul class="feature-list">
                     <li><i class="fa-solid fa-check"></i> External API Bridges (AI / Webhooks)</li>
                     <li><i class="fa-solid fa-check"></i> Secure Custom DataStore architecture</li>
@@ -445,14 +427,14 @@
             <ul class="tos-list" id="tos-list">
                 <li><strong>50% upfront deposit</strong> is required before development begins.</li>
                 <li>Work is demonstrated inside a live private test place before final payment & file delivery.</li>
-                <li id="tos-payment-rule"><strong>Payment Methods:</strong> PayPal / USD transfers only at this time.</li>
+                <li id="tos-payment-rule"><strong>Payment:</strong> Currently accepting <strong>USD only</strong> (PayPal/Card).</li>
                 <li>Includes <strong>7 days of free bug fixes</strong> for delivered code.</li>
             </ul>
         </div>
 
         <!-- Order Button -->
         <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-order">
-            <i class="fa-brands fa-discord" style="font-size: 1.4rem;"></i> Order via Discord DM
+            <i class="fa-brands fa-discord" style="font-size: 1.4rem;"></i> Get a Quote via Discord
         </a>
 
         <footer>
@@ -500,7 +482,7 @@
 
     <script>
         // =========================================================================
-        // ⚙️ PAYMENT CONFIGURATION (SWITCH THIS ANYTIME)
+        // ⚙️ PAYMENT CONFIGURATION
         // Options: "USD_ONLY" or "BOTH"
         // =========================================================================
         const CURRENT_PAYMENT_MODE = "USD_ONLY"; 
@@ -512,20 +494,17 @@
             const heroBadgeText = document.getElementById('hero-badge-text');
 
             if (mode === "USD_ONLY") {
-                document.body.classList.add('usd-only-mode');
                 banner.style.display = "flex";
                 bannerText.innerHTML = "💵 <strong>CURRENT STATUS:</strong> ACCEPTING <strong>USD ONLY</strong> AT THE MOMENT (ROBUX CURRENTLY CLOSED)";
                 tosPaymentRule.innerHTML = "<strong>Payment:</strong> Currently accepting <strong>USD only</strong> (PayPal/Card). Robux payments are temporarily closed.";
                 heroBadgeText.textContent = "🟢 COMMISSIONS OPEN (USD ONLY)";
             } else {
-                document.body.classList.remove('usd-only-mode');
                 banner.style.display = "none";
                 tosPaymentRule.innerHTML = "<strong>Payment:</strong> Accepting <strong>USD and Robux</strong> (Client covers 30% Roblox market tax if paying via Gamepass/T-Shirt).";
                 heroBadgeText.textContent = "🟢 COMMISSIONS OPEN (USD & ROBUX)";
             }
         }
 
-        // Vibe Tuner Engine
         function toggleVibeMenu() {
             document.getElementById('vibe-panel').classList.toggle('open');
         }
@@ -557,10 +536,8 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Apply payment mode
             applyPaymentMode(CURRENT_PAYMENT_MODE);
 
-            // Restore Vibe settings
             const savedGlow = localStorage.getItem('vibe_glow') || '100';
             const savedBoom = localStorage.getItem('vibe_boom') || '100';
             const savedPattern = localStorage.getItem('vibe_pattern') || '100';
