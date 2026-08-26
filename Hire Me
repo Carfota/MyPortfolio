@@ -1,1 +1,81 @@
+<!-- ─── COMMISSIONS & PRICING SHEET ─── -->
+<div class="welcome-card" style="margin-top: 40px; text-align: left;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
+        <h2 style="font-family: var(--font-head); font-size: 2.2rem; font-weight: 900; color: var(--fg); text-shadow: 2px 2px 0px var(--accent-5), 4px 4px 0px var(--accent-1); margin: 0;">
+            COMMISSIONS & RATES
+        </h2>
+        <span style="font-family: var(--font-display); font-size: 0.8rem; background: var(--accent-2); color: #0D0D1A; padding: 6px 16px; border-radius: 9999px; border: 2px solid var(--accent-1); box-shadow: 3px 3px 0px var(--accent-3);">
+            ● COMMISSIONS OPEN
+        </span>
+    </div>
 
+    <!-- Pricing Tiers Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        
+        <!-- Tier 1: Small -->
+        <div style="background: rgba(13, 13, 26, 0.7); border: 3px solid var(--accent-2); border-radius: 20px; padding: 20px; box-shadow: 4px 4px 0px var(--accent-5);">
+            <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--accent-3); margin-bottom: 6px;">TIER 1 // BASIC</div>
+            <div style="font-family: var(--font-head); font-size: 1.6rem; font-weight: 900; color: #FFF; margin-bottom: 10px;">
+                5K - 10K <span style="font-size: 0.9rem; color: var(--accent-2);">R$</span> <br>
+                <span style="font-size: 1.1rem; color: var(--accent-1);">$20 - $40 USD</span>
+            </div>
+            <ul style="font-size: 0.9rem; color: #ccc; line-height: 1.6; padding-left: 18px; margin: 0;">
+                <li>Single Mechanic / Script</li>
+                <li>Daily Rewards / Leaderboard</li>
+                <li>Bug fixing & Optimization</li>
+                <li>Delivery: 1–2 Days</li>
+            </ul>
+        </div>
+
+        <!-- Tier 2: Advanced (Highlighted) -->
+        <div style="background: rgba(45, 27, 78, 0.9); border: 4px solid var(--accent-1); border-radius: 20px; padding: 20px; box-shadow: 6px 6px 0px var(--accent-3); transform: scale(1.03);">
+            <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--accent-1); margin-bottom: 6px;">TIER 2 // ADVANCED</div>
+            <div style="font-family: var(--font-head); font-size: 1.6rem; font-weight: 900; color: #FFF; margin-bottom: 10px;">
+                15K - 35K <span style="font-size: 0.9rem; color: var(--accent-2);">R$</span> <br>
+                <span style="font-size: 1.1rem; color: var(--accent-3);">$60 - $140 USD</span>
+            </div>
+            <ul style="font-size: 0.9rem; color: #fff; line-height: 1.6; padding-left: 18px; margin: 0;">
+                <li>Full Combat / Hitbox System</li>
+                <li>Territory / Map Control</li>
+                <li>Custom Inventory / UI Systems</li>
+                <li>Delivery: 3–5 Days</li>
+            </ul>
+        </div>
+
+        <!-- Tier 3: Custom / Full Stack -->
+        <div style="background: rgba(13, 13, 26, 0.7); border: 3px solid var(--accent-4); border-radius: 20px; padding: 20px; box-shadow: 4px 4px 0px var(--accent-2);">
+            <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--accent-4); margin-bottom: 6px;">TIER 3 // BACKEND & SUITE</div>
+            <div style="font-family: var(--font-head); font-size: 1.6rem; font-weight: 900; color: #FFF; margin-bottom: 10px;">
+                40K - 100K+ <span style="font-size: 0.9rem; color: var(--accent-2);">R$</span> <br>
+                <span style="font-size: 1.1rem; color: var(--accent-4);">$160 - $400+ USD</span>
+            </div>
+            <ul style="font-size: 0.9rem; color: #ccc; line-height: 1.6; padding-left: 18px; margin: 0;">
+                <li>External API Bridges (AI / Webhooks)</li>
+                <li>Secure Custom DataStores</li>
+                <li>Full Game Core Loop Framework</li>
+                <li>Delivery: 1–2 Weeks</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Terms of Service (TOS) Collapsible/Box -->
+    <div style="background: rgba(0,0,0,0.5); border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 16px 20px; margin-bottom: 24px;">
+        <div style="font-family: var(--font-head); font-weight: 900; color: var(--accent-3); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 8px;">
+            📜 Terms of Service (TOS)
+        </div>
+        <ul style="font-size: 0.85rem; color: #aaa; line-height: 1.6; padding-left: 18px; margin: 0;">
+            <li><strong>50% upfront deposit</strong> required before scripting begins.</li>
+            <li>Client tests the system in a live test place before final payment & file delivery.</li>
+            <li>Robux via Gamepass/T-Shirt requires covering the 30% Roblox market tax.</li>
+            <li>Includes 7 days of free bug fixes for delivered code.</li>
+        </ul>
+    </div>
+
+    <!-- CTA Button -->
+    <div style="text-align: center;">
+        <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-dopamine btn-discord" style="font-size: 1rem; padding: 14px 32px;">
+            <i class="fa-brands fa-discord"></i> Order a Commission via Discord
+        </a>
+    </div>
+</div>
