@@ -135,6 +135,34 @@
             animation: wiggle calc(3s / var(--anim-speed-mult)) ease-in-out infinite;
         }
 
+        /* ─── PAYMENT STATUS BANNER ─── */
+        .payment-status-banner {
+            width: 100%;
+            background: rgba(255, 107, 53, 0.18);
+            border: 3px solid var(--accent-4);
+            border-radius: 16px;
+            padding: 14px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-3);
+            text-align: center;
+        }
+
+        .payment-status-banner i {
+            color: var(--accent-3);
+            font-size: 1.3rem;
+            animation: bounce-subtle 1.5s infinite;
+        }
+
         h1 {
             font-family: var(--font-head); font-size: clamp(3.2rem, 8vw, 6.2rem); font-weight: 900;
             line-height: 0.95; letter-spacing: -0.04em; text-transform: uppercase; text-align: center; color: var(--fg);
@@ -151,7 +179,7 @@
         .hero-subtitle {
             font-family: var(--font-display); font-size: clamp(0.95rem, 2vw, 1.25rem); color: var(--accent-3);
             text-shadow: calc(2px * var(--boom-tilt)) calc(2px * var(--boom-tilt)) 0px var(--accent-5), calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-1);
-            letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 40px; transform: rotate(calc(1deg * var(--boom-tilt)));
+            letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 30px; transform: rotate(calc(1deg * var(--boom-tilt)));
         }
 
         /* ─── PRICING CARDS ─── */
@@ -204,13 +232,32 @@
             color: #FFF; margin-bottom: 10px; text-transform: uppercase;
         }
 
-        .price-amount {
-            font-family: var(--font-head); font-size: 2.2rem; font-weight: 900;
-            color: var(--accent-3); line-height: 1.1; margin-bottom: 8px;
+        /* Robux & USD Pricing Styles */
+        .price-robux {
+            font-family: var(--font-head); font-size: 2rem; font-weight: 900;
+            color: var(--accent-3); line-height: 1.1; margin-bottom: 4px;
             text-shadow: 2px 2px 0px var(--accent-5);
+            transition: all 0.3s ease;
         }
 
-        .price-sub { font-size: 1.1rem; color: var(--accent-2); font-weight: 700; margin-bottom: 20px; }
+        .price-usd {
+            font-size: 1.45rem; color: var(--accent-2); font-weight: 900;
+            font-family: var(--font-head); margin-bottom: 18px;
+            transition: all 0.3s ease;
+        }
+
+        /* USD Only Override Styles */
+        body.usd-only-mode .price-robux {
+            text-decoration: line-through;
+            opacity: 0.35;
+            font-size: 1.3rem;
+        }
+
+        body.usd-only-mode .price-usd {
+            font-size: 2.2rem;
+            color: var(--accent-3);
+            text-shadow: 2px 2px 0px var(--accent-5);
+        }
 
         .feature-list { list-style: none; padding: 0; margin: 0 0 24px 0; display: flex; flex-direction: column; gap: 10px; }
 
@@ -305,7 +352,7 @@
 
     <div class="bg-watermark" aria-hidden="true">HIRE // RATES</div>
 
-    <div class="floating-shape shape-1" aria-hidden="true">💰</div>
+    <div class="floating-shape shape-1" aria-hidden="true">💵</div>
     <div class="floating-shape shape-2" aria-hidden="true">⚡</div>
     <div class="floating-shape shape-3" aria-hidden="true">💎</div>
     <div class="floating-shape shape-4" aria-hidden="true">🔥</div>
@@ -329,7 +376,13 @@
         </nav>
 
         <div class="hero-badge">
-            <span>🟢 COMMISSIONS CURRENTLY OPEN</span>
+            <span id="hero-badge-text">🟢 COMMISSIONS OPEN</span>
+        </div>
+
+        <!-- Dynamic Payment Status Alert Banner -->
+        <div class="payment-status-banner" id="payment-status-banner">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span id="payment-status-text">Payment Notice Loading...</span>
         </div>
 
         <h1>
@@ -344,8 +397,8 @@
             <div class="price-card">
                 <span class="tier-tag">TIER 1 // BASIC</span>
                 <div class="tier-title">Small Systems</div>
-                <div class="price-amount">5K – 10K R$</div>
-                <div class="price-sub">$20 – $40 USD</div>
+                <div class="price-robux">5K – 10K R$</div>
+                <div class="price-usd">$20 – $40 USD</div>
                 <ul class="feature-list">
                     <li><i class="fa-solid fa-check"></i> Single mechanic / standalone script</li>
                     <li><i class="fa-solid fa-check"></i> Daily Rewards / Leaderboards</li>
@@ -358,8 +411,8 @@
             <div class="price-card">
                 <span class="tier-tag">TIER 2 // POPULAR</span>
                 <div class="tier-title">Advanced Mechanics</div>
-                <div class="price-amount">15K – 35K R$</div>
-                <div class="price-sub">$60 – $140 USD</div>
+                <div class="price-robux">15K – 35K R$</div>
+                <div class="price-usd">$60 – $140 USD</div>
                 <ul class="feature-list">
                     <li><i class="fa-solid fa-check"></i> Full Combat / Hitbox Frameworks</li>
                     <li><i class="fa-solid fa-check"></i> Territory & Map Control Systems</li>
@@ -372,8 +425,8 @@
             <div class="price-card">
                 <span class="tier-tag">TIER 3 // FULL SUITE</span>
                 <div class="tier-title">Custom Backend</div>
-                <div class="price-amount">40K – 100K+ R$</div>
-                <div class="price-sub">$160 – $400+ USD</div>
+                <div class="price-robux">40K – 100K+ R$</div>
+                <div class="price-usd">$160 – $400+ USD</div>
                 <ul class="feature-list">
                     <li><i class="fa-solid fa-check"></i> External API Bridges (AI / Webhooks)</li>
                     <li><i class="fa-solid fa-check"></i> Secure Custom DataStore architecture</li>
@@ -389,10 +442,10 @@
             <div class="tos-title">
                 <i class="fa-solid fa-scroll"></i> Terms of Service (TOS)
             </div>
-            <ul class="tos-list">
+            <ul class="tos-list" id="tos-list">
                 <li><strong>50% upfront deposit</strong> is required before development begins.</li>
                 <li>Work is demonstrated inside a live private test place before final payment & file delivery.</li>
-                <li>If paying with Robux via Gamepass/T-Shirt, client covers the <strong>30% Roblox market tax</strong> (or pays via clean Group Payout).</li>
+                <li id="tos-payment-rule"><strong>Payment Methods:</strong> PayPal / USD transfers only at this time.</li>
                 <li>Includes <strong>7 days of free bug fixes</strong> for delivered code.</li>
             </ul>
         </div>
@@ -446,6 +499,33 @@
     </div>
 
     <script>
+        // =========================================================================
+        // ⚙️ PAYMENT CONFIGURATION (SWITCH THIS ANYTIME)
+        // Options: "USD_ONLY" or "BOTH"
+        // =========================================================================
+        const CURRENT_PAYMENT_MODE = "USD_ONLY"; 
+
+        function applyPaymentMode(mode) {
+            const banner = document.getElementById('payment-status-banner');
+            const bannerText = document.getElementById('payment-status-text');
+            const tosPaymentRule = document.getElementById('tos-payment-rule');
+            const heroBadgeText = document.getElementById('hero-badge-text');
+
+            if (mode === "USD_ONLY") {
+                document.body.classList.add('usd-only-mode');
+                banner.style.display = "flex";
+                bannerText.innerHTML = "💵 <strong>CURRENT STATUS:</strong> ACCEPTING <strong>USD ONLY</strong> AT THE MOMENT (ROBUX CURRENTLY CLOSED)";
+                tosPaymentRule.innerHTML = "<strong>Payment:</strong> Currently accepting <strong>USD only</strong> (PayPal/Card). Robux payments are temporarily closed.";
+                heroBadgeText.textContent = "🟢 COMMISSIONS OPEN (USD ONLY)";
+            } else {
+                document.body.classList.remove('usd-only-mode');
+                banner.style.display = "none";
+                tosPaymentRule.innerHTML = "<strong>Payment:</strong> Accepting <strong>USD and Robux</strong> (Client covers 30% Roblox market tax if paying via Gamepass/T-Shirt).";
+                heroBadgeText.textContent = "🟢 COMMISSIONS OPEN (USD & ROBUX)";
+            }
+        }
+
+        // Vibe Tuner Engine
         function toggleVibeMenu() {
             document.getElementById('vibe-panel').classList.toggle('open');
         }
@@ -477,10 +557,13 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // Apply payment mode
+            applyPaymentMode(CURRENT_PAYMENT_MODE);
+
+            // Restore Vibe settings
             const savedGlow = localStorage.getItem('vibe_glow') || '100';
             const savedBoom = localStorage.getItem('vibe_boom') || '100';
             const savedPattern = localStorage.getItem('vibe_pattern') || '100';
-
             applyPreset(savedGlow, savedBoom, savedPattern);
         });
     </script>
