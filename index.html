@@ -8,7 +8,7 @@
     <!-- Cinzel Decorative for Royalty, Inter for Clean Readability -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -24,7 +24,7 @@
             --font-body: 'Inter', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Hide default cursor for wisp */ }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 
         body {
             background-color: var(--void-black);
@@ -33,7 +33,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            scrollbar-width: none; /* Hide default scrollbar */
+            scrollbar-width: none;
         }
         body::-webkit-scrollbar { display: none; }
 
@@ -42,14 +42,11 @@
             position: fixed; top: 0; left: 0; height: 3px; width: 0%;
             background: linear-gradient(90deg, transparent, var(--spectral-teal), var(--bone-white));
             box-shadow: 0 0 10px var(--spectral-teal);
-            z-index: 9999;
-            pointer-events: none;
-            transition: width 0.1s ease-out;
+            z-index: 9999; pointer-events: none; transition: width 0.1s ease-out;
         }
         #blade-scrollbar::after {
             content: ''; position: absolute; right: -5px; top: -3px;
-            width: 10px; height: 9px;
-            background: var(--bone-white);
+            width: 10px; height: 9px; background: var(--bone-white);
             clip-path: polygon(0 50%, 100% 0, 100% 100%);
             box-shadow: 0 0 15px var(--bone-white);
         }
@@ -61,15 +58,13 @@
             pointer-events: none; z-index: 10000;
             transform: translate(-50%, -50%);
             box-shadow: 0 0 20px var(--spectral-teal), 0 0 40px var(--mist-deep);
-            transition: width 0.2s, height 0.2s;
-            mix-blend-mode: screen;
+            transition: width 0.2s, height 0.2s; mix-blend-mode: screen;
         }
         .cursor-trail {
             position: fixed; width: 8px; height: 8px;
             background: var(--ruin-purple); border-radius: 50%;
             pointer-events: none; z-index: 9999;
-            transform: translate(-50%, -50%);
-            opacity: 0.6;
+            transform: translate(-50%, -50%); opacity: 0.6;
             box-shadow: 0 0 15px var(--ruin-shadow);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
@@ -78,18 +73,30 @@
         #viego-loader {
             position: fixed; inset: 0; background: var(--void-black);
             z-index: 50000; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            overflow: hidden;
+            align-items: center; justify-content: center; overflow: hidden;
             animation: dissolveLoader 1.5s ease-in-out 8.5s forwards;
+        }
+
+        /* Skip Button */
+        .skip-btn {
+            position: absolute; bottom: 30px; right: 40px;
+            background: transparent; border: 1px solid rgba(61, 220, 151, 0.4);
+            color: rgba(232, 230, 225, 0.7); font-family: var(--font-body);
+            font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+            padding: 10px 20px; z-index: 50001; transition: all 0.3s ease;
+            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+        }
+        .skip-btn:hover {
+            color: var(--void-black); background: var(--spectral-teal);
+            border-color: var(--spectral-teal); box-shadow: 0 0 20px rgba(61, 220, 151, 0.5);
+            font-weight: 800;
         }
 
         /* The Ring Crack */
         .shattered-ring {
             position: absolute; width: 150px; height: 150px;
-            border: 2px solid rgba(61, 220, 151, 0.1);
-            border-radius: 50%;
-            opacity: 0;
-            animation: crackRing 3s ease-out 1s forwards;
+            border: 2px solid rgba(61, 220, 151, 0.1); border-radius: 50%;
+            opacity: 0; animation: crackRing 3s ease-out 1s forwards;
         }
 
         /* The Ember */
@@ -146,30 +153,26 @@
 
         /* ─── NAVIGATION ─── */
         nav {
-            position: relative; z-index: 10;
-            display: flex; justify-content: center; gap: 40px; padding: 40px 0;
+            position: relative; z-index: 10; display: flex; justify-content: center; gap: 40px; padding: 40px 0;
             border-bottom: 1px solid rgba(232, 230, 225, 0.05);
         }
 
         .nav-link {
             font-family: var(--font-display); font-size: 1rem;
             color: rgba(232, 230, 225, 0.6); text-decoration: none; text-transform: uppercase;
-            letter-spacing: 0.15em; transition: all 0.3s ease;
-            position: relative;
+            letter-spacing: 0.15em; transition: all 0.3s ease; position: relative;
         }
         .nav-link::before {
             content: ''; position: absolute; bottom: -6px; left: 50%;
             width: 0; height: 1px; background: var(--spectral-teal);
-            transition: all 0.3s ease; transform: translateX(-50%);
-            box-shadow: 0 0 8px var(--spectral-teal);
+            transition: all 0.3s ease; transform: translateX(-50%); box-shadow: 0 0 8px var(--spectral-teal);
         }
         .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
         /* ─── HERO SECTION ─── */
         .hero {
-            position: relative; z-index: 10;
-            min-height: 70vh; display: flex; flex-direction: column;
+            position: relative; z-index: 10; min-height: 60vh; display: flex; flex-direction: column;
             justify-content: center; padding: 0 10vw;
             opacity: 0; animation: fadeUp 2s ease-out 9s forwards;
         }
@@ -182,10 +185,8 @@
 
         .hero-title::after {
             content: ''; position: absolute; bottom: -10px; left: 0;
-            height: 2px; background: var(--spectral-teal);
-            box-shadow: 0 0 15px var(--spectral-teal);
-            animation: underlineGrow 1.5s ease-out 10s forwards;
-            width: 0;
+            height: 2px; background: var(--spectral-teal); box-shadow: 0 0 15px var(--spectral-teal);
+            animation: underlineGrow 1.5s ease-out 10s forwards; width: 0;
         }
 
         .hero-subtitle {
@@ -202,31 +203,60 @@
             opacity: 0; animation: fadeUp 1s ease-out 11s forwards;
         }
 
+        /* ─── STATS SECTION ─── */
+        .stats-section {
+            position: relative; z-index: 10; padding: 0 10vw 60px;
+            opacity: 0; animation: fadeUp 1s ease-out 11.2s forwards;
+        }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px;
+            max-width: 900px;
+        }
+
+        .stat-card {
+            background: rgba(10, 10, 15, 0.6);
+            border: 1px solid rgba(232, 230, 225, 0.05);
+            border-bottom: 2px solid var(--spectral-teal);
+            padding: 25px 20px; text-align: center;
+            backdrop-filter: blur(10px); transition: all 0.3s ease;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px); border-color: var(--spectral-teal);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(61, 220, 151, 0.1);
+        }
+
+        .stat-value {
+            font-family: var(--font-display); font-size: 3rem; font-weight: 900;
+            color: var(--spectral-teal); text-shadow: 0 0 15px rgba(61, 220, 151, 0.4);
+            margin-bottom: 5px; line-height: 1;
+        }
+
+        .stat-label {
+            font-family: var(--font-body); font-size: 0.75rem; font-weight: 600;
+            color: rgba(232, 230, 225, 0.7); letter-spacing: 0.25em; text-transform: uppercase;
+        }
+
         /* ─── THE RUINS (PROJECT SECTIONS) ─── */
         .ruins-section {
-            position: relative; z-index: 10; padding: 100px 10vw;
+            position: relative; z-index: 10; padding: 40px 10vw 100px;
             opacity: 0; animation: fadeUp 1s ease-out 11.5s forwards;
         }
 
         .section-header {
             font-family: var(--font-display); font-size: 2rem;
-            color: var(--bone-white); margin-bottom: 50px;
-            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+            color: var(--bone-white); margin-bottom: 50px; text-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
 
-        .ruins-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px;
-        }
+        .ruins-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
 
         .ruin-card {
-            background: rgba(10, 10, 15, 0.6);
-            border: 1px solid rgba(232, 230, 225, 0.1);
-            padding: 40px; position: relative; overflow: hidden;
-            backdrop-filter: blur(10px);
-            transition: all 0.4s ease;
+            background: rgba(10, 10, 15, 0.6); border: 1px solid rgba(232, 230, 225, 0.1);
+            padding: 40px; position: relative; overflow: hidden; backdrop-filter: blur(10px); transition: all 0.4s ease;
         }
 
-        /* The Mist Creep & Cracked Glass Hover */
         .ruin-card::before {
             content: ''; position: absolute; inset: 0;
             background: radial-gradient(circle at center, transparent 0%, rgba(61, 220, 151, 0.15) 100%);
@@ -234,74 +264,55 @@
         }
         
         .ruin-card::after {
-            content: ''; position: absolute; inset: 0;
-            border: 2px solid transparent;
+            content: ''; position: absolute; inset: 0; border: 2px solid transparent;
             transition: all 0.4s ease; pointer-events: none;
         }
 
         .ruin-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(61, 220, 151, 0.3);
+            transform: translateY(-5px); border-color: rgba(61, 220, 151, 0.3);
             box-shadow: inset 0 0 30px rgba(61, 220, 151, 0.1), 0 10px 30px rgba(0,0,0,0.8);
         }
 
         .ruin-card:hover::before { opacity: 1; }
         .ruin-card:hover::after {
-            border-color: var(--spectral-teal);
-            clip-path: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+            border-color: var(--spectral-teal); clip-path: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
             box-shadow: 0 0 15px var(--spectral-teal);
         }
 
-        .ruin-number {
-            font-family: var(--font-body); font-size: 0.8rem;
-            color: var(--mist-deep); letter-spacing: 0.2em; margin-bottom: 10px; display: block;
-        }
+        .ruin-number { font-family: var(--font-body); font-size: 0.8rem; color: var(--mist-deep); letter-spacing: 0.2em; margin-bottom: 10px; display: block; }
+        .ruin-title { font-family: var(--font-display); font-size: 1.8rem; color: var(--bone-white); margin-bottom: 15px; }
+        .ruin-desc { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; color: rgba(232, 230, 225, 0.6); margin-bottom: 25px; }
 
-        .ruin-title {
-            font-family: var(--font-display); font-size: 1.8rem;
-            color: var(--bone-white); margin-bottom: 15px;
-        }
-
-        .ruin-desc {
-            font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6;
-            color: rgba(232, 230, 225, 0.6); margin-bottom: 25px;
-        }
-
-        /* Shattered Button */
         .btn-ruin {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 12px 24px; background: transparent;
+            display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; background: transparent;
             border: 1px solid var(--ruin-purple); color: var(--bone-white);
             font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 0.1em;
-            text-transform: uppercase; text-decoration: none;
-            position: relative; overflow: hidden; transition: all 0.3s ease;
+            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: all 0.3s ease;
         }
 
         .btn-ruin::before {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%; background: var(--spectral-teal);
-            transition: all 0.4s ease; z-index: -1;
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--spectral-teal);
+            transition: all 0.4s ease; z-index: -1; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
 
-        .btn-ruin:hover {
-            border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700;
-            box-shadow: 0 0 20px rgba(61, 220, 151, 0.4);
-        }
+        .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 20px rgba(61, 220, 151, 0.4); }
         .btn-ruin:hover::before { left: 0; }
 
-        /* ─── ANIMATION KEYFRAMES ─── */
-        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 30px 10px var(--spectral-teal); } }
-        @keyframes crackRing {
-            0% { opacity: 1; transform: scale(0.8); border-color: rgba(61, 220, 151, 0.1); }
-            50% { opacity: 1; transform: scale(1.2); border-color: var(--spectral-teal); box-shadow: inset 0 0 20px var(--spectral-teal); }
-            100% { opacity: 0; transform: scale(2); border-color: transparent; }
+        /* ─── SKIP OVERRIDE CLASSES ─── */
+        body.skipped .hero, body.skipped .hero-subtitle, body.skipped .hero-tagline, 
+        body.skipped .stats-section, body.skipped .ruins-section {
+            animation-delay: 0s !important; animation-duration: 0.8s !important;
         }
+        body.skipped .hero-title::after { animation-delay: 0.5s !important; animation-duration: 0.8s !important; }
+
+        /* ─── KEYFRAMES ─── */
+        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 30px 10px var(--spectral-teal); } }
+        @keyframes crackRing { 0% { opacity: 1; transform: scale(0.8); border-color: rgba(61, 220, 151, 0.1); } 50% { opacity: 1; transform: scale(1.2); border-color: var(--spectral-teal); box-shadow: inset 0 0 20px var(--spectral-teal); } 100% { opacity: 0; transform: scale(2); border-color: transparent; } }
         @keyframes riseSilhouette { 0% { opacity: 0; transform: translateY(50px); filter: brightness(0); } 100% { opacity: 0.6; transform: translateY(0); filter: brightness(0.4) sepia(1) hue-rotate(130deg); } }
         @keyframes fadeInText { to { opacity: 1; } }
         @keyframes typing { from { width: 0; } to { width: 100%; } }
         @keyframes blinkCursor { 50% { border-color: transparent; } }
-        @keyframes dissolveLoader { 0% { opacity: 1; filter: blur(0); transform: scale(1); } 100% { opacity: 0; filter: blur(20px); transform: scale(1.1); pointer-events: none; visibility: hidden; } }
+        @keyframes dissolveLoader { 0% { opacity: 1; filter: blur(0); transform: scale(1); } 100% { opacity: 0; filter: blur(20px); transform: scale(1.1); pointer-events: none; visibility: hidden; display: none; } }
         @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes underlineGrow { 0% { width: 0; } 100% { width: 100%; } }
         @keyframes driftFog { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
@@ -317,6 +328,8 @@
         <div class="ember"></div>
         <div class="viego-silhouette"></div>
         <div class="flavor-text">He would tear the world apart before he let her go. This portfolio is built the same way.</div>
+        
+        <button class="skip-btn" id="btn-skip">Skip Sequence <i class="fa-solid fa-forward-step"></i></button>
     </div>
 
     <!-- ─── CUSTOM CURSOR & SCROLLBAR ─── -->
@@ -341,6 +354,24 @@
         <div class="hero-subtitle">Architect of Ruin // Luau Engineering</div>
         <div class="hero-tagline">
             "Some kings chase glory. I chase what refuses to stay finished. Every system here was broken at least once before it worked."
+        </div>
+    </section>
+
+    <!-- ─── THE RUINED STATS ─── -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">2+</div>
+                <div class="stat-label">Years Reign</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">WIP</div>
+                <div class="stat-label">Games Built</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">6+</div>
+                <div class="stat-label">Living Systems</div>
+            </div>
         </div>
     </section>
 
@@ -369,6 +400,30 @@
     <script src="sfx.js"></script>
 
     <script>
+        // ─── SKIP SEQUENCE LOGIC ───
+        const loader = document.getElementById('viego-loader');
+        const skipBtn = document.getElementById('btn-skip');
+
+        function skipCinematic() {
+            loader.style.display = 'none';
+            document.body.classList.add('skipped');
+            startSouls(); // Start particles immediately if skipped
+        }
+
+        skipBtn.addEventListener('click', skipCinematic);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && loader.style.display !== 'none') skipCinematic();
+        });
+
+        // Ensure loader removes itself from DOM after animation completes naturally
+        setTimeout(() => {
+            if (loader.style.display !== 'none') {
+                loader.style.display = 'none';
+                document.body.classList.add('skipped');
+            }
+        }, 10000);
+
+
         // ─── SCROLL PROGRESS BLADE ───
         window.addEventListener('scroll', () => {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -382,7 +437,6 @@
         const trails = [];
         const maxTrails = 8;
 
-        // Create trail elements
         for(let i=0; i<maxTrails; i++) {
             const t = document.createElement('div');
             t.className = 'cursor-trail';
@@ -400,8 +454,7 @@
             wisp.style.top = mouseY + 'px';
         });
 
-        // Hover effect for interactive elements
-        document.querySelectorAll('a, .btn-ruin').forEach(el => {
+        document.querySelectorAll('a, button, .btn-ruin, .stat-card').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 wisp.style.transform = 'translate(-50%, -50%) scale(2.5)';
                 wisp.style.background = 'transparent';
@@ -414,7 +467,6 @@
             });
         });
 
-        // Animate trails trailing the main wisp
         function animateTrails() {
             let prevX = mouseX;
             let prevY = mouseY;
@@ -426,7 +478,6 @@
                 trail.el.style.left = trail.x + 'px';
                 trail.el.style.top = trail.y + 'px';
                 
-                // Shrink and fade based on index
                 const scale = (maxTrails - index) / maxTrails;
                 trail.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
 
@@ -439,6 +490,8 @@
 
         // ─── GREEN SOUL PARTICLES GENERATOR ───
         const soulContainer = document.getElementById('soul-container');
+        let soulsStarted = false;
+
         function createSoul() {
             const soul = document.createElement('div');
             const size = Math.random() * 4 + 2;
@@ -454,14 +507,18 @@
             soul.style.animation = `soulRise ${Math.random() * 10 + 10}s linear forwards`;
             
             soulContainer.appendChild(soul);
-            
             setTimeout(() => { soul.remove(); }, 20000);
         }
         
-        // Start spawning souls after loader finishes
-        setTimeout(() => {
-            setInterval(createSoul, 800);
-        }, 8000);
+        function startSouls() {
+            if(!soulsStarted) {
+                soulsStarted = true;
+                setInterval(createSoul, 800);
+            }
+        }
+
+        // Start spawning souls naturally after loader finishes if not skipped
+        setTimeout(startSouls, 8000);
 
     </script>
 </body>
