@@ -24,7 +24,8 @@
             --font-body: 'Inter', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ─── HIDE NATIVE CURSOR EVERYWHERE ─── */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
             background-color: var(--void-black);
@@ -51,11 +52,11 @@
             box-shadow: 0 0 15px var(--bone-white);
         }
 
-        /* ─── CUSTOM CURSOR WISP (NOW JUST A GLOW TRAIL) ─── */
+        /* ─── CUSTOM CURSOR WISP (NOW ABOVE EVERYTHING) ─── */
         .cursor-wisp {
             position: fixed; top: 0; left: 0; width: 12px; height: 12px;
             background: var(--spectral-teal); border-radius: 50%;
-            pointer-events: none; z-index: 10000;
+            pointer-events: none; z-index: 999999; /* Fixed Z-Index to show above loader! */
             transform: translate(-50%, -50%);
             box-shadow: 0 0 20px var(--spectral-teal), 0 0 40px var(--mist-deep);
             transition: width 0.2s, height 0.2s; mix-blend-mode: screen;
@@ -63,7 +64,7 @@
         .cursor-trail {
             position: fixed; width: 8px; height: 8px;
             background: var(--ruin-purple); border-radius: 50%;
-            pointer-events: none; z-index: 9999;
+            pointer-events: none; z-index: 999998; /* Under wisp, above loader */
             transform: translate(-50%, -50%); opacity: 0.6;
             box-shadow: 0 0 15px var(--ruin-shadow);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
@@ -85,7 +86,6 @@
             font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
             padding: 12px 24px; z-index: 50001; transition: all 0.3s ease;
             clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-            cursor: pointer;
         }
         .skip-btn:hover {
             color: var(--void-black); background: var(--spectral-teal);
@@ -119,7 +119,7 @@
             pointer-events: none;
         }
 
-        /* Typewriter Text (FIXED EXACT CHARACTER WIDTH) */
+        /* Typewriter Text */
         .flavor-text {
             position: absolute; bottom: 15%; 
             text-align: center; font-family: var(--font-body);
@@ -312,7 +312,6 @@
         @keyframes crackRing { 0% { opacity: 1; transform: scale(0.8); border-color: rgba(61, 220, 151, 0.1); } 50% { opacity: 1; transform: scale(1.2); border-color: var(--spectral-teal); box-shadow: inset 0 0 20px var(--spectral-teal); } 100% { opacity: 0; transform: scale(2); border-color: transparent; } }
         @keyframes riseSilhouette { 0% { opacity: 0; transform: translateY(50px); filter: brightness(0); } 100% { opacity: 0.6; transform: translateY(0); filter: brightness(0.4) sepia(1) hue-rotate(130deg); } }
         @keyframes fadeInText { to { opacity: 1; } }
-        /* 94ch gives EXACT width for the sentence without cutting */
         @keyframes typing { from { width: 0; } to { width: 94ch; } }
         @keyframes blinkCursor { 50% { border-color: transparent; } }
         @keyframes dissolveLoader { 0% { opacity: 1; filter: blur(0); transform: scale(1); } 100% { opacity: 0; filter: blur(20px); transform: scale(1.1); pointer-events: none; visibility: hidden; display: none; } }
@@ -409,7 +408,7 @@
         function skipCinematic() {
             loader.style.display = 'none';
             document.body.classList.add('skipped');
-            startSouls(); // Start particles immediately if skipped
+            startSouls(); 
         }
 
         skipBtn.addEventListener('click', skipCinematic);
@@ -454,9 +453,9 @@
             wisp.style.top = mouseY + 'px';
         });
 
-        document.querySelectorAll('a, button, .btn-ruin, .stat-card').forEach(el => {
+        document.querySelectorAll('a, button, .btn-ruin, .stat-card, .skip-btn').forEach(el => {
             el.addEventListener('mouseenter', () => {
-                wisp.style.transform = 'translate(-50%, -50%) scale(2.5)';
+                wisp.style.transform = 'translate(-50%, -50%) scale(3)';
                 wisp.style.background = 'transparent';
                 wisp.style.border = '1px solid var(--spectral-teal)';
             });
