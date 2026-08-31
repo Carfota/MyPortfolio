@@ -43,7 +43,12 @@
             --card-border: rgba(212, 175, 55, 0.25); 
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Only hide default cursor on devices with a physical mouse */
+        @media (pointer: fine) {
+            * { cursor: none !important; }
+        }
 
         body {
             background-color: var(--void-black);
@@ -390,9 +395,67 @@
         @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
 
         @media (max-width: 900px) {
-            .ruin-media { margin: -40px -30px 25px -30px; width: calc(100% + 60px); }
-            .ruin-card { padding: 40px 30px; }
-            .vibe-panel { width: calc(100vw - 48px); right: 24px; }
+            /* 1. Disable Custom Cursor & Trails on Touch Devices */
+            .cursor-wisp, .cursor-trail { display: none !important; }
+            
+            /* 2. Navigation Wrapping */
+            nav { 
+                gap: 15px; 
+                padding: 20px 5vw; 
+                flex-wrap: wrap; 
+                margin-bottom: 30px;
+            }
+            .nav-link { font-size: 0.85rem; }
+
+            /* 3. Grid Layout Overrides (Fixes Horizontal Scroll) */
+            .ruins-grid { 
+                grid-template-columns: 1fr; 
+                gap: 25px; 
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* 4. Card Padding & Media Alignment */
+            .ruin-card { 
+                padding: 25px 20px; 
+            }
+            .ruin-media { 
+                width: calc(100% + 40px) !important; 
+                margin: -25px -20px 20px -20px !important; 
+            }
+
+            /* 5. Vibe Controller Panel */
+            .vibe-panel { 
+                width: calc(100vw - 40px); 
+                right: 20px; 
+                bottom: 90px;
+                padding: 20px;
+            }
+
+            /* 6. Buttons & Modals */
+            .action-tray { 
+                flex-direction: column; 
+            }
+            .btn-ruin { 
+                width: 100%; 
+                justify-content: center; 
+            }
+            
+            .modal { 
+                clip-path: none; 
+                border-radius: 12px; 
+            }
+            .modal-details { 
+                padding: 20px; 
+            }
+            .modal-title { 
+                font-size: 1.4rem; 
+            }
+            .modal-video-box { 
+                max-height: 35vh; 
+            }
         }
     </style>
 </head>
