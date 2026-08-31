@@ -1,4 +1,4 @@
-/* ─── DOPAMINE PROCEDURAL SOUND FX & HAPTIC ENGINE (FIXED & DEBOUNCED) ─── */
+/* ─── SPECTRAL SOUND FX & HAPTIC ENGINE (RUINED EDITION) ─── */
 const DopamineAudio = (() => {
     let audioCtx = null;
     let sfxEnabled = localStorage.getItem('vibe_sfx') !== 'false';
@@ -15,11 +15,11 @@ const DopamineAudio = (() => {
         return audioCtx;
     }
 
-    // 1. Playful Bubbly Hover Sound (Anti-Spam Debounced)
+    // 1. Spectral Hover (Eerie swoosh)
     function playHover() {
         if (!sfxEnabled) return;
         const now = performance.now();
-        if (now - lastHoverTime < 110) return; // Strict cooldown to kill looping/repeating
+        if (now - lastHoverTime < 110) return; // Cooldown
         lastHoverTime = now;
 
         try {
@@ -27,13 +27,13 @@ const DopamineAudio = (() => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             const startTime = ctx.currentTime;
-            const duration = 0.04;
+            const duration = 0.15;
 
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(500, startTime);
-            osc.frequency.exponentialRampToValueAtTime(800, startTime + duration);
+            osc.frequency.setValueAtTime(150, startTime);
+            osc.frequency.exponentialRampToValueAtTime(80, startTime + duration);
 
-            gain.gain.setValueAtTime(0.025, startTime);
+            gain.gain.setValueAtTime(0.015, startTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
             osc.connect(gain);
@@ -43,7 +43,7 @@ const DopamineAudio = (() => {
         } catch (e) {}
     }
 
-    // 2. Snappy Click Sound
+    // 2. Metallic Click (Blade strike)
     function playClick() {
         if (!sfxEnabled) return;
         try {
@@ -51,14 +51,13 @@ const DopamineAudio = (() => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             const startTime = ctx.currentTime;
-            const duration = 0.07;
+            const duration = 0.1;
 
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(850, startTime);
-            osc.frequency.exponentialRampToValueAtTime(1400, startTime + 0.025);
-            osc.frequency.exponentialRampToValueAtTime(280, startTime + duration);
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(800, startTime);
+            osc.frequency.exponentialRampToValueAtTime(100, startTime + duration);
 
-            gain.gain.setValueAtTime(0.06, startTime);
+            gain.gain.setValueAtTime(0.03, startTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
             osc.connect(gain);
@@ -66,7 +65,7 @@ const DopamineAudio = (() => {
             osc.start(startTime);
             osc.stop(startTime + duration);
 
-            if (navigator.vibrate) navigator.vibrate(10);
+            if (navigator.vibrate) navigator.vibrate(15);
         } catch (e) {}
     }
 
@@ -80,10 +79,10 @@ const DopamineAudio = (() => {
             const startTime = ctx.currentTime;
             const duration = 0.02;
 
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(1100, startTime);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(400, startTime);
 
-            gain.gain.setValueAtTime(0.015, startTime);
+            gain.gain.setValueAtTime(0.01, startTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
             osc.connect(gain);
@@ -113,18 +112,17 @@ const DopamineAudio = (() => {
         document.addEventListener('pointerdown', unlock);
         document.addEventListener('keydown', unlock);
 
-        // Targeted buttons & links only (no big wrapper cards)
+        // UPDATED TARGETS: These are the actual classes used in your Ruined King portfolio
         const interactiveSelector = `
             .nav-link, 
-            .btn-action, 
-            .btn-dopamine, 
-            .btn-order, 
-            .filter-btn, 
-            .preset-btn, 
-            .inline-pill-link, 
-            .skill-pill, 
+            .btn-ruin, 
+            .theme-btn, 
+            .sfx-btn, 
+            .skip-btn, 
+            .filter-btn,
             .vibe-controller-toggle,
-            .modal-close
+            .modal-close,
+            .stat-card
         `;
 
         document.querySelectorAll(interactiveSelector).forEach(el => {
