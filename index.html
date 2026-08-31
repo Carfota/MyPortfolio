@@ -24,7 +24,7 @@
             --font-body: 'Inter', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--void-black);
@@ -51,7 +51,7 @@
             box-shadow: 0 0 15px var(--bone-white);
         }
 
-        /* ─── CUSTOM CURSOR WISP ─── */
+        /* ─── CUSTOM CURSOR WISP (NOW JUST A GLOW TRAIL) ─── */
         .cursor-wisp {
             position: fixed; top: 0; left: 0; width: 12px; height: 12px;
             background: var(--spectral-teal); border-radius: 50%;
@@ -80,16 +80,17 @@
         /* Skip Button */
         .skip-btn {
             position: absolute; bottom: 30px; right: 40px;
-            background: transparent; border: 1px solid rgba(61, 220, 151, 0.4);
-            color: rgba(232, 230, 225, 0.7); font-family: var(--font-body);
-            font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
-            padding: 10px 20px; z-index: 50001; transition: all 0.3s ease;
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(61, 220, 151, 0.4);
+            color: rgba(232, 230, 225, 0.9); font-family: var(--font-body);
+            font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+            padding: 12px 24px; z-index: 50001; transition: all 0.3s ease;
             clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+            cursor: pointer;
         }
         .skip-btn:hover {
             color: var(--void-black); background: var(--spectral-teal);
             border-color: var(--spectral-teal); box-shadow: 0 0 20px rgba(61, 220, 151, 0.5);
-            font-weight: 800;
+            font-weight: 800; transform: scale(1.05);
         }
 
         /* The Ring Crack */
@@ -115,19 +116,20 @@
             -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
             opacity: 0; filter: contrast(1.5) brightness(0.2) sepia(1) hue-rotate(130deg) saturate(1.5);
             animation: riseSilhouette 4s ease-out 3s forwards;
+            pointer-events: none;
         }
 
-        /* Typewriter Text */
+        /* Typewriter Text (FIXED EXACT CHARACTER WIDTH) */
         .flavor-text {
-            position: absolute; bottom: 15%; width: 80%; max-width: 600px;
+            position: absolute; bottom: 15%; 
             text-align: center; font-family: var(--font-body);
-            font-size: 1.1rem; color: var(--bone-white); font-weight: 300;
+            font-size: 1.15rem; color: var(--bone-white); font-weight: 300;
             letter-spacing: 0.05em; text-shadow: 0 0 10px rgba(255,255,255,0.3);
             opacity: 0; overflow: hidden; white-space: nowrap;
             border-right: 2px solid var(--spectral-teal);
             animation: 
                 fadeInText 0.1s 5s forwards,
-                typing 3.5s steps(60, end) 5s forwards,
+                typing 3.5s steps(93, end) 5s forwards,
                 blinkCursor 0.7s step-end infinite;
         }
 
@@ -310,7 +312,8 @@
         @keyframes crackRing { 0% { opacity: 1; transform: scale(0.8); border-color: rgba(61, 220, 151, 0.1); } 50% { opacity: 1; transform: scale(1.2); border-color: var(--spectral-teal); box-shadow: inset 0 0 20px var(--spectral-teal); } 100% { opacity: 0; transform: scale(2); border-color: transparent; } }
         @keyframes riseSilhouette { 0% { opacity: 0; transform: translateY(50px); filter: brightness(0); } 100% { opacity: 0.6; transform: translateY(0); filter: brightness(0.4) sepia(1) hue-rotate(130deg); } }
         @keyframes fadeInText { to { opacity: 1; } }
-        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        /* 94ch gives EXACT width for the sentence without cutting */
+        @keyframes typing { from { width: 0; } to { width: 94ch; } }
         @keyframes blinkCursor { 50% { border-color: transparent; } }
         @keyframes dissolveLoader { 0% { opacity: 1; filter: blur(0); transform: scale(1); } 100% { opacity: 0; filter: blur(20px); transform: scale(1.1); pointer-events: none; visibility: hidden; display: none; } }
         @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -332,7 +335,7 @@
         <button class="skip-btn" id="btn-skip">Skip Sequence <i class="fa-solid fa-forward-step"></i></button>
     </div>
 
-    <!-- ─── CUSTOM CURSOR & SCROLLBAR ─── -->
+    <!-- ─── CUSTOM CURSOR (GLOW EFFECT) & SCROLLBAR ─── -->
     <div id="blade-scrollbar"></div>
     <div class="cursor-wisp" id="cursor-wisp"></div>
 
@@ -396,7 +399,6 @@
         </div>
     </section>
 
-    <!-- Connects to your existing SFX engine -->
     <script src="sfx.js"></script>
 
     <script>
@@ -415,14 +417,12 @@
             if (e.key === 'Escape' && loader.style.display !== 'none') skipCinematic();
         });
 
-        // Ensure loader removes itself from DOM after animation completes naturally
         setTimeout(() => {
             if (loader.style.display !== 'none') {
                 loader.style.display = 'none';
                 document.body.classList.add('skipped');
             }
         }, 10000);
-
 
         // ─── SCROLL PROGRESS BLADE ───
         window.addEventListener('scroll', () => {
@@ -517,7 +517,6 @@
             }
         }
 
-        // Start spawning souls naturally after loader finishes if not skipped
         setTimeout(startSouls, 8000);
 
     </script>
