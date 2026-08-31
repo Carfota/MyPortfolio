@@ -43,7 +43,8 @@
             --card-border: rgba(212, 175, 55, 0.25); 
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
+        /* شلت إخفاء الماوس الأساسي عشان ميعلقش في الـ Refresh */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--void-black);
@@ -72,20 +73,21 @@
             transition: background 1.5s, box-shadow 1.5s;
         }
 
-        /* ─── CUSTOM CURSOR WISP & TRAIL ─── */
+        /* ─── CUSTOM CURSOR WISP & TRAIL (كـ هالة خلف الماوس الأساسي) ─── */
         .cursor-wisp {
-            position: fixed; top: 0; left: 0; width: 12px; height: 12px;
+            position: fixed; top: 0; left: 0; width: 16px; height: 16px;
             background: var(--spectral-teal); border-radius: 50%;
             pointer-events: none; z-index: 999999;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--spectral-teal), 0 0 calc(40px * var(--glow-mult)) var(--mist-deep);
-            transition: width 0.2s, height 0.2s, background 1.5s, box-shadow 1.5s; mix-blend-mode: screen;
+            box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--spectral-teal);
+            transition: width 0.3s, height 0.3s, background 1.5s, box-shadow 1.5s; 
+            mix-blend-mode: screen; opacity: 0.5; /* خفيفة عشان متغطيش على الماوس */
         }
         .cursor-trail {
             position: fixed; width: 8px; height: 8px;
             background: var(--ruin-purple); border-radius: 50%;
             pointer-events: none; z-index: 999998;
-            transform: translate(-50%, -50%); opacity: 0.6;
+            transform: translate(-50%, -50%); opacity: 0.4;
             box-shadow: 0 0 15px var(--ruin-shadow);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
         }
@@ -146,7 +148,7 @@
             letter-spacing: 0.05em; text-shadow: 0 0 10px rgba(255,255,255,0.3);
             opacity: 0; overflow: hidden; white-space: nowrap;
             border-right: 2px solid var(--spectral-teal);
-            animation: fadeInText 0.1s 5s forwards, typing 3.5s steps(93, end) 5s forwards, blinkCursor 0.7s step-end infinite;
+            animation: fadeInText 0.1s 4s forwards, typing 3.5s steps(93, end) 4s forwards, blinkCursor 0.7s step-end infinite;
             transition: color 1.5s, border-color 1.5s;
         }
 
@@ -163,10 +165,9 @@
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center right/cover no-repeat;
             opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
         }
-        
         .art-king {
-            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_21.jpg') center right/cover no-repeat;
-            opacity: 0; filter: grayscale(0.1) contrast(1.1) blur(4px); transform: scale(1.08);
+            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_32.jpg') center right/cover no-repeat;
+            opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
@@ -209,19 +210,18 @@
         .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── DYNAMIC FAST ENTRY ANIMATIONS ─── */
-        /* Initially hide content to prepare for fast entry animation */
+        /* ─── DYNAMIC FAST ENTRY ANIMATIONS (ابطأ وأنعم من الأول) ─── */
         .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
         .hero-title::after { width: 0; }
 
-        /* Fast Snappy Animations trigger ONLY when body gets .content-ready class */
-        body.content-ready .hero { animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        body.content-ready .hero-title::after { animation: underlineGrow 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
-        body.content-ready .hero-subtitle { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
-        body.content-ready .hero-tagline { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards; }
-        body.content-ready .stats-section { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
-        body.content-ready .ruins-section { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards; }
+        body.content-ready .hero { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        body.content-ready .hero-title::after { animation: underlineGrow 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+        body.content-ready .hero-subtitle { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
+        body.content-ready .hero-tagline { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards; }
+        body.content-ready .stats-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards; }
+        body.content-ready .ruins-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1s forwards; }
 
+        /* ─── HERO SECTION ─── */
         .hero {
             position: relative; z-index: 10; min-height: 60vh; display: flex; flex-direction: column;
             justify-content: center; padding: 0 10vw;
@@ -254,9 +254,7 @@
         }
 
         /* ─── STATS SECTION ─── */
-        .stats-section {
-            position: relative; z-index: 10; padding: 0 10vw 60px;
-        }
+        .stats-section { position: relative; z-index: 10; padding: 0 10vw 60px; }
 
         .stats-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px;
@@ -289,9 +287,7 @@
         }
 
         /* ─── THE RUINS (PROJECT SECTIONS) ─── */
-        .ruins-section {
-            position: relative; z-index: 10; padding: 40px 10vw 100px;
-        }
+        .ruins-section { position: relative; z-index: 10; padding: 40px 10vw 100px; }
 
         .section-header {
             font-family: var(--font-display); font-size: 2rem;
@@ -346,7 +342,7 @@
         .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 20px var(--vignette-color); }
         .btn-ruin:hover::before { left: 0; }
 
-        /* ─── SANCTUM CONTROLS (VIBE TUNER) INCLUDED PROPERLY ─── */
+        /* ─── SANCTUM CONTROLS (VIBE TUNER) ─── */
         .vibe-controller-toggle {
             position: fixed; bottom: 24px; right: 24px; z-index: 99;
             background: rgba(10, 10, 15, 0.8); color: var(--bone-white); border: 1px solid var(--spectral-teal);
@@ -582,11 +578,12 @@
             mouseY = e.clientY;
             wisp.style.left = mouseX + 'px';
             wisp.style.top = mouseY + 'px';
+            wisp.style.opacity = '0.5'; // Make sure it's visible on move
         });
 
         document.querySelectorAll('a, button, .btn-ruin, .stat-card, .skip-btn').forEach(el => {
             el.addEventListener('mouseenter', () => {
-                wisp.style.transform = 'translate(-50%, -50%) scale(3)';
+                wisp.style.transform = 'translate(-50%, -50%) scale(2.5)';
                 wisp.style.background = 'transparent';
                 wisp.style.border = '1px solid var(--spectral-teal)';
             });
@@ -646,7 +643,6 @@
             }
         }
         
-        // Starts naturally if user waits out the intro instead of skipping
         setTimeout(startSouls, 8000);
 
         // ─── THEME & SETTINGS CONTROLS ───
