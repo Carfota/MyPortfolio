@@ -31,7 +31,7 @@
         }
 
         body.theme-king {
-            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY - GOLD, IVORY & NAVY) */
+            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY) */
             --void-black: #080a12; 
             --spectral-teal: #E2C06A; 
             --mist-deep: #142440; 
@@ -43,8 +43,8 @@
             --card-border: rgba(212, 175, 55, 0.25); 
         }
 
-        /* شلت إخفاء الماوس الأساسي عشان ميعلقش في الـ Refresh */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* NATIVE CURSOR HIDDEN COMPLETELY */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
             background-color: var(--void-black);
@@ -73,26 +73,26 @@
             transition: background 1.5s, box-shadow 1.5s;
         }
 
-        /* ─── CUSTOM CURSOR WISP & TRAIL (كـ هالة خلف الماوس الأساسي) ─── */
+        /* ─── CUSTOM CURSOR WISP & TRAIL ─── */
         .cursor-wisp {
-            position: fixed; top: 0; left: 0; width: 16px; height: 16px;
+            position: fixed; top: 0; left: 0; width: 14px; height: 14px;
             background: var(--spectral-teal); border-radius: 50%;
             pointer-events: none; z-index: 999999;
             transform: translate(-50%, -50%);
             box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--spectral-teal);
-            transition: width 0.3s, height 0.3s, background 1.5s, box-shadow 1.5s; 
-            mix-blend-mode: screen; opacity: 0.5; /* خفيفة عشان متغطيش على الماوس */
+            transition: width 0.2s, height 0.2s, background 1.5s, box-shadow 1.5s; 
+            mix-blend-mode: screen;
         }
         .cursor-trail {
             position: fixed; width: 8px; height: 8px;
             background: var(--ruin-purple); border-radius: 50%;
             pointer-events: none; z-index: 999998;
-            transform: translate(-50%, -50%); opacity: 0.4;
+            transform: translate(-50%, -50%); opacity: 0.5;
             box-shadow: 0 0 15px var(--ruin-shadow);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
         }
 
-        /* ─── THE LOADING SCREEN ─── */
+        /* ─── THE LOADING SCREEN (CINEMATIC) ─── */
         #viego-loader {
             position: fixed; inset: 0; background: var(--void-black);
             z-index: 50000; display: flex; flex-direction: column;
@@ -108,7 +108,6 @@
             font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
             padding: 12px 24px; z-index: 50001; transition: all 0.3s ease;
             clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-            cursor: pointer;
         }
         body.theme-king .skip-btn { border-color: rgba(226, 192, 106, 0.4); }
         .skip-btn:hover {
@@ -171,7 +170,7 @@
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
+        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -210,7 +209,7 @@
         .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── DYNAMIC FAST ENTRY ANIMATIONS (ابطأ وأنعم من الأول) ─── */
+        /* ─── DYNAMIC FAST ENTRY ANIMATIONS ─── */
         .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
         .hero-title::after { width: 0; }
 
@@ -466,82 +465,17 @@
         </div>
     </section>
 
-    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Sanctum Controls">
-        <i class="fa-solid fa-sliders"></i>
-    </button>
-
-    <div class="vibe-panel" id="vibe-panel">
-        <div class="vibe-header">
-            <span class="vibe-title">SANCTUM CONTROLS</span>
-            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:var(--bone-white); cursor:pointer; font-size:1.1rem;">✕</button>
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Viego Aspect</span></label>
-            <div class="theme-switch-row">
-                <button class="theme-btn active" id="btn-theme-ruined" onclick="setViegoTheme('ruined')">RUINED</button>
-                <button class="theme-btn" id="btn-theme-king" onclick="setViegoTheme('king')">KING</button>
-            </div>
-        </div>
-
-        <div class="vibe-row" style="flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
-            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn">SOUND FX: ON 🔊</button>
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Spectral Aura</span> <span id="val-glow">100%</span></label>
-            <input type="range" id="slider-glow" min="10" max="150" value="100" oninput="updateSanctumSliders()">
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Black Mist Fog</span> <span id="val-fog">100%</span></label>
-            <input type="range" id="slider-fog" min="0" max="100" value="100" oninput="updateSanctumSliders()">
-        </div>
-    </div>
-
     <script src="sfx.js"></script>
 
     <script>
-        // ─── SESSION STORAGE: PLAY ONCE PER SESSION ───
+        // ─── EVERY-TIME CINEMATIC LOGIC ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
 
-        function revealContent() {
+        function skipCinematic() {
             loader.style.display = 'none';
             document.body.classList.add('content-ready');
             startSouls(); 
-        }
-
-        if (sessionStorage.getItem('viego_intro_played')) {
-            // Already played this session, skip instantly
-            loader.style.display = 'none';
-            loader.style.animation = 'none';
-            document.body.classList.add('content-ready');
-            startSouls();
-        } else {
-            // Play normally, mark as played
-            sessionStorage.setItem('viego_intro_played', 'true');
-            
-            // Trigger fast entry animation when loader dissolves
-            setTimeout(() => {
-                if (!document.body.classList.contains('content-ready')) {
-                    document.body.classList.add('content-ready');
-                }
-            }, 8500);
-
-            // Hide loader completely from DOM after animation
-            setTimeout(() => {
-                if (loader.style.display !== 'none') {
-                    loader.style.display = 'none';
-                }
-            }, 10000);
-        }
-
-        // Manual Skip Button Logic
-        function skipCinematic() {
-            if (!document.body.classList.contains('content-ready')) {
-                revealContent();
-            }
         }
 
         skipBtn.addEventListener('click', skipCinematic);
@@ -549,6 +483,14 @@
             if (e.key === 'Escape' && loader.style.display !== 'none') skipCinematic();
         });
 
+        // Always plays, fades out after 10s naturally
+        setTimeout(() => {
+            if (loader.style.display !== 'none') {
+                loader.style.display = 'none';
+                document.body.classList.add('content-ready');
+                startSouls();
+            }
+        }, 10000);
 
         // ─── SCROLL PROGRESS BLADE ───
         window.addEventListener('scroll', () => {
@@ -578,7 +520,6 @@
             mouseY = e.clientY;
             wisp.style.left = mouseX + 'px';
             wisp.style.top = mouseY + 'px';
-            wisp.style.opacity = '0.5'; // Make sure it's visible on move
         });
 
         document.querySelectorAll('a, button, .btn-ruin, .stat-card, .skip-btn').forEach(el => {
@@ -642,8 +583,6 @@
                 setInterval(createSoul, 800);
             }
         }
-        
-        setTimeout(startSouls, 8000);
 
         // ─── THEME & SETTINGS CONTROLS ───
         function setViegoTheme(theme) {
