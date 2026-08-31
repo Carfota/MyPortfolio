@@ -31,16 +31,16 @@
         }
 
         body.theme-king {
-            /* 🔴 THE HUMAN KING (ROYALTY & GOLD) */
-            --void-black: #09080c; /* Deep royal navy-black */
-            --spectral-teal: #E32636; /* Royal Crimson */
-            --mist-deep: #7A0016; /* Velvet Burgundy */
-            --ruin-purple: #D4AF37; /* Regal Gold (For trails & accents) */
-            --ruin-shadow: #8B753A; /* Dimmed Brass */
-            --bone-white: #F4EBEB; /* Soft noble white */
+            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY - GOLD, IVORY & NAVY) */
+            --void-black: #080a12; /* Deep royal navy-black */
+            --spectral-teal: #E2C06A; /* Regal Camavoran Gold */
+            --mist-deep: #142440; /* Deep Velvet Navy / Sanctity Blue */
+            --ruin-purple: #9EABB8; /* Sanctity Steel / Silver */
+            --ruin-shadow: #7A6332; /* Antique Bronze */
+            --bone-white: #F9F6EE; /* Silk Ivory */
             
-            --vignette-color: rgba(227, 38, 54, 0.15);
-            --card-border: rgba(212, 175, 55, 0.25); /* Gold tinted borders */
+            --vignette-color: rgba(226, 192, 106, 0.12); /* Soft golden glow */
+            --card-border: rgba(226, 192, 106, 0.25); /* Gold tinted borders */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
@@ -108,7 +108,7 @@
             clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
             cursor: pointer;
         }
-        body.theme-king .skip-btn { border-color: rgba(227, 38, 54, 0.4); }
+        body.theme-king .skip-btn { border-color: rgba(226, 192, 106, 0.4); }
         .skip-btn:hover {
             color: var(--void-black); background: var(--spectral-teal);
             border-color: var(--spectral-teal); box-shadow: 0 0 20px var(--spectral-teal);
@@ -121,7 +121,7 @@
             opacity: 0; animation: crackRing 3s ease-out 1s forwards;
             transition: border-color 1.5s;
         }
-        body.theme-king .shattered-ring { border-color: rgba(212, 175, 55, 0.2); }
+        body.theme-king .shattered-ring { border-color: rgba(226, 192, 106, 0.15); }
 
         .ember {
             position: absolute; width: 6px; height: 6px;
@@ -164,13 +164,12 @@
             opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
         }
         .art-king {
-            /* Make sure image_e82722.jpg is in the same folder, or change URL */
             background: url('image_e82722.jpg') center right/cover no-repeat;
             opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.25; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
+        body.theme-king .art-king { opacity: 0.25; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -184,8 +183,8 @@
 
         body.theme-king .fog-layer {
             background: 
-                radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 45%),
-                radial-gradient(ellipse at 20% 80%, rgba(227, 38, 54, 0.08) 0%, transparent 55%);
+                radial-gradient(ellipse at 80% 20%, rgba(226, 192, 106, 0.05) 0%, transparent 45%),
+                radial-gradient(ellipse at 20% 80%, rgba(20, 36, 64, 0.08) 0%, transparent 55%);
         }
 
         .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--fog-opacity); }
@@ -315,7 +314,7 @@
         .ruin-card:hover::before { opacity: 1; }
         .ruin-card:hover::after {
             border-color: var(--spectral-teal); clip-path: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
-            box-shadow: 0 0 15px var(--spectral-teal);
+            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--spectral-teal);
         }
 
         .ruin-number { font-family: var(--font-body); font-size: 0.8rem; color: var(--mist-deep); letter-spacing: 0.2em; margin-bottom: 10px; display: block; transition: color 1.5s; }
@@ -468,39 +467,6 @@
         </div>
     </section>
 
-    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Sanctum Controls">
-        <i class="fa-solid fa-sliders"></i>
-    </button>
-
-    <div class="vibe-panel" id="vibe-panel">
-        <div class="vibe-header">
-            <span class="vibe-title">SANCTUM CONTROLS</span>
-            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:var(--bone-white); cursor:pointer; font-size:1.1rem;">✕</button>
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Viego Aspect</span></label>
-            <div class="theme-switch-row">
-                <button class="theme-btn active" id="btn-theme-ruined" onclick="setViegoTheme('ruined')">RUINED</button>
-                <button class="theme-btn" id="btn-theme-king" onclick="setViegoTheme('king')">KING</button>
-            </div>
-        </div>
-
-        <div class="vibe-row" style="flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
-            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn">SOUND FX: ON 🔊</button>
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Spectral Aura</span> <span id="val-glow">100%</span></label>
-            <input type="range" id="slider-glow" min="10" max="150" value="100" oninput="updateSanctumSliders()">
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Black Mist Fog</span> <span id="val-fog">100%</span></label>
-            <input type="range" id="slider-fog" min="0" max="100" value="100" oninput="updateSanctumSliders()">
-        </div>
-    </div>
-
     <script src="sfx.js"></script>
 
     <script>
@@ -525,46 +491,6 @@
                 document.body.classList.add('skipped');
             }
         }, 10000);
-
-        // ─── THEME & ASPECT SWITCHER ENGINE ───
-        function setViegoTheme(theme) {
-            const isKing = (theme === 'king');
-            document.body.classList.toggle('theme-king', isKing);
-            document.getElementById('btn-theme-ruined').classList.toggle('active', !isKing);
-            document.getElementById('btn-theme-king').classList.toggle('active', isKing);
-            localStorage.setItem('viego_aspect', theme);
-            if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
-        }
-
-        // ─── SANCTUM SLIDERS ───
-        function updateSanctumSliders() {
-            const glow = document.getElementById('slider-glow').value;
-            const fog = document.getElementById('slider-fog').value;
-
-            document.getElementById('val-glow').textContent = glow + '%';
-            document.getElementById('val-fog').textContent = fog + '%';
-
-            document.documentElement.style.setProperty('--glow-mult', glow / 100);
-            document.documentElement.style.setProperty('--fog-opacity', fog / 100);
-
-            localStorage.setItem('viego_glow', glow);
-            localStorage.setItem('viego_fog', fog);
-        }
-
-        function toggleVibeMenu() {
-            document.getElementById('vibe-panel').classList.toggle('open');
-        }
-
-        function handleSFXToggle() {
-            if (typeof DopamineAudio !== 'undefined') {
-                const enabled = DopamineAudio.toggleSFX();
-                const btn = document.getElementById('sfx-toggle-btn');
-                if (btn) {
-                    btn.textContent = enabled ? 'SOUND FX: ON 🔊' : 'SOUND FX: OFF 🔇';
-                    btn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
-                }
-            }
-        }
 
         // ─── SCROLL PROGRESS BLADE ───
         window.addEventListener('scroll', () => {
@@ -612,11 +538,14 @@
         function animateTrails() {
             let prevX = mouseX;
             let prevY = mouseY;
+
             trails.forEach((trail, index) => {
                 trail.x += (prevX - trail.x) * 0.3;
                 trail.y += (prevY - trail.y) * 0.3;
+                
                 trail.el.style.left = trail.x + 'px';
                 trail.el.style.top = trail.y + 'px';
+                
                 const scale = (maxTrails - index) / maxTrails;
                 trail.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
                 prevX = trail.x;
@@ -633,6 +562,7 @@
         function createSoul() {
             const soul = document.createElement('div');
             const size = Math.random() * 4 + 2;
+            
             soul.style.position = 'absolute';
             soul.style.left = Math.random() * 100 + 'vw';
             soul.style.width = size + 'px';
@@ -642,6 +572,7 @@
             soul.style.boxShadow = '0 0 10px var(--mist-deep)';
             soul.style.opacity = '0';
             soul.style.animation = `soulRise ${Math.random() * 10 + 10}s linear forwards`;
+            
             soulContainer.appendChild(soul);
             setTimeout(() => { soul.remove(); }, 20000);
         }
@@ -655,7 +586,45 @@
 
         setTimeout(startSouls, 8000);
 
-        // Load Settings on Boot
+        // ─── THEME & SETTINGS CONTROLS ───
+        function setViegoTheme(theme) {
+            const isKing = (theme === 'king');
+            document.body.classList.toggle('theme-king', isKing);
+            document.getElementById('btn-theme-ruined').classList.toggle('active', !isKing);
+            document.getElementById('btn-theme-king').classList.toggle('active', isKing);
+            localStorage.setItem('viego_aspect', theme);
+            if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
+        }
+
+        function toggleVibeMenu() {
+            document.getElementById('vibe-panel').classList.toggle('open');
+        }
+
+        function updateSanctumSliders() {
+            const glow = document.getElementById('slider-glow').value;
+            const fog = document.getElementById('slider-fog').value;
+
+            document.getElementById('val-glow').textContent = glow + '%';
+            document.getElementById('val-fog').textContent = fog + '%';
+
+            document.documentElement.style.setProperty('--glow-mult', glow / 100);
+            document.documentElement.style.setProperty('--fog-opacity', fog / 100);
+
+            localStorage.setItem('viego_glow', glow);
+            localStorage.setItem('viego_fog', fog);
+        }
+
+        function handleSFXToggle() {
+            if (typeof DopamineAudio !== 'undefined') {
+                const enabled = DopamineAudio.toggleSFX();
+                const btn = document.getElementById('sfx-toggle-btn');
+                if (btn) {
+                    btn.textContent = enabled ? 'SOUND FX: ON 🔊' : 'SOUND FX: OFF 🔇';
+                    btn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
+                }
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('viego_aspect') || 'ruined';
             setViegoTheme(savedTheme);
