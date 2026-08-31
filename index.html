@@ -31,7 +31,7 @@
         }
 
         body.theme-king {
-            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY) */
+            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY - GOLD, IVORY & NAVY) */
             --void-black: #080a12; 
             --spectral-teal: #E2C06A; 
             --mist-deep: #142440; 
@@ -43,7 +43,6 @@
             --card-border: rgba(212, 175, 55, 0.25); 
         }
 
-        /* NATIVE CURSOR HIDDEN COMPLETELY */
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
@@ -92,7 +91,7 @@
             transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
         }
 
-        /* ─── THE LOADING SCREEN (CINEMATIC) ─── */
+        /* ─── THE LOADING SCREEN ─── */
         #viego-loader {
             position: fixed; inset: 0; background: var(--void-black);
             z-index: 50000; display: flex; flex-direction: column;
@@ -165,7 +164,6 @@
             opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
         }
         .art-king {
-            /* FIXED TO VIEGO_21.JPG AS REQUESTED */
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_21.jpg') center right/cover no-repeat;
             opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
         }
@@ -391,10 +389,20 @@
         @keyframes driftFog { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
         @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
 
+        @media (max-width: 900px) {
+            .ruin-media { margin: -40px -30px 25px -30px; width: calc(100% + 60px); }
+            .ruin-card { padding: 40px 30px; }
+            .vibe-panel { width: calc(100vw - 48px); right: 24px; }
+            .modal { clip-path: none; border-radius: 16px; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Hidden YouTube iframe container for background music -->
+    <div id="yt-player-container" style="display: none;"></div>
+
+    <!-- ─── THE CINEMATIC LOADER ─── -->
     <div id="viego-loader">
         <div class="shattered-ring"></div>
         <div class="ember"></div>
@@ -404,15 +412,18 @@
         <button class="skip-btn" id="btn-skip">Skip Sequence <i class="fa-solid fa-forward-step"></i></button>
     </div>
 
+    <!-- ─── CUSTOM CURSOR & SCROLLBAR ─── -->
     <div id="blade-scrollbar"></div>
     <div class="cursor-wisp" id="cursor-wisp"></div>
 
+    <!-- ─── SMOOTH DUAL BACKGROUND ART ─── -->
     <div class="background-art art-ruined"></div>
     <div class="background-art art-king"></div>
     
     <div class="fog-layer"></div>
     <div class="soul-particles" id="soul-container"></div>
 
+    <!-- ─── NAVIGATION ─── -->
     <nav>
         <a href="index.html" class="nav-link active">The Throne</a>
         <a href="games.html" class="nav-link">Realms</a>
@@ -428,6 +439,7 @@
         </div>
     </section>
 
+    <!-- ─── THE RUINED STATS ─── -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-card">
@@ -466,6 +478,7 @@
         </div>
     </section>
 
+    <!-- ─── SANCTUM CONTROLS (VIBE TUNER) ─── -->
     <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Sanctum Controls">
         <i class="fa-solid fa-sliders"></i>
     </button>
@@ -497,6 +510,18 @@
             <label><span>Black Mist Fog</span> <span id="val-fog">100%</span></label>
             <input type="range" id="slider-fog" min="0" max="100" value="100" oninput="updateSanctumSliders()">
         </div>
+
+        <!-- NEW: RUINED SYMPHONY MUSIC CONTROLS -->
+        <div class="vibe-row" style="margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label style="margin:0;">
+                    <i class="fa-solid fa-music"></i> Ruined Symphony
+                </label>
+                <button id="music-toggle-btn" onclick="toggleMusic()" class="sfx-btn" style="width: auto; margin-top: 0; padding: 4px 12px;">PLAY ▶</button>
+            </div>
+            <span style="font-family: var(--font-body); font-size: 0.65rem; color: rgba(232, 230, 225, 0.5); display: block; margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase;">TRACK: VIEGO, THE RUINED KING</span>
+            <input type="range" id="slider-music-vol" min="0" max="100" value="30" oninput="updateMusicVolume()">
+        </div>
     </div>
 
     <script src="sfx.js"></script>
@@ -506,15 +531,21 @@
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
 
-        function skipCinematic() {
+        // Reveal content and optionally start music if it was previously set
+        function revealContent() {
             loader.style.display = 'none';
             document.body.classList.add('content-ready');
             startSouls(); 
+            
+            // Auto-start music if they skip, if allowed
+            if (isPlayerReady && !isMusicPlaying && localStorage.getItem('viego_music') !== 'off') {
+                toggleMusic();
+            }
         }
 
-        skipBtn.addEventListener('click', skipCinematic);
+        skipBtn.addEventListener('click', revealContent);
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && loader.style.display !== 'none') skipCinematic();
+            if (e.key === 'Escape' && loader.style.display !== 'none') revealContent();
         });
 
         // Always plays, fades out after 10s naturally
@@ -523,6 +554,11 @@
                 loader.style.display = 'none';
                 document.body.classList.add('content-ready');
                 startSouls();
+                
+                // Try playing music naturally when loading finishes
+                if (isPlayerReady && !isMusicPlaying && localStorage.getItem('viego_music') !== 'off') {
+                    toggleMusic();
+                }
             }
         }, 10000);
 
@@ -657,7 +693,72 @@
             }
         }
 
-        // LOAD SAVED SETTINGS
+        // ─── BACKGROUND MUSIC (YOUTUBE API ENGINE) ───
+        let ytPlayer;
+        let isMusicPlaying = false;
+        let isPlayerReady = false;
+
+        // Load the IFrame Player API code asynchronously.
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('yt-player-container', {
+                height: '0',
+                width: '0',
+                videoId: '1b11z8wXGts', // Official Viego Theme
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'disablekb': 1,
+                    'loop': 1,
+                    'playlist': '1b11z8wXGts' // Required for loop to work
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            isPlayerReady = true;
+            
+            // Set saved volume
+            const savedVol = localStorage.getItem('viego_music_vol') || '30';
+            document.getElementById('slider-music-vol').value = savedVol;
+            ytPlayer.setVolume(savedVol);
+        }
+
+        function toggleMusic() {
+            if (!isPlayerReady) return;
+            const btn = document.getElementById('music-toggle-btn');
+            
+            if (isMusicPlaying) {
+                ytPlayer.pauseVideo();
+                isMusicPlaying = false;
+                btn.innerHTML = 'PLAY ▶';
+                btn.style.borderColor = 'rgba(255,255,255,0.2)';
+                localStorage.setItem('viego_music', 'off');
+            } else {
+                ytPlayer.playVideo();
+                isMusicPlaying = true;
+                btn.innerHTML = 'PAUSE ⏸';
+                btn.style.borderColor = 'var(--spectral-teal)';
+                localStorage.setItem('viego_music', 'on');
+            }
+            if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
+        }
+
+        function updateMusicVolume() {
+            if (!isPlayerReady) return;
+            const vol = document.getElementById('slider-music-vol').value;
+            ytPlayer.setVolume(vol);
+            localStorage.setItem('viego_music_vol', vol);
+        }
+
+        // ─── INITIALIZATION ───
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('viego_aspect') || 'ruined';
             setViegoTheme(savedTheme);
