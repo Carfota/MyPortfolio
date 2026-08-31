@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carfota | Roblox Game Dev & Luau Architect</title>
+    <title>Carfota | The Ruined Architect // Luau & Systems</title>
     
+    <!-- Google Fonts for Regal Antique Ruin & Clean Body -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700;900&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
-            --bg: #0D0D1A;
-            --fg: #FFFFFF;
-            --muted-container: rgba(45, 27, 78, 0.85);
-            
-            --accent-1: #FF3AF2;
-            --accent-2: #00F5D4;
-            --accent-3: #FFE600;
-            --accent-4: #FF6B35;
-            --accent-5: #7B2FFF;
+            /* ─── Viego & Camavor Palette ─── */
+            --bg-obsidian: #0A0D10;
+            --bg-card: rgba(10, 15, 18, 0.78);
+            --mist-primary: #1CEBBA;
+            --mist-deep: #0A8D74;
+            --mist-glow: rgba(28, 235, 186, 0.35);
+            --gold-tarnished: #D4AF37;
+            --gold-dim: #8B753A;
+            --text-thread: #E6F1F2;
+            --text-dim: rgba(230, 241, 242, 0.7);
 
-            --font-head: 'Outfit', sans-serif;
-            --font-body: 'DM Sans', sans-serif;
-            --font-display: 'Bungee', cursive;
-
-            --glow-intensity: 1;
-            --boom-tilt: 1;
-            --pattern-opacity: 1;
-            --anim-speed-mult: 1;
+            --font-title: 'Cinzel Decorative', serif;
+            --font-sub: 'Cinzel', serif;
+            --font-body: 'Raleway', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg);
-            color: var(--fg);
+            background-color: var(--bg-obsidian);
+            color: var(--text-thread);
             font-family: var(--font-body);
             min-height: 100vh;
             overflow-x: hidden;
@@ -44,517 +41,506 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            filter: saturate(calc(0.5 + (0.5 * var(--glow-intensity))));
         }
 
-        .bg-pattern-layer {
-            position: fixed; inset: 0; pointer-events: none; z-index: 0;
-            opacity: var(--pattern-opacity);
-            transition: opacity 0.3s ease;
+        /* ─── THE CREEPING BLACK MIST & GHOSTLY OVERLAY ─── */
+        .mist-background {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
         }
 
-        .pattern-dots {
+        /* Ambient spotlight illuminating The Empty Throne from above */
+        .throne-light {
+            position: absolute; top: -15%; left: 50%; transform: translateX(-50%);
+            width: min(1000px, 100vw); height: 700px;
+            background: radial-gradient(ellipse at center, rgba(28, 235, 186, 0.12) 0%, rgba(10, 141, 116, 0.04) 45%, transparent 75%);
+            filter: blur(50px);
+            animation: pulseThrone 8s ease-in-out infinite alternate;
+        }
+
+        .creeping-fog-layer {
             position: absolute; inset: 0;
-            background-image: radial-gradient(circle, var(--accent-1) 1.5px, transparent 1.5px);
-            background-size: 28px 28px;
-            opacity: 0.15;
+            background: 
+                radial-gradient(ellipse at 15% 85%, rgba(10, 141, 116, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 90%, rgba(28, 235, 186, 0.12) 0%, transparent 60%);
+            animation: driftMist 16s ease-in-out infinite alternate;
         }
 
-        .pattern-stripes {
-            position: absolute; inset: 0;
-            background-image: repeating-linear-gradient(
-                45deg, transparent, transparent 14px,
-                rgba(255, 230, 0, 0.05) 14px, rgba(255, 230, 0, 0.05) 28px
-            );
-        }
-
-        .pattern-mesh {
-            position: absolute; inset: 0;
-            background:
-                radial-gradient(ellipse at 15% 20%, rgba(255, 58, 242, 0.22) 0%, transparent 50%),
-                radial-gradient(ellipse at 85% 30%, rgba(0, 245, 212, 0.18) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 85%, rgba(123, 47, 255, 0.25) 0%, transparent 60%),
-                radial-gradient(ellipse at 75% 75%, rgba(255, 107, 53, 0.15) 0%, transparent 50%);
-        }
-
-        .bg-watermark {
+        /* ─── WATERMARK: THE SWORD OF THE RUINED KING ─── */
+        .blade-watermark {
             position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(calc(-12deg * var(--boom-tilt)));
-            font-family: var(--font-display);
-            font-size: clamp(10rem, 24vw, 24rem);
-            line-height: 0.8;
-            color: rgba(255, 58, 242, calc(0.035 * var(--pattern-opacity)));
-            text-shadow: 
-                4px 4px 0px rgba(0, 245, 212, calc(0.03 * var(--pattern-opacity))),
-                -4px -4px 0px rgba(255, 230, 0, calc(0.03 * var(--pattern-opacity)));
-            white-space: nowrap; user-select: none; pointer-events: none; z-index: 1;
+            transform: translate(-50%, -50%);
+            width: min(520px, 85vw);
+            opacity: 0.055;
+            pointer-events: none;
+            z-index: 1;
+            filter: drop-shadow(0 0 30px var(--mist-primary));
+            animation: bladeAura 9s ease-in-out infinite;
         }
 
-        .floating-shape {
-            position: absolute; pointer-events: none; z-index: 2;
-            filter: drop-shadow(0 0 calc(15px * var(--glow-intensity)) currentColor);
-            opacity: calc(0.2 + (0.8 * var(--pattern-opacity)));
-        }
-
-        .shape-1 { top: 8%; left: 6%; color: var(--accent-3); animation: wiggle calc(2s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 3rem; }
-        .shape-2 { top: 22%; right: 7%; color: var(--accent-2); animation: float calc(5s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 2.8rem; }
-        .shape-3 { top: 58%; left: 3%; color: var(--accent-1); animation: spin-slow calc(15s / var(--anim-speed-mult)) linear infinite; font-size: 3.5rem; }
-        .shape-4 { bottom: 12%; right: 5%; color: var(--accent-4); animation: bounce-subtle calc(2.5s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 3.2rem; }
-        .shape-5 { top: 40%; right: 3%; color: var(--accent-5); animation: float-reverse calc(6s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 2.2rem; }
-        .shape-6 { bottom: 25%; left: 8%; color: var(--accent-2); animation: wiggle calc(3s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 2.6rem; }
-
+        /* ─── CONTAINER ─── */
         .container {
-            position: relative; z-index: 10; max-width: 1080px; width: 100%;
-            padding: 40px 24px 80px; display: flex; flex-direction: column; align-items: center;
+            position: relative; z-index: 10;
+            max-width: 1000px; width: 100%;
+            padding: 50px 24px 90px;
+            display: flex; flex-direction: column;
+            align-items: center; text-align: center;
         }
 
-        nav { display: flex; justify-content: center; gap: 14px; margin-bottom: 50px; flex-wrap: wrap; }
+        /* ─── SEAMSTRESS THREAD PROGRESS DIVIDER ─── */
+        .spectral-thread {
+            width: min(340px, 80%); height: 1px;
+            background: linear-gradient(90deg, transparent, var(--mist-primary), var(--gold-tarnished), transparent);
+            margin: 20px auto 35px;
+            position: relative;
+            box-shadow: 0 0 10px var(--mist-glow);
+        }
+
+        .spectral-thread::after {
+            content: '◆';
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: var(--gold-tarnished); font-size: 0.7rem; background: var(--bg-obsidian); padding: 0 8px;
+            text-shadow: 0 0 8px var(--mist-primary);
+        }
+
+        /* ─── NAVIGATION (Tarnished Camavor Filigree) ─── */
+        nav {
+            display: flex; justify-content: center; gap: 14px; margin-bottom: 55px; flex-wrap: wrap;
+        }
 
         .nav-link {
-            font-family: var(--font-head); font-weight: 900; font-size: 0.95rem;
-            letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg); text-decoration: none;
-            padding: 12px 30px; border-radius: 9999px; background: var(--muted-container);
-            border: 4px solid var(--accent-1);
-            box-shadow: 
-                calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-5),
-                calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-2);
-            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-family: var(--font-sub);
+            font-size: 0.8rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 12px 28px;
+            background: rgba(10, 15, 20, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+            backdrop-filter: blur(10px);
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
             display: inline-flex; align-items: center; gap: 8px;
+            position: relative;
         }
-
-        .nav-link:nth-child(2) { border-color: var(--accent-2); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-1), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-3); }
-        .nav-link:nth-child(3) { border-color: var(--accent-3); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-4), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-5); }
-        .nav-link:nth-child(4) { border-color: var(--accent-4); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-2), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-1); }
 
         .nav-link:hover, .nav-link.active {
-            transform: scale(calc(1 + (0.1 * var(--boom-tilt)))) translateY(-4px) rotate(calc(-1deg * var(--boom-tilt)));
-            border-color: var(--accent-3); background: var(--accent-1); color: #0D0D1A;
-            box-shadow: 0 0 calc(25px * var(--glow-intensity)) rgba(255, 58, 242, 0.8), 6px 6px 0px var(--accent-3), 12px 12px 0px var(--accent-2);
+            color: var(--mist-primary);
+            border-color: var(--mist-primary);
+            background: rgba(28, 235, 186, 0.08);
+            box-shadow: 0 0 25px rgba(28, 235, 186, 0.25), inset 0 0 15px rgba(28, 235, 186, 0.1);
+            transform: translateY(-2px);
         }
 
-        .hero-badge {
-            font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 0.15em; color: #0D0D1A;
-            background: var(--accent-3); padding: 8px 24px; border-radius: 9999px;
-            border: 4px dashed var(--accent-1);
-            transform: rotate(calc(-3deg * var(--boom-tilt)));
-            box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-4), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-2);
-            margin-bottom: 24px; display: inline-flex; align-items: center; gap: 8px;
-            animation: wiggle calc(3s / var(--anim-speed-mult)) ease-in-out infinite;
+        /* ─── CROWN OF CAMAVOR EMBLEM ─── */
+        .crown-emblem {
+            font-size: 2.4rem;
+            color: var(--gold-tarnished);
+            text-shadow: 0 0 20px var(--mist-primary), 0 0 40px rgba(212, 175, 55, 0.6);
+            margin-bottom: 12px;
+            display: inline-block;
+            animation: floatGently 6s ease-in-out infinite;
         }
 
+        /* ─── THE EMPTY THRONE HEADLINE ─── */
         h1 {
-            font-family: var(--font-head); font-size: clamp(3.8rem, 10vw, 7.5rem);
-            font-weight: 900; line-height: 0.95; letter-spacing: -0.04em;
-            text-transform: uppercase; text-align: center; color: var(--fg);
-            text-shadow: 
-                calc(3px * var(--boom-tilt)) calc(3px * var(--boom-tilt)) 0px var(--accent-5),
-                calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-1),
-                calc(9px * var(--boom-tilt)) calc(9px * var(--boom-tilt)) 0px var(--accent-2),
-                calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-3);
-            margin-bottom: 15px; position: relative;
-        }
-
-        .gradient-text {
-            background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-4), var(--accent-1));
-            background-size: 300% auto;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            animation: gradient-shift 4s ease infinite;
-            filter: drop-shadow(0 0 calc(20px * var(--glow-intensity)) rgba(0, 245, 212, 0.4));
+            font-family: var(--font-title);
+            font-size: clamp(3.2rem, 8vw, 6.2rem);
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            line-height: 1.05;
+            background: linear-gradient(180deg, #FFFFFF 15%, var(--mist-primary) 70%, var(--gold-tarnished) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(28, 235, 186, 0.3));
+            margin-bottom: 8px;
         }
 
         .hero-subtitle {
-            font-family: var(--font-display); font-size: clamp(1rem, 2.5vw, 1.4rem);
-            color: var(--accent-2);
-            text-shadow: calc(2px * var(--boom-tilt)) calc(2px * var(--boom-tilt)) 0px var(--accent-5), calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-1);
-            letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 40px;
-            transform: rotate(calc(1deg * var(--boom-tilt)));
+            font-family: var(--font-sub);
+            font-size: clamp(0.78rem, 2vw, 1.05rem);
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(28, 235, 186, 0.7);
+            text-shadow: 0 0 10px rgba(28, 235, 186, 0.3);
+            margin-bottom: 12px;
         }
 
-        .welcome-card {
-            background: var(--muted-container); border: 6px solid var(--accent-1);
-            border-radius: 32px; padding: 48px 40px; position: relative; backdrop-filter: blur(16px);
-            width: 100%; text-align: center;
+        /* ─── THE SHATTERED MIRROR SHARD (Main Glassmorphic Card) ─── */
+        .mirror-shard-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(28, 235, 186, 0.25);
+            /* Sharp, fractured jagged glass shard silhouette */
+            clip-path: polygon(
+                0 20px, 
+                20px 0, 
+                calc(100% - 25px) 0, 
+                100% 25px, 
+                100% calc(100% - 20px), 
+                calc(100% - 20px) 100%, 
+                25px 100%, 
+                0 calc(100% - 25px)
+            );
+            backdrop-filter: blur(20px);
+            padding: 45px 38px;
+            width: 100%;
+            margin-bottom: 45px;
+            position: relative;
             box-shadow: 
-                0 0 calc(35px * var(--glow-intensity)) rgba(255, 58, 242, 0.4),
-                calc(10px * var(--boom-tilt)) calc(10px * var(--boom-tilt)) 0px var(--accent-3),
-                calc(20px * var(--boom-tilt)) calc(20px * var(--boom-tilt)) 0px var(--accent-2),
-                calc(30px * var(--boom-tilt)) calc(30px * var(--boom-tilt)) 0px var(--accent-5);
-            transform: rotate(calc(-1deg * var(--boom-tilt)));
-            transition: all 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                0 0 30px rgba(28, 235, 186, 0.08),
+                inset 0 1px 0 rgba(230, 241, 242, 0.15);
+            transition: all 0.4s ease;
+        }
+
+        .mirror-shard-card:hover {
+            border-color: rgba(28, 235, 186, 0.5);
+            box-shadow: 
+                0 35px 90px rgba(0, 0, 0, 0.9),
+                0 0 45px rgba(28, 235, 186, 0.2),
+                inset 0 0 25px rgba(28, 235, 186, 0.06);
+            transform: translateY(-3px);
+        }
+
+        .card-crest {
+            font-family: var(--font-sub);
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            color: var(--gold-tarnished);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+
+        .card-desc {
+            font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+            line-height: 1.85;
+            color: var(--text-thread);
+            font-weight: 300;
+        }
+
+        .highlight-spectral {
+            color: var(--mist-primary);
+            font-weight: 600;
+            text-shadow: 0 0 12px rgba(28, 235, 186, 0.4);
+        }
+
+        .highlight-gold {
+            color: var(--gold-tarnished);
+            font-family: var(--font-sub);
+            font-weight: 700;
+        }
+
+        .inline-portal {
+            display: inline-flex; align-items: center; gap: 6px;
+            text-decoration: none; font-family: var(--font-sub);
+            font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--bg-obsidian);
+            background: linear-gradient(135deg, var(--mist-primary), var(--mist-deep));
+            padding: 4px 16px;
+            clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+            margin: 0 4px;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(28, 235, 186, 0.35);
+            transition: all 0.25s ease;
+        }
+
+        .inline-portal:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 0 25px var(--mist-primary);
+            color: #FFFFFF;
+        }
+
+        /* ─── ASYMMETRIC STATS FORGE ─── */
+        .stats-shard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
             margin-bottom: 45px;
         }
 
-        .welcome-card:hover {
-            transform: scale(calc(1 + (0.02 * var(--boom-tilt)))) rotate(calc(1deg * var(--boom-tilt)));
-            border-color: var(--accent-2);
-            box-shadow: 
-                0 0 calc(50px * var(--glow-intensity)) rgba(0, 245, 212, 0.6),
-                14px 14px 0px var(--accent-1), 28px 28px 0px var(--accent-3), 42px 42px 0px var(--accent-4);
+        .stat-shard {
+            background: rgba(12, 17, 22, 0.7);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 2px solid var(--mist-primary);
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+            padding: 24px 16px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
         }
 
-        .welcome-card::before {
-            content: '⚡ EXPERT SCRIPTING ⚡'; position: absolute; top: -22px; left: 32px;
-            background: var(--accent-4); color: #0D0D1A; font-family: var(--font-display);
-            font-size: 0.85rem; padding: 6px 18px; border-radius: 9999px; border: 3px solid var(--accent-3);
-            box-shadow: 4px 4px 0px #0D0D1A; transform: rotate(calc(-2deg * var(--boom-tilt)));
+        .stat-shard:hover {
+            border-color: var(--mist-primary);
+            box-shadow: 0 0 25px rgba(28, 235, 186, 0.18);
+            transform: translateY(-4px);
         }
 
-        .description { font-size: clamp(1.2rem, 2.5vw, 1.55rem); color: var(--fg); line-height: 1.8; font-weight: 500; }
-
-        .highlight-bold {
-            font-family: var(--font-head); font-weight: 900; color: var(--accent-3);
-            background: rgba(255, 230, 0, 0.15); padding: 2px 10px; border-radius: 8px;
-            border: 2px dashed var(--accent-3); text-shadow: 2px 2px 0px var(--accent-5);
-            display: inline-block; transform: rotate(calc(-1deg * var(--boom-tilt)));
+        .stat-num {
+            font-family: var(--font-title);
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            color: var(--mist-primary);
+            text-shadow: 0 0 18px rgba(28, 235, 186, 0.4);
+            line-height: 1; margin-bottom: 6px; display: block;
         }
 
-        .inline-pill-link {
-            font-family: var(--font-head); font-weight: 900; text-transform: uppercase; text-decoration: none;
-            color: #0D0D1A; background: var(--accent-2); padding: 4px 18px; border-radius: 9999px;
-            border: 3px solid var(--accent-1); box-shadow: calc(3px * var(--boom-tilt)) calc(3px * var(--boom-tilt)) 0px var(--accent-3);
-            display: inline-flex; align-items: center; gap: 6px;
-            transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); margin: 0 4px;
+        .stat-label {
+            font-family: var(--font-sub);
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-tarnished);
         }
 
-        .inline-pill-link.systems-link { background: var(--accent-1); color: #FFFFFF; border-color: var(--accent-3); box-shadow: calc(3px * var(--boom-tilt)) calc(3px * var(--boom-tilt)) 0px var(--accent-2); }
-        .inline-pill-link:hover { transform: scale(1.15) translateY(-3px) rotate(3deg); box-shadow: 0 0 20px rgba(0, 245, 212, 0.8), 6px 6px 0px var(--accent-5); color: #0D0D1A; background: var(--accent-3); border-color: var(--accent-4); }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; margin-bottom: 45px; }
-
-        .stat-card {
-            background: var(--muted-container); border-radius: 24px; padding: 28px 20px;
-            text-align: center; position: relative; backdrop-filter: blur(12px);
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        /* ─── ISOLDE'S THREAD SKILL RUNES ─── */
+        .runes-cloud {
+            display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+            margin-bottom: 50px; width: 100%;
         }
 
-        .stat-card:nth-child(1) { border: 4px solid var(--accent-2); box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-1), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-5); transform: translateY(calc(12px * var(--boom-tilt))) rotate(calc(-1.5deg * var(--boom-tilt))); }
-        .stat-card:nth-child(2) { border: 4px dashed var(--accent-3); box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-4), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-1); transform: translateY(calc(-8px * var(--boom-tilt))) rotate(calc(1.5deg * var(--boom-tilt))); }
-        .stat-card:nth-child(3) { border: 4px solid var(--accent-4); box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-2), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-3); transform: translateY(calc(16px * var(--boom-tilt))) rotate(calc(-1deg * var(--boom-tilt))); }
-        .stat-card:hover { transform: scale(1.08) translateY(-10px) rotate(0deg) !important; }
-
-        .stat-number { font-family: var(--font-head); font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 900; line-height: 1; margin-bottom: 8px; display: block; }
-        .stat-card:nth-child(1) .stat-number { color: var(--accent-2); text-shadow: 2px 2px 0px var(--accent-1); }
-        .stat-card:nth-child(2) .stat-number { color: var(--accent-3); text-shadow: 2px 2px 0px var(--accent-5); }
-        .stat-card:nth-child(3) .stat-number { color: var(--accent-4); text-shadow: 2px 2px 0px var(--accent-2); }
-        .stat-label { font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg); }
-
-        .skills-cloud { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 50px; width: 100%; }
-
-        .skill-pill {
-            font-family: var(--font-head); font-weight: 800; font-size: 0.9rem; text-transform: uppercase;
-            letter-spacing: 0.05em; padding: 8px 20px; border-radius: 9999px; background: var(--muted-container);
-            transition: all 0.25s ease; cursor: pointer;
+        .rune-tag {
+            font-family: var(--font-sub);
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 7px 18px;
+            background: rgba(10, 14, 18, 0.8);
+            border: 1px solid rgba(28, 235, 186, 0.2);
+            color: var(--text-dim);
+            border-radius: 2px;
+            transition: all 0.25s ease;
+            position: relative;
         }
 
-        .skill-pill:nth-child(1) { border: 3px solid var(--accent-1); color: var(--accent-1); transform: rotate(calc(-2deg * var(--boom-tilt))); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-5); }
-        .skill-pill:nth-child(2) { border: 3px dashed var(--accent-2); color: var(--accent-2); transform: rotate(calc(1deg * var(--boom-tilt))); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-1); }
-        .skill-pill:nth-child(3) { border: 3px solid var(--accent-3); color: var(--accent-3); transform: rotate(calc(-1deg * var(--boom-tilt))); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-4); }
-        .skill-pill:nth-child(4) { border: 3px solid var(--accent-4); color: var(--accent-4); transform: rotate(calc(2deg * var(--boom-tilt))); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-2); }
-        .skill-pill:nth-child(5) { border: 3px dashed var(--accent-5); color: #a78bfa; transform: rotate(calc(-2deg * var(--boom-tilt))); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-3); }
-        .skill-pill:hover { transform: scale(1.15) rotate(0deg) !important; background: var(--fg); color: #0D0D1A !important; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+        .rune-tag:hover {
+            color: var(--mist-primary);
+            border-color: var(--mist-primary);
+            background: rgba(28, 235, 186, 0.08);
+            box-shadow: 0 0 15px rgba(28, 235, 186, 0.3);
+            transform: scale(1.05);
+        }
 
-        .social-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 50px; }
+        /* ─── ACTION PEDESTAL BUTTONS ─── */
+        .actions-row {
+            display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+            margin-bottom: 55px;
+        }
 
-        .btn-dopamine {
-            font-family: var(--font-head); font-weight: 900; font-size: 1.05rem; letter-spacing: 0.15em;
-            text-transform: uppercase; text-decoration: none; color: #0D0D1A; padding: 16px 36px;
-            border-radius: 9999px; display: inline-flex; align-items: center; gap: 12px;
-            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55); position: relative;
+        .btn-viego {
+            font-family: var(--font-sub);
+            font-size: 0.85rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 16px 36px;
+            display: inline-flex; align-items: center; gap: 12px;
+            clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            position: relative;
+            font-weight: 700;
         }
 
         .btn-roblox {
-            background: linear-gradient(90deg, #FFFFFF, var(--accent-2)); border: 4px solid var(--accent-1);
-            box-shadow: 0 0 calc(25px * var(--glow-intensity)) rgba(255, 255, 255, 0.4), calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-1), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-5);
+            background: linear-gradient(135deg, rgba(230, 241, 242, 0.9), rgba(28, 235, 186, 0.8));
+            color: var(--bg-obsidian);
+            border: 1px solid #FFFFFF;
+            box-shadow: 0 0 25px rgba(28, 235, 186, 0.4);
         }
 
         .btn-discord {
-            background: linear-gradient(90deg, #5865F2, var(--accent-1)); color: #FFFFFF; border: 4px solid var(--accent-3);
-            box-shadow: 0 0 calc(25px * var(--glow-intensity)) rgba(88, 101, 242, 0.6), calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-3), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-2);
+            background: rgba(10, 15, 20, 0.8);
+            color: var(--mist-primary);
+            border: 1px solid var(--gold-tarnished);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
         }
 
-        .btn-dopamine:hover { transform: scale(1.12) translateY(-4px) rotate(calc(1.5deg * var(--boom-tilt))); }
-        .btn-roblox:hover { box-shadow: 0 0 35px rgba(0, 245, 212, 0.8), 10px 10px 0px var(--accent-3), 18px 18px 0px var(--accent-1); }
-        .btn-discord:hover { box-shadow: 0 0 35px rgba(255, 58, 242, 0.8), 10px 10px 0px var(--accent-2), 18px 18px 0px var(--accent-4); }
-
-        footer { font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.25em; color: var(--accent-2); text-shadow: 2px 2px 0px var(--accent-5); text-transform: uppercase; text-align: center; }
-
-        /* ─── VIBE CONTROLLER PANEL ─── */
-        .vibe-controller-toggle {
-            position: fixed; bottom: 24px; right: 24px; z-index: 99;
-            background: var(--accent-3); color: #0D0D1A; border: 4px solid var(--accent-1);
-            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 4px 4px 0px var(--accent-5), 0 0 20px var(--accent-3);
-            font-size: 1.5rem; transition: transform 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        .btn-viego:hover {
+            transform: translateY(-3px) scale(1.03);
         }
 
-        .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); background: var(--accent-2); }
-
-        .vibe-panel {
-            position: fixed; bottom: 95px; right: 24px; z-index: 100;
-            background: rgba(13, 13, 26, 0.96); border: 5px solid var(--accent-2);
-            box-shadow: 0 0 40px rgba(0, 245, 212, 0.4), 8px 8px 0px var(--accent-1);
-            border-radius: 24px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
-            display: none; flex-direction: column; gap: 16px;
-            animation: bounce-subtle 0.3s ease;
+        .btn-roblox:hover {
+            box-shadow: 0 0 40px var(--mist-primary);
+            background: #FFFFFF;
         }
 
-        .vibe-panel.open { display: flex; }
-
-        .vibe-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px dashed rgba(255, 255, 255, 0.15); padding-bottom: 10px;
+        .btn-discord:hover {
+            border-color: var(--mist-primary);
+            color: #FFFFFF;
+            background: rgba(28, 235, 186, 0.15);
+            box-shadow: 0 0 30px rgba(28, 235, 186, 0.5);
         }
 
-        .vibe-title { font-family: var(--font-display); font-size: 1.05rem; color: var(--accent-3); }
-
-        .vibe-tip {
-            font-size: 0.78rem; line-height: 1.4; color: #bbb;
-            background: rgba(255, 58, 242, 0.1); border-left: 3px solid var(--accent-1);
-            padding: 8px 10px; border-radius: 4px;
+        /* ─── FOOTER ─── */
+        footer {
+            font-family: var(--font-sub);
+            font-size: 0.72rem;
+            letter-spacing: 0.35em;
+            color: rgba(212, 175, 55, 0.5);
+            text-transform: uppercase;
         }
 
-        .vibe-row { display: flex; flex-direction: column; gap: 6px; }
-
-        .vibe-row label {
-            font-family: var(--font-head); font-weight: 800; font-size: 0.8rem;
-            text-transform: uppercase; color: var(--accent-2); display: flex; justify-content: space-between;
+        /* ─── ANIMATIONS ─── */
+        @keyframes driftMist {
+            0% { transform: translateY(0) scale(1); opacity: 0.7; }
+            100% { transform: translateY(-30px) scale(1.15); opacity: 1; }
         }
 
-        .vibe-row input[type="range"] {
-            accent-color: var(--accent-1); height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.15);
-            cursor: pointer;
+        @keyframes pulseThrone {
+            0% { opacity: 0.4; transform: translateX(-50%) scale(0.95); }
+            100% { opacity: 0.8; transform: translateX(-50%) scale(1.08); }
         }
 
-        .preset-buttons { display: flex; gap: 6px; margin-top: 4px; }
-
-        .preset-btn {
-            flex: 1; font-family: var(--font-head); font-weight: 900; font-size: 0.7rem;
-            padding: 6px 4px; border-radius: 8px; border: 2px solid var(--accent-3);
-            background: var(--muted-container); color: #FFFFFF; cursor: pointer;
-            transition: all 0.2s ease; text-transform: uppercase;
+        @keyframes bladeAura {
+            0%, 100% { opacity: 0.05; filter: drop-shadow(0 0 25px rgba(28, 235, 186, 0.3)); }
+            50% { opacity: 0.09; filter: drop-shadow(0 0 50px rgba(28, 235, 186, 0.6)); }
         }
 
-        .preset-btn:hover { background: var(--accent-3); color: #0D0D1A; }
-
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-22px) rotate(8deg); } }
-        @keyframes float-reverse { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(22px) rotate(-8deg); } }
-        @keyframes wiggle { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
-        @keyframes bounce-subtle { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-12px) scale(1.08); } }
-        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes floatGently {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
 
         @media (max-width: 768px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .vibe-panel { width: calc(100vw - 48px); right: 24px; }
+            .stats-shard-grid { grid-template-columns: 1fr; }
+            .mirror-shard-card { padding: 32px 22px; }
+            .actions-row { flex-direction: column; width: 100%; align-items: center; }
+            .btn-viego { width: 100%; max-width: 320px; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-pattern-layer">
-        <div class="pattern-dots"></div>
-        <div class="pattern-stripes"></div>
-        <div class="pattern-mesh"></div>
+    <!-- Creeping Mist & Ghostly Throne Lighting -->
+    <div class="mist-background">
+        <div class="throne-light"></div>
+        <div class="creeping-fog-layer"></div>
     </div>
 
-    <div class="bg-watermark" aria-hidden="true">BOOM! DEV</div>
-
-    <div class="floating-shape shape-1" aria-hidden="true">⚡</div>
-    <div class="floating-shape shape-2" aria-hidden="true">✨</div>
-    <div class="floating-shape shape-3" aria-hidden="true">💥</div>
-    <div class="floating-shape shape-4" aria-hidden="true">🔥</div>
-    <div class="floating-shape shape-5" aria-hidden="true">💎</div>
-    <div class="floating-shape shape-6" aria-hidden="true">🚀</div>
+    <!-- The Blade of the Ruined King SVG Watermark -->
+    <svg class="blade-watermark" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="bladeGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#0A8D74" stop-opacity="0.3"/>
+                <stop offset="50%" stop-color="#1CEBBA" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#0A8D74" stop-opacity="0.3"/>
+            </linearGradient>
+            <linearGradient id="goldFiligree" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#D4AF37"/>
+                <stop offset="100%" stop-color="#8B753A"/>
+            </linearGradient>
+        </defs>
+        <!-- Blade -->
+        <polygon points="100,20 112,600 100,650 88,600" fill="url(#bladeGlow)"/>
+        <line x1="100" y1="20" x2="100" y2="630" stroke="#1CEBBA" stroke-width="1" opacity="0.8"/>
+        <!-- Crossguard Crown -->
+        <path d="M40,640 Q100,610 160,640 L168,665 Q100,645 32,665 Z" fill="url(#goldFiligree)" opacity="0.85"/>
+        <circle cx="100" cy="642" r="7" fill="#1CEBBA"/>
+        <!-- Handle & Pommel -->
+        <rect x="92" y="665" width="16" height="90" rx="3" fill="#0A0D10" stroke="#D4AF37" stroke-width="1.5"/>
+        <polygon points="100,760 115,780 100,795 85,780" fill="url(#goldFiligree)"/>
+        <circle cx="100" cy="778" r="4" fill="#1CEBBA"/>
+    </svg>
 
     <div class="container">
         
+        <!-- Navigation Bar -->
         <nav>
             <a href="index.html" class="nav-link active">
-                <i class="fa-solid fa-bolt"></i> Home
+                <i class="fa-solid fa-crown"></i> Sanctum
             </a>
             <a href="games.html" class="nav-link">
-                <i class="fa-solid fa-gamepad"></i> Games
+                <i class="fa-solid fa-gamepad"></i> Experiences
             </a>
             <a href="systems.html" class="nav-link">
-                <i class="fa-solid fa-gears"></i> Systems
+                <i class="fa-solid fa-gem"></i> Artifacts
             </a>
             <a href="hire-me.html" class="nav-link">
-                <i class="fa-solid fa-handshake"></i> Hire Me
+                <i class="fa-solid fa-scroll"></i> Covenant
             </a>
         </nav>
 
-        <div class="hero-badge">
-            <span>👾 LEVEL 99 LUAU ARCHITECT</span>
+        <!-- Crown of Camavor -->
+        <div class="crown-emblem">
+            <i class="fa-solid fa-crown"></i>
         </div>
 
-        <h1>
-            <span class="gradient-text">Carfota</span>
-        </h1>
-        <p class="hero-subtitle">Roblox Studio // Systems Creator</p>
+        <!-- The Empty Throne Headline -->
+        <h1>Carfota</h1>
+        <p class="hero-subtitle">Architect of the Ruined Kingdom // Luau Engineer</p>
 
-        <div class="welcome-card">
-            <p class="description">
-                I am a <span class="highlight-bold">Roblox Game Developer</span> forging hyper-reactive mechanics, scalable backends, and high-adrenaline gameplay.
+        <!-- Stitching Seamstress Thread -->
+        <div class="spectral-thread"></div>
+
+        <!-- The Shattered Mirror Card -->
+        <div class="mirror-shard-card">
+            <div class="card-crest">
+                <span>✦ CAMAVORAN ROYAL FORGE ✦</span>
+            </div>
+            <p class="card-desc">
+                Forging multiplayer realities with <span class="highlight-spectral">relentless precision</span> and necrotic mastery. 
+                Every framework is crafted to conquer limits, binding backend logic and combat flow into an unbroken realm.
                 <br><br>
-                Step right into my 
-                <a href="games.html" class="inline-pill-link">
-                    <i class="fa-solid fa-gamepad"></i> Games
+                Traverse my created
+                <a href="games.html" class="inline-portal">
+                    <i class="fa-solid fa-dungeon"></i> Experiences
                 </a>
-                and explore the raw
-                <a href="systems.html" class="inline-pill-link systems-link">
-                    <i class="fa-solid fa-code"></i> Systems
+                or unveil the core
+                <a href="systems.html" class="inline-portal">
+                    <i class="fa-solid fa-code-branch"></i> Artifacts
                 </a>
-                engineered with pure obsession inside <span class="highlight-bold">Roblox Studio</span>.
+                stitched inside <span class="highlight-gold">Roblox Studio</span>.
             </p>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-number">WIP</span>
-                <span class="stat-label">🎮 Games Built</span>
+        <!-- Sharded Stats Pedestal -->
+        <div class="stats-shard-grid">
+            <div class="stat-shard">
+                <span class="stat-num">WIP</span>
+                <span class="stat-label">⚔️ Realms Forged</span>
             </div>
-            <div class="stat-card">
-                <span class="stat-number">6+</span>
-                <span class="stat-label">⚙️ Live Systems</span>
+            <div class="stat-shard">
+                <span class="stat-num">7+</span>
+                <span class="stat-label">✦ Living Systems</span>
             </div>
-            <div class="stat-card">
-                <span class="stat-number">2+</span>
-                <span class="stat-label">⏳ Years Dev</span>
+            <div class="stat-shard">
+                <span class="stat-num">2+</span>
+                <span class="stat-label">⏳ Years Reign</span>
             </div>
         </div>
 
-        <div class="skills-cloud">
-            <span class="skill-pill">⚡ Luau Scripting</span>
-            <span class="skill-pill">🔥 Combat Frameworks</span>
-            <span class="skill-pill">💾 DataStore Backends</span>
-            <span class="skill-pill">🤖 AI Integrations</span>
+        <!-- Isolde's Thread Skill Runes -->
+        <div class="runes-cloud">
+            <span class="rune-tag">✦ Luau Architecture</span>
+            <span class="rune-tag">✦ Combat Hitboxes & Combos</span>
+            <span class="rune-tag">✦ ProfileService & Cloud Save</span>
+            <span class="rune-tag">✦ AI & External API Bridges</span>
         </div>
 
-        <div class="social-row">
-            <a href="https://www.roblox.com/users/348153219/profile" target="_blank" class="btn-dopamine btn-roblox">
-                <svg width="22" height="22" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <!-- Pedestal Action Buttons -->
+        <div class="actions-row">
+            <a href="https://www.roblox.com/users/348153219/profile" target="_blank" class="btn-viego btn-roblox">
+                <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.073 0L0 25.927 25.927 32 32 6.073ZM20.314 20.615l-8.656-2.299 2.3-8.656 8.655 2.3z"/>
                 </svg>
-                Roblox Profile
+                Roblox Presence
             </a>
 
-            <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-dopamine btn-discord">
-                <i class="fa-brands fa-discord" style="font-size: 1.4rem;"></i>
-                Discord Connect
+            <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-viego btn-discord">
+                <i class="fa-brands fa-discord" style="font-size: 1.1rem;"></i>
+                Summon via Discord
             </a>
         </div>
 
+        <!-- Footer -->
         <footer>
-            <span>⚡ Crafted in Cairo, Egypt · No Restraint ⚡</span>
+            <span>✦ No Distance Is Too Great · Sanctum of Cairo ✦</span>
         </footer>
 
     </div>
 
-    <!-- ── VIBE TUNER & SFX CONTROLLER ── -->
-    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Tune Brightness & Audio">
-        <i class="fa-solid fa-sliders"></i>
-    </button>
-
-    <div class="vibe-panel" id="vibe-panel">
-        <div class="vibe-header">
-            <span class="vibe-title">🎛️ VIBE TUNER</span>
-            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:#FFF; cursor:pointer; font-size:1.1rem;">✕</button>
-        </div>
-        
-        <div class="vibe-tip">
-            💡 <strong>Tip:</strong> You can tune down visual intensity or toggle interactive sound FX!
-        </div>
-
-        <!-- Audio Toggle Control -->
-        <div class="vibe-row" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
-            <span style="font-family: var(--font-head); font-weight: 800; font-size: 0.85rem; color: var(--accent-3); text-transform: uppercase;">
-                <i class="fa-solid fa-volume-high"></i> Sound FX
-            </span>
-            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="preset-btn" style="flex: unset; width: 85px; padding: 6px 10px;">
-                ON 🔊
-            </button>
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Glow & Brightness</span> <span id="val-glow">100%</span></label>
-            <input type="range" id="slider-glow" min="0" max="100" value="100" oninput="updateVibeSettings()">
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Boomness & Tilt</span> <span id="val-boom">100%</span></label>
-            <input type="range" id="slider-boom" min="0" max="100" value="100" oninput="updateVibeSettings()">
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Pattern Contrast</span> <span id="val-pattern">100%</span></label>
-            <input type="range" id="slider-pattern" min="0" max="100" value="100" oninput="updateVibeSettings()">
-        </div>
-
-        <div class="preset-buttons">
-            <button class="preset-btn" onclick="applyPreset(100, 100, 100)">⚡ Max</button>
-            <button class="preset-btn" onclick="applyPreset(50, 40, 40)">🛡️ Balanced</button>
-            <button class="preset-btn" onclick="applyPreset(10, 0, 15)">🌙 Chill</button>
-        </div>
-    </div>
-
-    <!-- External Sound Effects Engine -->
+    <!-- Integrates with your sfx.js -->
     <script src="sfx.js"></script>
 
-    <script>
-        function handleSFXToggle() {
-            if (typeof DopamineAudio !== 'undefined') {
-                const enabled = DopamineAudio.toggleSFX();
-                const btn = document.getElementById('sfx-toggle-btn');
-                if (btn) {
-                    btn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
-                    btn.style.borderColor = enabled ? 'var(--accent-2)' : '#555';
-                }
-            }
-        }
-
-        function toggleVibeMenu() {
-            document.getElementById('vibe-panel').classList.toggle('open');
-        }
-
-        function updateVibeSettings() {
-            const glow = document.getElementById('slider-glow').value;
-            const boom = document.getElementById('slider-boom').value;
-            const pattern = document.getElementById('slider-pattern').value;
-
-            document.getElementById('val-glow').textContent = glow + '%';
-            document.getElementById('val-boom').textContent = boom + '%';
-            document.getElementById('val-pattern').textContent = pattern + '%';
-
-            document.documentElement.style.setProperty('--glow-intensity', glow / 100);
-            document.documentElement.style.setProperty('--boom-tilt', boom / 100);
-            document.documentElement.style.setProperty('--pattern-opacity', pattern / 100);
-            document.documentElement.style.setProperty('--anim-speed-mult', Math.max(0.2, boom / 100));
-
-            localStorage.setItem('vibe_glow', glow);
-            localStorage.setItem('vibe_boom', boom);
-            localStorage.setItem('vibe_pattern', pattern);
-        }
-
-        function applyPreset(glow, boom, pattern) {
-            document.getElementById('slider-glow').value = glow;
-            document.getElementById('slider-boom').value = boom;
-            document.getElementById('slider-pattern').value = pattern;
-            updateVibeSettings();
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const sfxBtn = document.getElementById('sfx-toggle-btn');
-            if (sfxBtn && typeof DopamineAudio !== 'undefined') {
-                const enabled = DopamineAudio.isEnabled();
-                sfxBtn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
-                sfxBtn.style.borderColor = enabled ? 'var(--accent-2)' : '#555';
-            }
-
-            const savedGlow = localStorage.getItem('vibe_glow') || '100';
-            const savedBoom = localStorage.getItem('vibe_boom') || '100';
-            const savedPattern = localStorage.getItem('vibe_pattern') || '100';
-            applyPreset(savedGlow, savedBoom, savedPattern);
-        });
-    </script>
 </body>
 </html>
