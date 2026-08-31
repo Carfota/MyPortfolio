@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carfota | Architect of Ruin</title>
     
-    <!-- Cinzel Decorative for Royalty, Inter for Clean Readability -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -13,6 +12,7 @@
 
     <style>
         :root {
+            /* 👑 DEFAULT: RUINED KING */
             --void-black: #0a0a0f;
             --spectral-teal: #3ddc97;
             --mist-deep: #1fbf87;
@@ -24,7 +24,16 @@
             --font-body: 'Inter', sans-serif;
         }
 
-        /* ─── HIDE NATIVE CURSOR EVERYWHERE ─── */
+        body.theme-rage {
+            /* 🩸 WRATH: SOUL FIGHTER (Matches image_e7aaa6.jpg perfectly) */
+            --void-black: #0a0405; /* Deep blood shadow */
+            --spectral-teal: #FF1E46; /* Crimson Sword Glow */
+            --mist-deep: #B30022; /* Dark Blood Mist */
+            --ruin-purple: #00F5D4; /* Cyan Chains Accent */
+            --ruin-shadow: #067D6E;
+            --bone-white: #FFF0F2;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
@@ -35,6 +44,7 @@
             overflow-x: hidden;
             position: relative;
             scrollbar-width: none;
+            transition: background-color 1.2s ease, color 1.2s ease;
         }
         body::-webkit-scrollbar { display: none; }
 
@@ -43,31 +53,32 @@
             position: fixed; top: 0; left: 0; height: 3px; width: 0%;
             background: linear-gradient(90deg, transparent, var(--spectral-teal), var(--bone-white));
             box-shadow: 0 0 10px var(--spectral-teal);
-            z-index: 9999; pointer-events: none; transition: width 0.1s ease-out;
+            z-index: 9999; pointer-events: none; transition: width 0.1s ease-out, background 1s, box-shadow 1s;
         }
         #blade-scrollbar::after {
             content: ''; position: absolute; right: -5px; top: -3px;
             width: 10px; height: 9px; background: var(--bone-white);
             clip-path: polygon(0 50%, 100% 0, 100% 100%);
             box-shadow: 0 0 15px var(--bone-white);
+            transition: background 1s, box-shadow 1s;
         }
 
-        /* ─── CUSTOM CURSOR WISP (NOW ABOVE EVERYTHING) ─── */
+        /* ─── CUSTOM CURSOR WISP & TRAIL ─── */
         .cursor-wisp {
             position: fixed; top: 0; left: 0; width: 12px; height: 12px;
             background: var(--spectral-teal); border-radius: 50%;
-            pointer-events: none; z-index: 999999; /* Fixed Z-Index to show above loader! */
+            pointer-events: none; z-index: 999999;
             transform: translate(-50%, -50%);
             box-shadow: 0 0 20px var(--spectral-teal), 0 0 40px var(--mist-deep);
-            transition: width 0.2s, height 0.2s; mix-blend-mode: screen;
+            transition: width 0.2s, height 0.2s, background 1s, box-shadow 1s; mix-blend-mode: screen;
         }
         .cursor-trail {
             position: fixed; width: 8px; height: 8px;
             background: var(--ruin-purple); border-radius: 50%;
-            pointer-events: none; z-index: 999998; /* Under wisp, above loader */
+            pointer-events: none; z-index: 999998;
             transform: translate(-50%, -50%); opacity: 0.6;
             box-shadow: 0 0 15px var(--ruin-shadow);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1s, box-shadow 1s;
         }
 
         /* ─── THE LOADING SCREEN (CINEMATIC) ─── */
@@ -76,9 +87,9 @@
             z-index: 50000; display: flex; flex-direction: column;
             align-items: center; justify-content: center; overflow: hidden;
             animation: dissolveLoader 1.5s ease-in-out 8.5s forwards;
+            transition: background 1s;
         }
 
-        /* Skip Button */
         .skip-btn {
             position: absolute; bottom: 30px; right: 40px;
             background: rgba(0,0,0,0.5); border: 1px solid rgba(61, 220, 151, 0.4);
@@ -87,61 +98,71 @@
             padding: 12px 24px; z-index: 50001; transition: all 0.3s ease;
             clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
         }
+        body.theme-rage .skip-btn { border-color: rgba(255, 30, 70, 0.4); }
         .skip-btn:hover {
             color: var(--void-black); background: var(--spectral-teal);
-            border-color: var(--spectral-teal); box-shadow: 0 0 20px rgba(61, 220, 151, 0.5);
+            border-color: var(--spectral-teal); box-shadow: 0 0 20px var(--spectral-teal);
             font-weight: 800; transform: scale(1.05);
         }
 
-        /* The Ring Crack */
         .shattered-ring {
             position: absolute; width: 150px; height: 150px;
             border: 2px solid rgba(61, 220, 151, 0.1); border-radius: 50%;
             opacity: 0; animation: crackRing 3s ease-out 1s forwards;
         }
+        body.theme-rage .shattered-ring { border-color: rgba(255, 30, 70, 0.1); }
 
-        /* The Ember */
         .ember {
             position: absolute; width: 6px; height: 6px;
             background: var(--spectral-teal); border-radius: 50%;
             box-shadow: 0 0 20px 5px var(--spectral-teal);
             animation: pulseEmber 2s ease-in-out infinite;
+            transition: background 1s, box-shadow 1s;
         }
 
-        /* Viego Silhouette Reveal */
         .viego-silhouette {
             position: absolute; bottom: 0; width: 100vw; height: 70vh;
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center/cover no-repeat;
             mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
             -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
             opacity: 0; filter: contrast(1.5) brightness(0.2) sepia(1) hue-rotate(130deg) saturate(1.5);
-            animation: riseSilhouette 4s ease-out 3s forwards;
-            pointer-events: none;
+            animation: riseSilhouette 4s ease-out 3s forwards; pointer-events: none;
         }
 
-        /* Typewriter Text */
         .flavor-text {
-            position: absolute; bottom: 15%; 
-            text-align: center; font-family: var(--font-body);
+            position: absolute; bottom: 15%; text-align: center; font-family: var(--font-body);
             font-size: 1.15rem; color: var(--bone-white); font-weight: 300;
             letter-spacing: 0.05em; text-shadow: 0 0 10px rgba(255,255,255,0.3);
             opacity: 0; overflow: hidden; white-space: nowrap;
             border-right: 2px solid var(--spectral-teal);
-            animation: 
-                fadeInText 0.1s 5s forwards,
-                typing 3.5s steps(93, end) 5s forwards,
-                blinkCursor 0.7s step-end infinite;
+            animation: fadeInText 0.1s 5s forwards, typing 3.5s steps(93, end) 5s forwards, blinkCursor 0.7s step-end infinite;
+            transition: color 1s, border-color 1s;
         }
 
-        /* ─── MAIN SITE ATMOSPHERE ─── */
+        /* ─── SMOOTH DUAL BACKGROUND ART ENGINE ─── */
         .background-art {
             position: fixed; top: 0; right: 0; width: 70vw; height: 100vh;
-            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center right/cover no-repeat;
-            opacity: 0.15; z-index: -2;
+            z-index: -2; pointer-events: none;
             mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
             -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            filter: grayscale(0.4) contrast(1.2);
+            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), filter 1.5s ease;
         }
+        
+        /* 1. Normal Mode Layer */
+        .art-king {
+            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center right/cover no-repeat;
+            opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
+        }
+        /* 2. Wrath Mode Layer */
+        .art-wrath {
+            background: url('image_e7aaa6.jpg') center right/cover no-repeat;
+            opacity: 0; filter: grayscale(0.6) contrast(1.3) blur(4px); transform: scale(1.08);
+        }
+
+        /* ─── THE SWITCH TRIGGERS ─── */
+        body.theme-rage .art-king { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
+        body.theme-rage .art-wrath { opacity: 0.25; transform: scale(1); filter: grayscale(0.1) contrast(1.2) blur(0px); }
+
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -149,6 +170,13 @@
                 radial-gradient(ellipse at 80% 20%, rgba(61, 220, 151, 0.05) 0%, transparent 40%),
                 radial-gradient(ellipse at 20% 80%, rgba(74, 47, 107, 0.1) 0%, transparent 50%);
             animation: driftFog 20s ease-in-out infinite alternate;
+            transition: background 1.5s ease;
+        }
+
+        body.theme-rage .fog-layer {
+            background: 
+                radial-gradient(ellipse at 80% 20%, rgba(255, 30, 70, 0.08) 0%, transparent 45%),
+                radial-gradient(ellipse at 20% 80%, rgba(0, 245, 212, 0.08) 0%, transparent 55%);
         }
 
         .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
@@ -182,27 +210,27 @@
         .hero-title {
             font-family: var(--font-display); font-size: clamp(4rem, 8vw, 7rem);
             font-weight: 900; line-height: 1; color: var(--bone-white);
-            margin-bottom: 10px; position: relative; display: inline-block;
+            margin-bottom: 10px; position: relative; display: inline-block; transition: color 1s ease;
         }
 
         .hero-title::after {
             content: ''; position: absolute; bottom: -10px; left: 0;
             height: 2px; background: var(--spectral-teal); box-shadow: 0 0 15px var(--spectral-teal);
-            animation: underlineGrow 1.5s ease-out 10s forwards; width: 0;
+            animation: underlineGrow 1.5s ease-out 10s forwards; width: 0; transition: background 1s, box-shadow 1s;
         }
 
         .hero-subtitle {
             font-family: var(--font-body); font-size: clamp(1rem, 1.5vw, 1.2rem);
             color: var(--spectral-teal); font-weight: 300; letter-spacing: 0.2em;
             text-transform: uppercase; margin-bottom: 30px; margin-top: 20px;
-            opacity: 0; animation: fadeUp 1s ease-out 10.5s forwards;
+            opacity: 0; animation: fadeUp 1s ease-out 10.5s forwards; transition: color 1s ease;
         }
 
         .hero-tagline {
             font-family: var(--font-body); font-size: 1.1rem; color: rgba(232, 230, 225, 0.7);
             max-width: 500px; line-height: 1.8; font-style: italic;
             border-left: 2px solid var(--ruin-purple); padding-left: 20px;
-            opacity: 0; animation: fadeUp 1s ease-out 11s forwards;
+            opacity: 0; animation: fadeUp 1s ease-out 11s forwards; transition: border-color 1s ease;
         }
 
         /* ─── STATS SECTION ─── */
@@ -211,17 +239,12 @@
             opacity: 0; animation: fadeUp 1s ease-out 11.2s forwards;
         }
 
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px;
-            max-width: 900px;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; max-width: 900px; }
 
         .stat-card {
-            background: rgba(10, 10, 15, 0.6);
-            border: 1px solid rgba(232, 230, 225, 0.05);
-            border-bottom: 2px solid var(--spectral-teal);
-            padding: 25px 20px; text-align: center;
-            backdrop-filter: blur(10px); transition: all 0.3s ease;
+            background: rgba(10, 10, 15, 0.6); border: 1px solid rgba(232, 230, 225, 0.05);
+            border-bottom: 2px solid var(--spectral-teal); padding: 25px 20px; text-align: center;
+            backdrop-filter: blur(10px); transition: all 0.3s ease, border-color 1s ease;
             clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
         }
 
@@ -229,11 +252,12 @@
             transform: translateY(-5px); border-color: var(--spectral-teal);
             box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(61, 220, 151, 0.1);
         }
+        body.theme-rage .stat-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 30, 70, 0.15); }
 
         .stat-value {
             font-family: var(--font-display); font-size: 3rem; font-weight: 900;
-            color: var(--spectral-teal); text-shadow: 0 0 15px rgba(61, 220, 151, 0.4);
-            margin-bottom: 5px; line-height: 1;
+            color: var(--spectral-teal); text-shadow: 0 0 15px var(--mist-deep);
+            margin-bottom: 5px; line-height: 1; transition: color 1s, text-shadow 1s;
         }
 
         .stat-label {
@@ -248,8 +272,7 @@
         }
 
         .section-header {
-            font-family: var(--font-display); font-size: 2rem;
-            color: var(--bone-white); margin-bottom: 50px; text-shadow: 0 0 20px rgba(255,255,255,0.1);
+            font-family: var(--font-display); font-size: 2rem; color: var(--bone-white); margin-bottom: 50px; text-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
 
         .ruins-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
@@ -262,42 +285,38 @@
         .ruin-card::before {
             content: ''; position: absolute; inset: 0;
             background: radial-gradient(circle at center, transparent 0%, rgba(61, 220, 151, 0.15) 100%);
-            opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+            opacity: 0; transition: opacity 0.5s ease, background 1s ease; pointer-events: none;
         }
+        body.theme-rage .ruin-card::before { background: radial-gradient(circle at center, transparent 0%, rgba(255, 30, 70, 0.15) 100%); }
         
         .ruin-card::after {
-            content: ''; position: absolute; inset: 0; border: 2px solid transparent;
-            transition: all 0.4s ease; pointer-events: none;
+            content: ''; position: absolute; inset: 0; border: 2px solid transparent; transition: all 0.4s ease, border-color 1s ease; pointer-events: none;
         }
 
-        .ruin-card:hover {
-            transform: translateY(-5px); border-color: rgba(61, 220, 151, 0.3);
-            box-shadow: inset 0 0 30px rgba(61, 220, 151, 0.1), 0 10px 30px rgba(0,0,0,0.8);
-        }
-
+        .ruin-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.15); box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8); }
         .ruin-card:hover::before { opacity: 1; }
         .ruin-card:hover::after {
             border-color: var(--spectral-teal); clip-path: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
             box-shadow: 0 0 15px var(--spectral-teal);
         }
 
-        .ruin-number { font-family: var(--font-body); font-size: 0.8rem; color: var(--mist-deep); letter-spacing: 0.2em; margin-bottom: 10px; display: block; }
-        .ruin-title { font-family: var(--font-display); font-size: 1.8rem; color: var(--bone-white); margin-bottom: 15px; }
-        .ruin-desc { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; color: rgba(232, 230, 225, 0.6); margin-bottom: 25px; }
+        .ruin-number { font-family: var(--font-body); font-size: 0.8rem; color: var(--mist-deep); letter-spacing: 0.2em; margin-bottom: 10px; display: block; transition: color 1s ease; }
+        .ruin-title { font-family: var(--font-display); font-size: 1.8rem; color: var(--bone-white); margin-bottom: 15px; transition: color 1s ease; }
+        .ruin-desc { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; color: rgba(232, 230, 225, 0.6); margin-bottom: 25px; transition: color 1s ease; }
 
         .btn-ruin {
             display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; background: transparent;
             border: 1px solid var(--ruin-purple); color: var(--bone-white);
             font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 0.1em;
-            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: all 0.3s ease;
+            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: all 0.3s ease, border-color 1s ease;
         }
 
         .btn-ruin::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--spectral-teal);
-            transition: all 0.4s ease; z-index: -1; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            transition: all 0.4s ease, background 1s ease; z-index: -1; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
 
-        .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 20px rgba(61, 220, 151, 0.4); }
+        .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 20px var(--mist-deep); }
         .btn-ruin:hover::before { left: 0; }
 
         /* ─── SKIP OVERRIDE CLASSES ─── */
@@ -324,26 +343,24 @@
 </head>
 <body>
 
-    <!-- ─── THE CINEMATIC LOADER ─── -->
     <div id="viego-loader">
         <div class="shattered-ring"></div>
         <div class="ember"></div>
         <div class="viego-silhouette"></div>
         <div class="flavor-text">He would tear the world apart before he let her go. This portfolio is built the same way.</div>
-        
         <button class="skip-btn" id="btn-skip">Skip Sequence <i class="fa-solid fa-forward-step"></i></button>
     </div>
 
-    <!-- ─── CUSTOM CURSOR (GLOW EFFECT) & SCROLLBAR ─── -->
     <div id="blade-scrollbar"></div>
     <div class="cursor-wisp" id="cursor-wisp"></div>
 
-    <!-- ─── ATMOSPHERE ─── -->
-    <div class="background-art"></div>
+    <!-- ─── SMOOTH DUAL BACKGROUND ART ─── -->
+    <div class="background-art art-king"></div>
+    <div class="background-art art-wrath"></div>
+    
     <div class="fog-layer"></div>
     <div class="soul-particles" id="soul-container"></div>
 
-    <!-- ─── SITE CONTENT ─── -->
     <nav>
         <a href="index.html" class="nav-link active">The Throne</a>
         <a href="games.html" class="nav-link">Realms</a>
@@ -359,7 +376,6 @@
         </div>
     </section>
 
-    <!-- ─── THE RUINED STATS ─── -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-card">
@@ -401,7 +417,6 @@
     <script src="sfx.js"></script>
 
     <script>
-        // ─── SKIP SEQUENCE LOGIC ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
 
@@ -423,7 +438,6 @@
             }
         }, 10000);
 
-        // ─── SCROLL PROGRESS BLADE ───
         window.addEventListener('scroll', () => {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -431,7 +445,6 @@
             document.getElementById("blade-scrollbar").style.width = scrolled + "%";
         });
 
-        // ─── CUSTOM WISP CURSOR ───
         const wisp = document.getElementById('cursor-wisp');
         const trails = [];
         const maxTrails = 8;
@@ -469,17 +482,13 @@
         function animateTrails() {
             let prevX = mouseX;
             let prevY = mouseY;
-
             trails.forEach((trail, index) => {
                 trail.x += (prevX - trail.x) * 0.3;
                 trail.y += (prevY - trail.y) * 0.3;
-                
                 trail.el.style.left = trail.x + 'px';
                 trail.el.style.top = trail.y + 'px';
-                
                 const scale = (maxTrails - index) / maxTrails;
                 trail.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
-
                 prevX = trail.x;
                 prevY = trail.y;
             });
@@ -487,14 +496,12 @@
         }
         animateTrails();
 
-        // ─── GREEN SOUL PARTICLES GENERATOR ───
         const soulContainer = document.getElementById('soul-container');
         let soulsStarted = false;
 
         function createSoul() {
             const soul = document.createElement('div');
             const size = Math.random() * 4 + 2;
-            
             soul.style.position = 'absolute';
             soul.style.left = Math.random() * 100 + 'vw';
             soul.style.width = size + 'px';
@@ -504,7 +511,6 @@
             soul.style.boxShadow = '0 0 10px var(--mist-deep)';
             soul.style.opacity = '0';
             soul.style.animation = `soulRise ${Math.random() * 10 + 10}s linear forwards`;
-            
             soulContainer.appendChild(soul);
             setTimeout(() => { soul.remove(); }, 20000);
         }
@@ -517,6 +523,14 @@
         }
 
         setTimeout(startSouls, 8000);
+
+        // SYNC THEME ACROSS PAGES (Optional extra robustness)
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('viego_aspect');
+            if (savedTheme === 'rage') {
+                document.body.classList.add('theme-rage');
+            }
+        });
 
     </script>
 </body>
