@@ -32,16 +32,16 @@
         }
 
         body.theme-king {
-            /* 🔴 THE HUMAN KING (ROYALTY & GOLD) */
-            --void-black: #09080c; 
-            --spectral-teal: #E32636; 
-            --mist-deep: #7A0016; 
-            --ruin-purple: #D4AF37; 
-            --ruin-shadow: #8B753A; 
-            --bone-white: #F4EBEB; 
+            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY - GOLD, IVORY & NAVY) */
+            --void-black: #080a12; 
+            --spectral-teal: #E2C06A; 
+            --mist-deep: #142440; 
+            --ruin-purple: #9EABB8; 
+            --ruin-shadow: #7A6332; 
+            --bone-white: #F9F6EE; 
             
-            --vignette-color: rgba(227, 38, 54, 0.15);
-            --card-border: rgba(212, 175, 55, 0.25);
+            --vignette-color: rgba(226, 192, 106, 0.12);
+            --card-border: rgba(226, 192, 106, 0.25);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
@@ -110,25 +110,25 @@
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.25; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
+        body.theme-king .art-king { opacity: 0.25; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
             background: 
-                radial-gradient(ellipse at 80% 20%, var(--vignette-color) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 20%, rgba(61, 220, 151, 0.05) 0%, transparent 40%),
                 radial-gradient(ellipse at 20% 80%, rgba(74, 47, 107, 0.1) 0%, transparent 50%);
-            opacity: var(--fog-opacity);
             animation: driftFog 20s ease-in-out infinite alternate;
+            opacity: var(--fog-opacity);
             transition: opacity 0.5s ease, background 1.5s ease;
         }
 
         body.theme-king .fog-layer {
             background: 
-                radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 45%),
-                radial-gradient(ellipse at 20% 80%, rgba(227, 38, 54, 0.08) 0%, transparent 55%);
+                radial-gradient(ellipse at 80% 20%, rgba(226, 192, 106, 0.05) 0%, transparent 45%),
+                radial-gradient(ellipse at 20% 80%, rgba(20, 36, 64, 0.08) 0%, transparent 55%);
         }
 
-        .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--fog-opacity); transition: opacity 0.3s ease; }
+        .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--fog-opacity); }
 
         /* ─── NAVIGATION ─── */
         nav {
@@ -143,9 +143,9 @@
         .nav-link::before {
             content: ''; position: absolute; bottom: -6px; left: 50%;
             width: 0; height: 1px; background: var(--spectral-teal);
-            transition: all 0.3s ease, background 1.5s, box-shadow 1.5s; transform: translateX(-50%); box-shadow: 0 0 calc(8px * var(--glow-mult)) var(--spectral-teal);
+            transition: all 0.3s ease, background 1.5s, box-shadow 1.5s; transform: translateX(-50%); box-shadow: 0 0 8px var(--spectral-teal);
         }
-        .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-deep); }
+        .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
         /* ─── HEADER & FILTERS ─── */
@@ -237,7 +237,7 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
             color: var(--spectral-teal); text-align: center; padding: 20px; transition: color 1.5s, background 1.5s;
         }
-        body.theme-king .media-placeholder { background: radial-gradient(circle at center, rgba(227, 38, 54, 0.08) 0%, transparent 70%); }
+        body.theme-king .media-placeholder { background: radial-gradient(circle at center, rgba(226, 192, 106, 0.08) 0%, transparent 70%); }
         .media-placeholder i { font-size: 2.5rem; filter: drop-shadow(0 0 calc(10px * var(--glow-mult)) var(--spectral-teal)); animation: pulseEmber 2s infinite; }
         .media-placeholder span { font-family: var(--font-body); font-size: 0.9rem; letter-spacing: 0.2em; color: var(--bone-white); text-transform: uppercase; }
 
@@ -366,7 +366,7 @@
 
     <div class="background-art art-ruined"></div>
     <div class="background-art art-king"></div>
-
+    
     <div class="fog-layer"></div>
     <div class="soul-particles" id="soul-container"></div>
 
