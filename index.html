@@ -165,7 +165,6 @@
         }
         
         .art-king {
-            /* DIRECT OFFICIAL LEAGUE OF LEGENDS URL FOR KING VIEGO (100% BULLETPROOF) */
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_21.jpg') center right/cover no-repeat;
             opacity: 0; filter: grayscale(0.1) contrast(1.1) blur(4px); transform: scale(1.08);
         }
@@ -210,11 +209,22 @@
         .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── HERO SECTION ─── */
+        /* ─── DYNAMIC FAST ENTRY ANIMATIONS ─── */
+        /* Initially hide content to prepare for fast entry animation */
+        .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
+        .hero-title::after { width: 0; }
+
+        /* Fast Snappy Animations trigger ONLY when body gets .content-ready class */
+        body.content-ready .hero { animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        body.content-ready .hero-title::after { animation: underlineGrow 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
+        body.content-ready .hero-subtitle { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+        body.content-ready .hero-tagline { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards; }
+        body.content-ready .stats-section { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
+        body.content-ready .ruins-section { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards; }
+
         .hero {
             position: relative; z-index: 10; min-height: 60vh; display: flex; flex-direction: column;
             justify-content: center; padding: 0 10vw;
-            opacity: 0; animation: fadeUp 2s ease-out 9s forwards;
         }
 
         .hero-title {
@@ -226,27 +236,26 @@
         .hero-title::after {
             content: ''; position: absolute; bottom: -10px; left: 0;
             height: 2px; background: var(--spectral-teal); box-shadow: 0 0 15px var(--spectral-teal);
-            animation: underlineGrow 1.5s ease-out 10s forwards; width: 0; transition: background 1.5s, box-shadow 1.5s;
+            transition: background 1.5s, box-shadow 1.5s;
         }
 
         .hero-subtitle {
             font-family: var(--font-body); font-size: clamp(1rem, 1.5vw, 1.2rem);
             color: var(--spectral-teal); font-weight: 300; letter-spacing: 0.2em;
             text-transform: uppercase; margin-bottom: 30px; margin-top: 20px;
-            opacity: 0; animation: fadeUp 1s ease-out 10.5s forwards; transition: color 1.5s;
+            transition: color 1.5s;
         }
 
         .hero-tagline {
             font-family: var(--font-body); font-size: 1.1rem; color: rgba(232, 230, 225, 0.7);
             max-width: 500px; line-height: 1.8; font-style: italic;
             border-left: 2px solid var(--ruin-purple); padding-left: 20px;
-            opacity: 0; animation: fadeUp 1s ease-out 11s forwards; transition: border-color 1.5s;
+            transition: border-color 1.5s;
         }
 
         /* ─── STATS SECTION ─── */
         .stats-section {
             position: relative; z-index: 10; padding: 0 10vw 60px;
-            opacity: 0; animation: fadeUp 1s ease-out 11.2s forwards;
         }
 
         .stats-grid {
@@ -282,7 +291,6 @@
         /* ─── THE RUINS (PROJECT SECTIONS) ─── */
         .ruins-section {
             position: relative; z-index: 10; padding: 40px 10vw 100px;
-            opacity: 0; animation: fadeUp 1s ease-out 11.5s forwards;
         }
 
         .section-header {
@@ -373,13 +381,6 @@
         
         .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s, border-color 1.5s; width: 100%; margin-top: 5px; }
         .sfx-btn:hover { background: var(--spectral-teal); color: var(--void-black); }
-
-        /* ─── SKIP OVERRIDE CLASSES ─── */
-        body.skipped .hero, body.skipped .hero-subtitle, body.skipped .hero-tagline, 
-        body.skipped .stats-section, body.skipped .ruins-section {
-            animation-delay: 0s !important; animation-duration: 0.8s !important;
-        }
-        body.skipped .hero-title::after { animation-delay: 0.5s !important; animation-duration: 0.8s !important; }
 
         /* ─── KEYFRAMES ─── */
         @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 30px 10px var(--spectral-teal); } }
@@ -505,14 +506,46 @@
     <script src="sfx.js"></script>
 
     <script>
-        // ─── SKIP SEQUENCE LOGIC ───
+        // ─── SESSION STORAGE: PLAY ONCE PER SESSION ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
 
-        function skipCinematic() {
+        function revealContent() {
             loader.style.display = 'none';
-            document.body.classList.add('skipped');
+            document.body.classList.add('content-ready');
             startSouls(); 
+        }
+
+        if (sessionStorage.getItem('viego_intro_played')) {
+            // Already played this session, skip instantly
+            loader.style.display = 'none';
+            loader.style.animation = 'none';
+            document.body.classList.add('content-ready');
+            startSouls();
+        } else {
+            // Play normally, mark as played
+            sessionStorage.setItem('viego_intro_played', 'true');
+            
+            // Trigger fast entry animation when loader dissolves
+            setTimeout(() => {
+                if (!document.body.classList.contains('content-ready')) {
+                    document.body.classList.add('content-ready');
+                }
+            }, 8500);
+
+            // Hide loader completely from DOM after animation
+            setTimeout(() => {
+                if (loader.style.display !== 'none') {
+                    loader.style.display = 'none';
+                }
+            }, 10000);
+        }
+
+        // Manual Skip Button Logic
+        function skipCinematic() {
+            if (!document.body.classList.contains('content-ready')) {
+                revealContent();
+            }
         }
 
         skipBtn.addEventListener('click', skipCinematic);
@@ -520,12 +553,6 @@
             if (e.key === 'Escape' && loader.style.display !== 'none') skipCinematic();
         });
 
-        setTimeout(() => {
-            if (loader.style.display !== 'none') {
-                loader.style.display = 'none';
-                document.body.classList.add('skipped');
-            }
-        }, 10000);
 
         // ─── SCROLL PROGRESS BLADE ───
         window.addEventListener('scroll', () => {
@@ -573,11 +600,14 @@
         function animateTrails() {
             let prevX = mouseX;
             let prevY = mouseY;
+
             trails.forEach((trail, index) => {
                 trail.x += (prevX - trail.x) * 0.3;
                 trail.y += (prevY - trail.y) * 0.3;
+                
                 trail.el.style.left = trail.x + 'px';
                 trail.el.style.top = trail.y + 'px';
+                
                 const scale = (maxTrails - index) / maxTrails;
                 trail.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
                 prevX = trail.x;
@@ -615,7 +645,8 @@
                 setInterval(createSoul, 800);
             }
         }
-
+        
+        // Starts naturally if user waits out the intro instead of skipping
         setTimeout(startSouls, 8000);
 
         // ─── THEME & SETTINGS CONTROLS ───
@@ -657,6 +688,7 @@
             }
         }
 
+        // LOAD SAVED SETTINGS
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('viego_aspect') || 'ruined';
             setViegoTheme(savedTheme);
