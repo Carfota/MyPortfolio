@@ -43,7 +43,6 @@
             --card-border: rgba(212, 175, 55, 0.25); 
         }
 
-        /* NATIVE CURSOR HIDDEN COMPLETELY */
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
@@ -92,7 +91,7 @@
             transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
         }
 
-        /* ─── THE LOADING SCREEN (CINEMATIC) ─── */
+        /* ─── THE LOADING SCREEN ─── */
         #viego-loader {
             position: fixed; inset: 0; background: var(--void-black);
             z-index: 50000; display: flex; flex-direction: column;
@@ -165,13 +164,12 @@
             opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
         }
         .art-king {
-            /* FIXED TO VIEGO_21.JPG AS REQUESTED */
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_21.jpg') center right/cover no-repeat;
             opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
+        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -210,7 +208,7 @@
         .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── DYNAMIC FAST ENTRY ANIMATIONS ─── */
+        /* ─── ENTRY ANIMATIONS ─── */
         .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
         .hero-title::after { width: 0; }
 
@@ -374,7 +372,7 @@
         .vibe-row { display: flex; flex-direction: column; gap: 6px; }
         .vibe-row label { font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232, 230, 225, 0.8); display: flex; justify-content: space-between; }
         .vibe-row input[type="range"] { accent-color: var(--spectral-teal); height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); cursor: pointer; }
-        
+
         .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s, border-color 1.5s; width: 100%; margin-top: 5px; }
         .sfx-btn:hover { background: var(--spectral-teal); color: var(--void-black); }
 
@@ -391,10 +389,21 @@
         @keyframes driftFog { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
         @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
 
+        @media (max-width: 900px) {
+            .ruin-media { margin: -40px -30px 25px -30px; width: calc(100% + 60px); }
+            .ruin-card { padding: 40px 30px; }
+            .vibe-panel { width: calc(100vw - 48px); right: 24px; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- LOCAL MUSIC PLAYER -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="theme.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ─── THE CINEMATIC LOADER ─── -->
     <div id="viego-loader">
         <div class="shattered-ring"></div>
         <div class="ember"></div>
@@ -404,15 +413,18 @@
         <button class="skip-btn" id="btn-skip">Skip Sequence <i class="fa-solid fa-forward-step"></i></button>
     </div>
 
+    <!-- ─── CUSTOM CURSOR & SCROLLBAR ─── -->
     <div id="blade-scrollbar"></div>
     <div class="cursor-wisp" id="cursor-wisp"></div>
 
+    <!-- ─── SMOOTH DUAL BACKGROUND ART ─── -->
     <div class="background-art art-ruined"></div>
     <div class="background-art art-king"></div>
     
     <div class="fog-layer"></div>
     <div class="soul-particles" id="soul-container"></div>
 
+    <!-- ─── SITE CONTENT ─── -->
     <nav>
         <a href="index.html" class="nav-link active">The Throne</a>
         <a href="games.html" class="nav-link">Realms</a>
@@ -428,6 +440,7 @@
         </div>
     </section>
 
+    <!-- ─── THE RUINED STATS ─── -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-card">
@@ -466,6 +479,7 @@
         </div>
     </section>
 
+    <!-- ─── SANCTUM CONTROLS (VIBE TUNER) ─── -->
     <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Sanctum Controls">
         <i class="fa-solid fa-sliders"></i>
     </button>
@@ -485,7 +499,7 @@
         </div>
 
         <div class="vibe-row" style="flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
-            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn">SOUND FX: ON 🔊</button>
+            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn" style="margin-top: 0;">SOUND FX: ON 🔊</button>
         </div>
 
         <div class="vibe-row">
@@ -497,32 +511,90 @@
             <label><span>Black Mist Fog</span> <span id="val-fog">100%</span></label>
             <input type="range" id="slider-fog" min="0" max="100" value="100" oninput="updateSanctumSliders()">
         </div>
+
+        <!-- RUINED SYMPHONY MUSIC CONTROLS -->
+        <div class="vibe-row" style="margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label style="margin:0; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-music"></i> RUINED SYMPHONY
+                </label>
+                <button id="music-toggle-btn" onclick="toggleMusic()" class="sfx-btn" style="width: auto; margin-top: 0; padding: 4px 12px; background: transparent; border: 1px solid var(--bone-white);">PLAY ▶</button>
+            </div>
+            <span style="font-family: var(--font-body); font-size: 0.65rem; color: rgba(232, 230, 225, 0.5); display: block; margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase;">TRACK: VIEGO, THE RUINED KING</span>
+            <input type="range" id="slider-music-vol" min="0" max="100" value="30" oninput="updateMusicVolume()">
+        </div>
     </div>
 
     <script src="sfx.js"></script>
 
     <script>
-        // ─── EVERY-TIME CINEMATIC LOGIC ───
+        // ─── LOCAL BACKGROUND MUSIC ENGINE ───
+        const bgAudio = document.getElementById('bg-audio');
+        let isMusicPlaying = false;
+
+        function toggleMusic(forcePlay = false) {
+            const btn = document.getElementById('music-toggle-btn');
+            
+            if (isMusicPlaying && !forcePlay) {
+                bgAudio.pause();
+                isMusicPlaying = false;
+                btn.innerHTML = 'PLAY ▶';
+                btn.style.borderColor = 'rgba(255,255,255,0.2)';
+                localStorage.setItem('viego_music', 'off');
+            } else {
+                let playPromise = bgAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        isMusicPlaying = true;
+                        btn.innerHTML = 'PAUSE ⏸';
+                        btn.style.borderColor = 'var(--spectral-teal)';
+                        localStorage.setItem('viego_music', 'on');
+                    }).catch(error => {
+                        isMusicPlaying = false;
+                    });
+                }
+            }
+            if (typeof DopamineAudio !== 'undefined' && !forcePlay) DopamineAudio.playClick();
+        }
+
+        function updateMusicVolume() {
+            const vol = document.getElementById('slider-music-vol').value;
+            bgAudio.volume = vol / 100;
+            localStorage.setItem('viego_music_vol', vol);
+        }
+
+        // ─── CINEMATIC LOGIC ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
 
-        function skipCinematic() {
+        function revealContent() {
             loader.style.display = 'none';
             document.body.classList.add('content-ready');
             startSouls(); 
+            
+            if (localStorage.getItem('viego_music') !== 'off' && bgAudio.paused) {
+                toggleMusic(true);
+            }
         }
 
-        skipBtn.addEventListener('click', skipCinematic);
+        skipBtn.addEventListener('click', revealContent);
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && loader.style.display !== 'none') skipCinematic();
+            if (e.key === 'Escape' && loader.style.display !== 'none') revealContent();
         });
 
-        // Always plays, fades out after 10s naturally
+        setTimeout(() => {
+            if (!document.body.classList.contains('content-ready')) {
+                document.body.classList.add('content-ready');
+            }
+        }, 8500);
+
         setTimeout(() => {
             if (loader.style.display !== 'none') {
                 loader.style.display = 'none';
-                document.body.classList.add('content-ready');
                 startSouls();
+                if (localStorage.getItem('viego_music') !== 'off' && bgAudio.paused) {
+                    toggleMusic(true);
+                }
             }
         }, 10000);
 
@@ -667,6 +739,10 @@
             document.getElementById('slider-glow').value = savedGlow;
             document.getElementById('slider-fog').value = savedFog;
             updateSanctumSliders();
+
+            const savedMusicVol = localStorage.getItem('viego_music_vol') || '30';
+            document.getElementById('slider-music-vol').value = savedMusicVol;
+            bgAudio.volume = savedMusicVol / 100;
 
             const sfxBtn = document.getElementById('sfx-toggle-btn');
             if (sfxBtn && typeof DopamineAudio !== 'undefined') {
