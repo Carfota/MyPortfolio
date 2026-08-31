@@ -15,11 +15,11 @@ const DopamineAudio = (() => {
         return audioCtx;
     }
 
-    // 1. Spectral Hover (Eerie swoosh)
+    // 1. Spectral Hover (Eerie resonant swoosh)
     function playHover() {
         if (!sfxEnabled) return;
         const now = performance.now();
-        if (now - lastHoverTime < 110) return; // Cooldown
+        if (now - lastHoverTime < 110) return; // Anti-spam cooldown
         lastHoverTime = now;
 
         try {
@@ -27,13 +27,13 @@ const DopamineAudio = (() => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             const startTime = ctx.currentTime;
-            const duration = 0.15;
+            const duration = 0.14;
 
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(150, startTime);
-            osc.frequency.exponentialRampToValueAtTime(80, startTime + duration);
+            osc.frequency.setValueAtTime(160, startTime);
+            osc.frequency.exponentialRampToValueAtTime(70, startTime + duration);
 
-            gain.gain.setValueAtTime(0.015, startTime);
+            gain.gain.setValueAtTime(0.018, startTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
             osc.connect(gain);
@@ -43,7 +43,7 @@ const DopamineAudio = (() => {
         } catch (e) {}
     }
 
-    // 2. Metallic Click (Blade strike)
+    // 2. Metallic Click (Blade strike resonance)
     function playClick() {
         if (!sfxEnabled) return;
         try {
@@ -51,13 +51,13 @@ const DopamineAudio = (() => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             const startTime = ctx.currentTime;
-            const duration = 0.1;
+            const duration = 0.09;
 
             osc.type = 'square';
-            osc.frequency.setValueAtTime(800, startTime);
-            osc.frequency.exponentialRampToValueAtTime(100, startTime + duration);
+            osc.frequency.setValueAtTime(750, startTime);
+            osc.frequency.exponentialRampToValueAtTime(120, startTime + duration);
 
-            gain.gain.setValueAtTime(0.03, startTime);
+            gain.gain.setValueAtTime(0.035, startTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
             osc.connect(gain);
@@ -80,9 +80,9 @@ const DopamineAudio = (() => {
             const duration = 0.02;
 
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(400, startTime);
+            osc.frequency.setValueAtTime(420, startTime);
 
-            gain.gain.setValueAtTime(0.01, startTime);
+            gain.gain.setValueAtTime(0.015, startTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
             osc.connect(gain);
@@ -112,16 +112,16 @@ const DopamineAudio = (() => {
         document.addEventListener('pointerdown', unlock);
         document.addEventListener('keydown', unlock);
 
-        // UPDATED TARGETS: These are the actual classes used in your Ruined King portfolio
+        // Matched interactive selectors across all pages
         const interactiveSelector = `
             .nav-link, 
             .btn-ruin, 
             .theme-btn, 
             .sfx-btn, 
             .skip-btn, 
-            .filter-btn,
-            .vibe-controller-toggle,
-            .modal-close,
+            .filter-btn, 
+            .vibe-controller-toggle, 
+            .modal-close, 
             .stat-card
         `;
 
