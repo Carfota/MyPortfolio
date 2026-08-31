@@ -41,7 +41,7 @@
             --bone-white: #F9F6EE; 
             
             --vignette-color: rgba(226, 192, 106, 0.12);
-            --card-border: rgba(226, 192, 106, 0.25);
+            --card-border: rgba(212, 175, 55, 0.25);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
@@ -105,12 +105,13 @@
             opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
         }
         .art-king {
-            background: url('image_e82722.jpg') center right/cover no-repeat;
+            /* OFFICIAL KING VIEGO ART LINK */
+            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_32.jpg') center right/cover no-repeat;
             opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.25; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
+        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -124,8 +125,8 @@
 
         body.theme-king .fog-layer {
             background: 
-                radial-gradient(ellipse at 80% 20%, rgba(226, 192, 106, 0.05) 0%, transparent 45%),
-                radial-gradient(ellipse at 20% 80%, rgba(20, 36, 64, 0.08) 0%, transparent 55%);
+                radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 45%),
+                radial-gradient(ellipse at 20% 80%, rgba(20, 36, 64, 0.12) 0%, transparent 55%);
         }
 
         .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--fog-opacity); }
@@ -157,8 +158,13 @@
         .hero-title {
             font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5rem);
             font-weight: 900; line-height: 1; color: var(--bone-white);
-            margin-bottom: 10px; position: relative; display: inline-block;
-            text-shadow: 0 0 calc(20px * var(--glow-mult)) rgba(255,255,255,0.1); transition: text-shadow 1.5s;
+            margin-bottom: 10px; position: relative; display: inline-block; transition: color 1.5s;
+        }
+
+        .hero-title::after {
+            content: ''; position: absolute; bottom: -10px; left: 0;
+            height: 2px; background: var(--spectral-teal); box-shadow: 0 0 15px var(--spectral-teal);
+            animation: underlineGrow 1.5s ease-out 10s forwards; width: 0; transition: background 1.5s, box-shadow 1.5s;
         }
 
         .hero-subtitle {
@@ -347,8 +353,9 @@
         .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s, border-color 1.5s; width: 100%; margin-top: 5px; }
         .sfx-btn:hover { background: var(--spectral-teal); color: var(--void-black); }
 
-        @keyframes driftFog { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
-        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 calc(25px * var(--glow-mult)) var(--spectral-teal)); } }
+        /* ─── KEYFRAMES ─── */
+        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 30px 10px var(--spectral-teal); } }
+        @keyframes driftFog { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
         @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
 
         @media (max-width: 900px) {
