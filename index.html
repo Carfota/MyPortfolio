@@ -213,12 +213,12 @@
         .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
         .hero-title::after { width: 0; }
 
-        body.content-ready .hero { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        body.content-ready .hero-title::after { animation: underlineGrow 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
-        body.content-ready .hero-subtitle { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
-        body.content-ready .hero-tagline { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards; }
-        body.content-ready .stats-section { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
-        body.content-ready .ruins-section { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards; }
+        body.content-ready .hero { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        body.content-ready .hero-title::after { animation: underlineGrow 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+        body.content-ready .hero-subtitle { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
+        body.content-ready .hero-tagline { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards; }
+        body.content-ready .stats-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards; }
+        body.content-ready .ruins-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1s forwards; }
 
         /* ─── HERO SECTION ─── */
         .hero {
@@ -373,7 +373,7 @@
         .vibe-row { display: flex; flex-direction: column; gap: 6px; }
         .vibe-row label { font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232, 230, 225, 0.8); display: flex; justify-content: space-between; }
         .vibe-row input[type="range"] { accent-color: var(--spectral-teal); height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); cursor: pointer; }
-        
+
         .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s, border-color 1.5s; width: 100%; margin-top: 5px; }
         .sfx-btn:hover { background: var(--spectral-teal); color: var(--void-black); }
 
@@ -402,11 +402,11 @@
 
     <!-- LOCAL MUSIC PLAYER -->
     <audio id="bg-audio" loop preload="auto">
-        <!-- Direct local reference exactly as you provided -->
+        <!-- Direct local reference exactly as provided -->
         <source src="YTDown.com_YouTube_Ruined-King-01-Dark-Clouds-on-the-Horizo_Media_vdCTh8zE2WA_007_128k (1).mp3" type="audio/mpeg">
     </audio>
 
-    <!-- ─── THE CINEMATIC LOADER ─── -->
+    <!-- ─── THE CINEMATIC LOADER (PLAYS EVERY SINGLE TIME NOW) ─── -->
     <div id="viego-loader">
         <div class="shattered-ring"></div>
         <div class="ember"></div>
@@ -502,7 +502,7 @@
         </div>
 
         <div class="vibe-row" style="flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
-            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn">SOUND FX: ON 🔊</button>
+            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn" style="margin-top: 0;">SOUND FX: ON 🔊</button>
         </div>
 
         <div class="vibe-row">
@@ -515,7 +515,7 @@
             <input type="range" id="slider-fog" min="0" max="100" value="100" oninput="updateSanctumSliders()">
         </div>
 
-        <!-- NEW: RUINED SYMPHONY MUSIC CONTROLS -->
+        <!-- RUINED SYMPHONY MUSIC CONTROLS -->
         <div class="vibe-row" style="margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <label style="margin:0; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;">
@@ -545,7 +545,6 @@
                 btn.style.borderColor = 'rgba(255,255,255,0.2)';
                 localStorage.setItem('viego_music', 'off');
             } else {
-                // Browsers require a user interaction first, this catch handles that
                 let playPromise = bgAudio.play();
                 if (playPromise !== undefined) {
                     playPromise.then(_ => {
@@ -554,7 +553,6 @@
                         btn.style.borderColor = 'var(--spectral-teal)';
                         localStorage.setItem('viego_music', 'on');
                     }).catch(error => {
-                        // Auto-play was prevented by the browser. Wait for click.
                         isMusicPlaying = false;
                     });
                 }
@@ -568,7 +566,7 @@
             localStorage.setItem('viego_music_vol', vol);
         }
 
-        // ─── SESSION STORAGE: PLAY ONCE PER SESSION ───
+        // ─── EVERY TIME CINEMATIC LOGIC (NO SESSION STORAGE) ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
 
@@ -578,7 +576,7 @@
             startSouls(); 
             
             // Auto-start music if they allowed it previously
-            if (localStorage.getItem('viego_music') !== 'off') {
+            if (localStorage.getItem('viego_music') !== 'off' && bgAudio.paused) {
                 toggleMusic(true);
             }
         }
@@ -588,38 +586,23 @@
             if (e.key === 'Escape' && loader.style.display !== 'none') revealContent();
         });
 
-        // Check if intro was already played THIS SESSION
-        if (sessionStorage.getItem('viego_intro_played')) {
-            // Already played this session, skip instantly
-            loader.style.display = 'none';
-            loader.style.animation = 'none';
-            document.body.classList.add('content-ready');
-            startSouls();
+        // Trigger fast entry animation when loader dissolves naturally
+        setTimeout(() => {
+            if (!document.body.classList.contains('content-ready')) {
+                document.body.classList.add('content-ready');
+            }
+        }, 8500);
 
-            // Try to start music if enabled (might need an initial click depending on browser)
-            window.addEventListener('click', () => {
-                if (localStorage.getItem('viego_music') !== 'off' && bgAudio.paused) toggleMusic(true);
-            }, { once: true });
-
-        } else {
-            // Play normally, mark as played for this session
-            sessionStorage.setItem('viego_intro_played', 'true');
-            
-            // Trigger fast entry animation when loader dissolves
-            setTimeout(() => {
-                if (!document.body.classList.contains('content-ready')) {
-                    document.body.classList.add('content-ready');
+        // Hide loader completely from DOM after animation
+        setTimeout(() => {
+            if (loader.style.display !== 'none') {
+                loader.style.display = 'none';
+                startSouls();
+                if (localStorage.getItem('viego_music') !== 'off' && bgAudio.paused) {
+                    toggleMusic(true);
                 }
-            }, 8500);
-
-            // Hide loader completely from DOM after animation
-            setTimeout(() => {
-                if (loader.style.display !== 'none') {
-                    loader.style.display = 'none';
-                    if (localStorage.getItem('viego_music') !== 'off') toggleMusic(true);
-                }
-            }, 10000);
-        }
+            }
+        }, 10000);
 
         // ─── SCROLL PROGRESS BLADE ───
         window.addEventListener('scroll', () => {
@@ -649,6 +632,7 @@
             mouseY = e.clientY;
             wisp.style.left = mouseX + 'px';
             wisp.style.top = mouseY + 'px';
+            wisp.style.opacity = '0.5'; // Make sure it's visible on move
         });
 
         document.querySelectorAll('a, button, .btn-ruin, .stat-card, .skip-btn').forEach(el => {
