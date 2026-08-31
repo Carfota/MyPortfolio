@@ -12,7 +12,7 @@
 
     <style>
         :root {
-            /* 👑 DEFAULT: RUINED KING */
+            /* 👑 DEFAULT: THE RUINED KING (SPECTRAL MIST) */
             --void-black: #0a0a0f;
             --spectral-teal: #3ddc97;
             --mist-deep: #1fbf87;
@@ -31,17 +31,17 @@
             --fog-opacity: 1;
         }
 
-        body.theme-rage {
-            /* 🩸 WRATH: SOUL FIGHTER */
-            --void-black: #0a0405; 
-            --spectral-teal: #FF1E46; 
-            --mist-deep: #B30022; 
-            --ruin-purple: #00F5D4; 
-            --ruin-shadow: #067D6E;
-            --bone-white: #FFF0F2;
+        body.theme-king {
+            /* 🔴 THE HUMAN KING (ROYALTY & GOLD) */
+            --void-black: #09080c; 
+            --spectral-teal: #E32636; 
+            --mist-deep: #7A0016; 
+            --ruin-purple: #D4AF37; 
+            --ruin-shadow: #8B753A; 
+            --bone-white: #F4EBEB; 
             
-            --vignette-color: rgba(255, 30, 70, 0.15);
-            --card-border: rgba(255, 30, 70, 0.2);
+            --vignette-color: rgba(227, 38, 54, 0.15);
+            --card-border: rgba(212, 175, 55, 0.25);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
@@ -54,7 +54,7 @@
             overflow-x: hidden;
             position: relative;
             scrollbar-width: none;
-            transition: background-color 1.2s ease, color 1.2s ease;
+            transition: background-color 1.5s ease, color 1.5s ease;
         }
         body::-webkit-scrollbar { display: none; }
 
@@ -63,14 +63,14 @@
             position: fixed; top: 0; left: 0; height: 3px; width: 0%;
             background: linear-gradient(90deg, transparent, var(--spectral-teal), var(--bone-white));
             box-shadow: 0 0 calc(10px * var(--glow-mult)) var(--spectral-teal);
-            z-index: 9999; pointer-events: none; transition: width 0.1s ease-out, background 1s, box-shadow 1s;
+            z-index: 9999; pointer-events: none; transition: width 0.1s ease-out, background 1.5s, box-shadow 1.5s;
         }
         #blade-scrollbar::after {
             content: ''; position: absolute; right: -5px; top: -3px;
             width: 10px; height: 9px; background: var(--bone-white);
             clip-path: polygon(0 50%, 100% 0, 100% 100%);
             box-shadow: 0 0 15px var(--bone-white);
-            transition: background 1s, box-shadow 1s;
+            transition: background 1.5s, box-shadow 1.5s;
         }
 
         /* ─── CUSTOM CURSOR WISP & TRAIL ─── */
@@ -80,7 +80,7 @@
             pointer-events: none; z-index: 999999;
             transform: translate(-50%, -50%);
             box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--spectral-teal), 0 0 calc(40px * var(--glow-mult)) var(--mist-deep);
-            transition: width 0.2s, height 0.2s, background 1s, box-shadow 1s; mix-blend-mode: screen;
+            transition: width 0.2s, height 0.2s, background 1.5s, box-shadow 1.5s; mix-blend-mode: screen;
         }
         .cursor-trail {
             position: fixed; width: 8px; height: 8px;
@@ -88,7 +88,7 @@
             pointer-events: none; z-index: 999998;
             transform: translate(-50%, -50%); opacity: 0.6;
             box-shadow: 0 0 15px var(--ruin-shadow);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1s, box-shadow 1s;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
         }
 
         /* ─── SMOOTH DUAL BACKGROUND ART ENGINE ─── */
@@ -100,17 +100,17 @@
             transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), filter 1.5s ease;
         }
         
-        .art-king {
+        .art-ruined {
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center right/cover no-repeat;
-            opacity: 0.12; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
+            opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
         }
-        .art-wrath {
-            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_21.jpg') center right/cover no-repeat;
-            opacity: 0; filter: grayscale(0.6) contrast(1.3) blur(4px); transform: scale(1.08);
+        .art-king {
+            background: url('image_e82722.jpg') center right/cover no-repeat;
+            opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
         }
 
-        body.theme-rage .art-king { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-rage .art-wrath { opacity: 0.18; transform: scale(1); filter: grayscale(0.1) contrast(1.3) blur(0px); }
+        body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
+        body.theme-king .art-king { opacity: 0.25; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -119,13 +119,13 @@
                 radial-gradient(ellipse at 20% 80%, rgba(74, 47, 107, 0.1) 0%, transparent 50%);
             opacity: var(--fog-opacity);
             animation: driftFog 20s ease-in-out infinite alternate;
-            transition: opacity 0.3s ease, background 1.5s ease;
+            transition: opacity 0.5s ease, background 1.5s ease;
         }
 
-        body.theme-rage .fog-layer {
+        body.theme-king .fog-layer {
             background: 
-                radial-gradient(ellipse at 80% 20%, var(--vignette-color) 0%, transparent 45%),
-                radial-gradient(ellipse at 20% 80%, rgba(0, 245, 212, 0.08) 0%, transparent 55%);
+                radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 45%),
+                radial-gradient(ellipse at 20% 80%, rgba(227, 38, 54, 0.08) 0%, transparent 55%);
         }
 
         .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--fog-opacity); transition: opacity 0.3s ease; }
@@ -138,12 +138,12 @@
         .nav-link {
             font-family: var(--font-display); font-size: 1rem;
             color: rgba(232, 230, 225, 0.6); text-decoration: none; text-transform: uppercase;
-            letter-spacing: 0.15em; transition: all 0.3s ease; position: relative;
+            letter-spacing: 0.15em; transition: all 0.3s ease, color 1.5s; position: relative;
         }
         .nav-link::before {
             content: ''; position: absolute; bottom: -6px; left: 50%;
             width: 0; height: 1px; background: var(--spectral-teal);
-            transition: all 0.3s ease; transform: translateX(-50%); box-shadow: 0 0 calc(8px * var(--glow-mult)) var(--spectral-teal);
+            transition: all 0.3s ease, background 1.5s, box-shadow 1.5s; transform: translateX(-50%); box-shadow: 0 0 calc(8px * var(--glow-mult)) var(--spectral-teal);
         }
         .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
@@ -158,14 +158,14 @@
             font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5rem);
             font-weight: 900; line-height: 1; color: var(--bone-white);
             margin-bottom: 10px; position: relative; display: inline-block;
-            text-shadow: 0 0 calc(20px * var(--glow-mult)) rgba(255,255,255,0.1); transition: text-shadow 1s;
+            text-shadow: 0 0 calc(20px * var(--glow-mult)) rgba(255,255,255,0.1); transition: text-shadow 1.5s;
         }
 
         .hero-subtitle {
             font-family: var(--font-body); font-size: clamp(0.85rem, 2vw, 1.1rem);
             color: var(--spectral-teal); font-weight: 300; letter-spacing: 0.2em;
             text-transform: uppercase; margin-bottom: 40px;
-            text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-deep); transition: color 1s, text-shadow 1s;
+            text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-deep); transition: color 1.5s, text-shadow 1.5s;
         }
 
         .filter-container { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 60px; width: 100%; }
@@ -173,7 +173,7 @@
         .filter-btn {
             font-family: var(--font-body); font-weight: 600; font-size: 0.8rem; letter-spacing: 0.15em;
             text-transform: uppercase; color: rgba(232, 230, 225, 0.6); background: rgba(10, 10, 15, 0.6);
-            padding: 10px 24px; border: 1px solid var(--card-border); transition: all 0.3s ease, border-color 1s; backdrop-filter: blur(5px);
+            padding: 10px 24px; border: 1px solid var(--card-border); transition: all 0.3s ease, border-color 1.5s; backdrop-filter: blur(5px);
             position: relative; overflow: hidden;
         }
 
@@ -184,7 +184,7 @@
 
         .filter-btn::before {
             content: ''; position: absolute; inset: 0; background: var(--spectral-teal);
-            transform: scaleX(0); transform-origin: right; transition: transform 0.4s ease, background 1s; z-index: -1;
+            transform: scaleX(0); transform-origin: right; transition: transform 0.4s ease, background 1.5s; z-index: -1;
         }
         .filter-btn:hover::before, .filter-btn.active::before { transform: scaleX(1); transform-origin: left; }
 
@@ -195,7 +195,7 @@
 
         .ruin-card {
             background: rgba(10, 10, 15, 0.6); border: 1px solid var(--card-border);
-            padding: 40px; position: relative; overflow: hidden; backdrop-filter: blur(10px); transition: all 0.4s ease, border-color 1s;
+            padding: 40px; position: relative; overflow: hidden; backdrop-filter: blur(10px); transition: all 0.4s ease, border-color 1.5s;
             display: flex; flex-direction: column;
         }
         .ruin-card.hidden { display: none !important; }
@@ -203,18 +203,18 @@
         .ruin-card::before {
             content: ''; position: absolute; inset: 0;
             background: radial-gradient(circle at center, transparent 0%, var(--vignette-color) 100%);
-            opacity: 0; transition: opacity 0.5s ease, background 1s; pointer-events: none;
+            opacity: 0; transition: opacity 0.5s ease, background 1.5s; pointer-events: none;
         }
+        
         .ruin-card::after {
             content: ''; position: absolute; inset: 0; border: 2px solid transparent;
-            transition: all 0.4s ease, border-color 1s; pointer-events: none;
+            transition: all 0.4s ease, border-color 1.5s; pointer-events: none;
         }
 
         .ruin-card:hover {
             transform: translateY(-5px); border-color: rgba(255,255,255,0.15);
             box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8);
         }
-        body.theme-rage .ruin-card:hover { border-color: rgba(255,30,70,0.25); }
 
         .ruin-card:hover::before { opacity: 1; }
         .ruin-card:hover::after {
@@ -225,7 +225,7 @@
         .ruin-media {
             width: calc(100% + 80px); margin: -40px -40px 25px -40px;
             aspect-ratio: 16/9; background: #000; position: relative; overflow: hidden;
-            border-bottom: 2px solid var(--mist-deep); transition: border-color 1s;
+            border-bottom: 2px solid var(--mist-deep); transition: border-color 1.5s;
         }
         
         .ruin-media video { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; filter: grayscale(0.6); transition: all 0.5s ease; display: block; }
@@ -235,9 +235,9 @@
             width: 100%; height: 100%;
             background: radial-gradient(circle at center, rgba(61, 220, 151, 0.08) 0%, transparent 70%);
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
-            color: var(--spectral-teal); text-align: center; padding: 20px; transition: color 1s, background 1s;
+            color: var(--spectral-teal); text-align: center; padding: 20px; transition: color 1.5s, background 1.5s;
         }
-        body.theme-rage .media-placeholder { background: radial-gradient(circle at center, rgba(255, 30, 70, 0.08) 0%, transparent 70%); }
+        body.theme-king .media-placeholder { background: radial-gradient(circle at center, rgba(227, 38, 54, 0.08) 0%, transparent 70%); }
         .media-placeholder i { font-size: 2.5rem; filter: drop-shadow(0 0 calc(10px * var(--glow-mult)) var(--spectral-teal)); animation: pulseEmber 2s infinite; }
         .media-placeholder span { font-family: var(--font-body); font-size: 0.9rem; letter-spacing: 0.2em; color: var(--bone-white); text-transform: uppercase; }
 
@@ -249,10 +249,10 @@
         .media-overlay i {
             color: var(--void-black); background: var(--spectral-teal);
             width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--spectral-teal); transition: background 1s, box-shadow 1s, color 1s;
+            font-size: 1.2rem; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--spectral-teal); transition: background 1.5s, box-shadow 1.5s, color 1.5s;
         }
 
-        .ruin-number { font-family: var(--font-body); font-size: 0.75rem; color: var(--mist-deep); font-weight: 800; letter-spacing: 0.25em; margin-bottom: 10px; display: block; text-transform: uppercase; transition: color 1s; }
+        .ruin-number { font-family: var(--font-body); font-size: 0.75rem; color: var(--mist-deep); font-weight: 800; letter-spacing: 0.25em; margin-bottom: 10px; display: block; text-transform: uppercase; transition: color 1.5s; }
         .ruin-title { font-family: var(--font-display); font-size: 1.6rem; color: var(--bone-white); margin-bottom: 15px; }
         .ruin-desc { font-family: var(--font-body); font-size: 0.92rem; line-height: 1.6; color: rgba(232, 230, 225, 0.6); margin-bottom: 25px; white-space: pre-line; flex-grow: 1; }
 
@@ -265,19 +265,20 @@
             display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; background: transparent;
             border: 1px solid var(--ruin-purple); color: var(--bone-white);
             font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.1em;
-            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: all 0.3s ease, border-color 1s; flex: 1; justify-content: center;
+            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: all 0.3s ease, border-color 1.5s; flex: 1; justify-content: center;
         }
 
         .btn-ruin::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--spectral-teal);
-            transition: all 0.4s ease, background 1s; z-index: -1; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            transition: all 0.4s ease, background 1.5s; z-index: -1; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
 
-        .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 calc(20px * var(--glow-mult)) rgba(61, 220, 151, 0.4); }
-        body.theme-rage .btn-ruin:hover { box-shadow: 0 0 calc(20px * var(--glow-mult)) rgba(255, 30, 70, 0.4); }
+        .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--vignette-color); }
         .btn-ruin:hover::before { left: 0; }
+        
+        .btn-discord-action { border-color: var(--mist-deep); }
 
-        footer { margin-top: 40px; font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.3em; color: var(--spectral-teal); text-transform: uppercase; opacity: 0.6; text-align: center; transition: color 1s; }
+        footer { margin-top: 40px; font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.3em; color: var(--spectral-teal); text-transform: uppercase; opacity: 0.6; text-align: center; transition: color 1.5s; }
 
         /* ─── LIGHTBOX MODAL ─── */
         .modal-overlay {
@@ -291,12 +292,12 @@
             background: var(--void-black); border: 2px solid var(--spectral-teal);
             max-width: 900px; width: 100%; max-height: 88vh; display: flex; flex-direction: column; position: relative;
             box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-glow);
-            transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 1s, box-shadow 1s, background 1s;
+            transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 1.5s, box-shadow 1.5s, background 1.5s;
             clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
         }
         .modal-overlay.open .modal { transform: scale(1); }
 
-        .modal-video-box { width: 100%; max-height: 55vh; aspect-ratio: 16/9; background: #000; border-bottom: 2px solid var(--mist-deep); flex-shrink: 1; overflow: hidden; transition: border-color 1s; }
+        .modal-video-box { width: 100%; max-height: 55vh; aspect-ratio: 16/9; background: #000; border-bottom: 2px solid var(--mist-deep); flex-shrink: 1; overflow: hidden; transition: border-color 1.5s; }
         .modal-video-box video { width: 100%; height: 100%; object-fit: contain; display: block; }
         
         .modal-details { padding: 30px 40px; text-align: left; overflow-y: auto; flex-shrink: 0; background: rgba(10, 10, 15, 0.8); }
@@ -306,7 +307,7 @@
         .modal-close {
             position: absolute; top: 15px; right: 20px; background: transparent; border: 1px solid var(--spectral-teal);
             width: 40px; height: 40px; cursor: pointer; color: var(--spectral-teal); font-size: 1.2rem;
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s, border-color 1s, color 1s; z-index: 10;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s, border-color 1.5s, color 1.5s; z-index: 10;
         }
         .modal-close:hover { background: var(--spectral-teal); color: var(--void-black); box-shadow: 0 0 20px var(--mist-glow); transform: rotate(90deg); }
 
@@ -315,17 +316,17 @@
             position: fixed; bottom: 24px; right: 24px; z-index: 99;
             background: rgba(10, 10, 15, 0.8); color: var(--bone-white); border: 1px solid var(--spectral-teal);
             width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-glow);
-            font-size: 1.2rem; transition: transform 0.25s ease, border-color 0.3s ease, box-shadow 1s; backdrop-filter: blur(10px);
+            cursor: pointer; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-deep);
+            font-size: 1.2rem; transition: transform 0.25s ease, border-color 1.5s, box-shadow 1.5s; backdrop-filter: blur(10px);
         }
         .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); border-color: var(--bone-white); color: var(--spectral-teal); }
 
         .vibe-panel {
             position: fixed; bottom: 95px; right: 24px; z-index: 100;
             background: rgba(10, 10, 15, 0.96); border: 1px solid var(--spectral-teal);
-            box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-glow);
+            box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-deep);
             border-radius: 8px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
-            display: none; flex-direction: column; gap: 16px; transition: border-color 1s, box-shadow 1s;
+            display: none; flex-direction: column; gap: 16px; transition: border-color 1.5s, box-shadow 1.5s;
         }
         .vibe-panel.open { display: flex; }
         .vibe-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255, 255, 255, 0.15); padding-bottom: 10px; }
@@ -337,13 +338,13 @@
             padding: 8px 4px; border-radius: 4px; cursor: pointer; text-transform: uppercase;
             border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: var(--bone-white); transition: all 0.25s ease;
         }
-        .theme-btn.active { border-color: var(--spectral-teal); background: var(--spectral-teal); color: var(--void-black); font-weight: 800; box-shadow: 0 0 15px var(--mist-glow); }
+        .theme-btn.active { border-color: var(--spectral-teal); background: var(--spectral-teal); color: var(--void-black); font-weight: 800; box-shadow: 0 0 15px var(--vignette-color); }
 
         .vibe-row { display: flex; flex-direction: column; gap: 6px; }
         .vibe-row label { font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232, 230, 225, 0.8); display: flex; justify-content: space-between; }
         .vibe-row input[type="range"] { accent-color: var(--spectral-teal); height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); cursor: pointer; }
         
-        .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s; width: 100%; margin-top: 5px; }
+        .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s, border-color 1.5s; width: 100%; margin-top: 5px; }
         .sfx-btn:hover { background: var(--spectral-teal); color: var(--void-black); }
 
         @keyframes driftFog { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
@@ -363,9 +364,9 @@
     <div id="blade-scrollbar"></div>
     <div class="cursor-wisp" id="cursor-wisp"></div>
 
+    <div class="background-art art-ruined"></div>
     <div class="background-art art-king"></div>
-    <div class="background-art art-wrath"></div>
-    
+
     <div class="fog-layer"></div>
     <div class="soul-particles" id="soul-container"></div>
 
@@ -480,14 +481,13 @@ Blackgate is an isolated correctional complex where every escape has consequence
         <div class="vibe-row">
             <label><span>Viego Aspect</span></label>
             <div class="theme-switch-row">
-                <button class="theme-btn active" id="btn-theme-king" onclick="setViegoTheme('king')">Ruined King</button>
-                <button class="theme-btn" id="btn-theme-rage" onclick="setViegoTheme('rage')">Wrath</button>
+                <button class="theme-btn active" id="btn-theme-ruined" onclick="setViegoTheme('ruined')">RUINED</button>
+                <button class="theme-btn" id="btn-theme-king" onclick="setViegoTheme('king')">KING</button>
             </div>
         </div>
 
         <div class="vibe-row" style="flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
-            <label style="margin:0;"><i class="fa-solid fa-volume-high"></i> Sound FX</label>
-            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn" style="width: 85px; margin-top: 0;">ON 🔊</button>
+            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn">SOUND FX: ON 🔊</button>
         </div>
 
         <div class="vibe-row">
@@ -504,7 +504,6 @@ Blackgate is an isolated correctional complex where every escape has consequence
     <script src="sfx.js"></script>
 
     <script>
-        // ─── FILTER GAMES ───
         function filterGames(category) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
@@ -520,7 +519,6 @@ Blackgate is an isolated correctional complex where every escape has consequence
             if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
         }
 
-        // ─── LIGHTBOX MODAL ───
         const lightbox = document.getElementById('lightbox');
         const lightboxVideo = document.getElementById('lightbox-video');
         const lightboxVideoBox = document.getElementById('lightbox-video-box');
@@ -559,17 +557,15 @@ Blackgate is an isolated correctional complex where every escape has consequence
             if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
         });
 
-        // ─── THEME & ASPECT SWITCHER ENGINE ───
         function setViegoTheme(theme) {
-            const isRage = (theme === 'rage');
-            document.body.classList.toggle('theme-rage', isRage);
-            document.getElementById('btn-theme-king').classList.toggle('active', !isRage);
-            document.getElementById('btn-theme-rage').classList.toggle('active', isRage);
+            const isKing = (theme === 'king');
+            document.body.classList.toggle('theme-king', isKing);
+            document.getElementById('btn-theme-ruined').classList.toggle('active', !isKing);
+            document.getElementById('btn-theme-king').classList.toggle('active', isKing);
             localStorage.setItem('viego_aspect', theme);
             if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
         }
 
-        // ─── SANCTUM SLIDERS ───
         function updateSanctumSliders() {
             const glow = document.getElementById('slider-glow').value;
             const fog = document.getElementById('slider-fog').value;
@@ -593,13 +589,12 @@ Blackgate is an isolated correctional complex where every escape has consequence
                 const enabled = DopamineAudio.toggleSFX();
                 const btn = document.getElementById('sfx-toggle-btn');
                 if (btn) {
-                    btn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
+                    btn.textContent = enabled ? 'SOUND FX: ON 🔊' : 'SOUND FX: OFF 🔇';
                     btn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
                 }
             }
         }
 
-        // ─── SCROLL PROGRESS BLADE ───
         window.addEventListener('scroll', () => {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -607,7 +602,6 @@ Blackgate is an isolated correctional complex where every escape has consequence
             document.getElementById("blade-scrollbar").style.width = scrolled + "%";
         });
 
-        // ─── CUSTOM WISP CURSOR ───
         const wisp = document.getElementById('cursor-wisp');
         const trails = [];
         const maxTrails = 8;
@@ -659,7 +653,6 @@ Blackgate is an isolated correctional complex where every escape has consequence
         }
         animateTrails();
 
-        // ─── GREEN SOUL PARTICLES GENERATOR ───
         const soulContainer = document.getElementById('soul-container');
         function createSoul() {
             const soul = document.createElement('div');
@@ -678,26 +671,22 @@ Blackgate is an isolated correctional complex where every escape has consequence
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Restore chosen Aspect Theme
-            const savedTheme = localStorage.getItem('viego_aspect') || 'king';
+            const savedTheme = localStorage.getItem('viego_aspect') || 'ruined';
             setViegoTheme(savedTheme);
 
-            // Restore sliders
             const savedGlow = localStorage.getItem('viego_glow') || '100';
             const savedFog = localStorage.getItem('viego_fog') || '100';
             document.getElementById('slider-glow').value = savedGlow;
             document.getElementById('slider-fog').value = savedFog;
             updateSanctumSliders();
 
-            // Sync SFX Button
             const sfxBtn = document.getElementById('sfx-toggle-btn');
             if (sfxBtn && typeof DopamineAudio !== 'undefined') {
                 const enabled = DopamineAudio.isEnabled();
-                sfxBtn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
+                sfxBtn.textContent = enabled ? 'SOUND FX: ON 🔊' : 'SOUND FX: OFF 🔇';
                 sfxBtn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
             }
 
-            // Start Souls Immediately (No Loading Screen here)
             setInterval(createSoul, 800);
         });
     </script>
