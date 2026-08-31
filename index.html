@@ -31,7 +31,7 @@
         }
 
         body.theme-king {
-            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY - GOLD, IVORY & NAVY) */
+            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY) */
             --void-black: #080a12; 
             --spectral-teal: #E2C06A; 
             --mist-deep: #142440; 
@@ -43,6 +43,7 @@
             --card-border: rgba(212, 175, 55, 0.25); 
         }
 
+        /* NATIVE CURSOR HIDDEN COMPLETELY */
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
@@ -91,7 +92,7 @@
             transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
         }
 
-        /* ─── THE LOADING SCREEN ─── */
+        /* ─── THE LOADING SCREEN (CINEMATIC) ─── */
         #viego-loader {
             position: fixed; inset: 0; background: var(--void-black);
             z-index: 50000; display: flex; flex-direction: column;
@@ -165,11 +166,11 @@
         }
         .art-king {
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_21.jpg') center right/cover no-repeat;
-            opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
+            opacity: 0; filter: grayscale(0.1) contrast(1.1) blur(4px); transform: scale(1.08);
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
+        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -212,12 +213,12 @@
         .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
         .hero-title::after { width: 0; }
 
-        body.content-ready .hero { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        body.content-ready .hero-title::after { animation: underlineGrow 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
-        body.content-ready .hero-subtitle { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
-        body.content-ready .hero-tagline { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards; }
-        body.content-ready .stats-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards; }
-        body.content-ready .ruins-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1s forwards; }
+        body.content-ready .hero { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        body.content-ready .hero-title::after { animation: underlineGrow 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
+        body.content-ready .hero-subtitle { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+        body.content-ready .hero-tagline { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards; }
+        body.content-ready .stats-section { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
+        body.content-ready .ruins-section { animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards; }
 
         /* ─── HERO SECTION ─── */
         .hero {
@@ -399,8 +400,11 @@
 </head>
 <body>
 
-    <!-- Hidden YouTube iframe container for background music -->
-    <div id="yt-player-container" style="display: none;"></div>
+    <!-- LOCAL MUSIC PLAYER -->
+    <audio id="bg-audio" loop preload="auto">
+        <!-- Direct local reference exactly as you provided -->
+        <source src="YTDown.com_YouTube_Ruined-King-01-Dark-Clouds-on-the-Horizo_Media_vdCTh8zE2WA_007_128k (1).mp3" type="audio/mpeg">
+    </audio>
 
     <!-- ─── THE CINEMATIC LOADER ─── -->
     <div id="viego-loader">
@@ -423,7 +427,7 @@
     <div class="fog-layer"></div>
     <div class="soul-particles" id="soul-container"></div>
 
-    <!-- ─── NAVIGATION ─── -->
+    <!-- ─── SITE CONTENT ─── -->
     <nav>
         <a href="index.html" class="nav-link active">The Throne</a>
         <a href="games.html" class="nav-link">Realms</a>
@@ -512,12 +516,12 @@
         </div>
 
         <!-- NEW: RUINED SYMPHONY MUSIC CONTROLS -->
-        <div class="vibe-row" style="margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <label style="margin:0;">
-                    <i class="fa-solid fa-music"></i> Ruined Symphony
+        <div class="vibe-row" style="margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label style="margin:0; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-music"></i> RUINED SYMPHONY
                 </label>
-                <button id="music-toggle-btn" onclick="toggleMusic()" class="sfx-btn" style="width: auto; margin-top: 0; padding: 4px 12px;">PLAY ▶</button>
+                <button id="music-toggle-btn" onclick="toggleMusic()" class="sfx-btn" style="width: auto; margin-top: 0; padding: 4px 12px; background: transparent; border: 1px solid var(--bone-white);">PLAY ▶</button>
             </div>
             <span style="font-family: var(--font-body); font-size: 0.65rem; color: rgba(232, 230, 225, 0.5); display: block; margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase;">TRACK: VIEGO, THE RUINED KING</span>
             <input type="range" id="slider-music-vol" min="0" max="100" value="30" oninput="updateMusicVolume()">
@@ -527,19 +531,55 @@
     <script src="sfx.js"></script>
 
     <script>
-        // ─── EVERY-TIME CINEMATIC LOGIC ───
+        // ─── LOCAL BACKGROUND MUSIC ENGINE ───
+        const bgAudio = document.getElementById('bg-audio');
+        let isMusicPlaying = false;
+
+        function toggleMusic(forcePlay = false) {
+            const btn = document.getElementById('music-toggle-btn');
+            
+            if (isMusicPlaying && !forcePlay) {
+                bgAudio.pause();
+                isMusicPlaying = false;
+                btn.innerHTML = 'PLAY ▶';
+                btn.style.borderColor = 'rgba(255,255,255,0.2)';
+                localStorage.setItem('viego_music', 'off');
+            } else {
+                // Browsers require a user interaction first, this catch handles that
+                let playPromise = bgAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        isMusicPlaying = true;
+                        btn.innerHTML = 'PAUSE ⏸';
+                        btn.style.borderColor = 'var(--spectral-teal)';
+                        localStorage.setItem('viego_music', 'on');
+                    }).catch(error => {
+                        // Auto-play was prevented by the browser. Wait for click.
+                        isMusicPlaying = false;
+                    });
+                }
+            }
+            if (typeof DopamineAudio !== 'undefined' && !forcePlay) DopamineAudio.playClick();
+        }
+
+        function updateMusicVolume() {
+            const vol = document.getElementById('slider-music-vol').value;
+            bgAudio.volume = vol / 100;
+            localStorage.setItem('viego_music_vol', vol);
+        }
+
+        // ─── SESSION STORAGE: PLAY ONCE PER SESSION ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
 
-        // Reveal content and optionally start music if it was previously set
         function revealContent() {
             loader.style.display = 'none';
             document.body.classList.add('content-ready');
             startSouls(); 
             
-            // Auto-start music if they skip, if allowed
-            if (isPlayerReady && !isMusicPlaying && localStorage.getItem('viego_music') !== 'off') {
-                toggleMusic();
+            // Auto-start music if they allowed it previously
+            if (localStorage.getItem('viego_music') !== 'off') {
+                toggleMusic(true);
             }
         }
 
@@ -548,19 +588,38 @@
             if (e.key === 'Escape' && loader.style.display !== 'none') revealContent();
         });
 
-        // Always plays, fades out after 10s naturally
-        setTimeout(() => {
-            if (loader.style.display !== 'none') {
-                loader.style.display = 'none';
-                document.body.classList.add('content-ready');
-                startSouls();
-                
-                // Try playing music naturally when loading finishes
-                if (isPlayerReady && !isMusicPlaying && localStorage.getItem('viego_music') !== 'off') {
-                    toggleMusic();
+        // Check if intro was already played THIS SESSION
+        if (sessionStorage.getItem('viego_intro_played')) {
+            // Already played this session, skip instantly
+            loader.style.display = 'none';
+            loader.style.animation = 'none';
+            document.body.classList.add('content-ready');
+            startSouls();
+
+            // Try to start music if enabled (might need an initial click depending on browser)
+            window.addEventListener('click', () => {
+                if (localStorage.getItem('viego_music') !== 'off' && bgAudio.paused) toggleMusic(true);
+            }, { once: true });
+
+        } else {
+            // Play normally, mark as played for this session
+            sessionStorage.setItem('viego_intro_played', 'true');
+            
+            // Trigger fast entry animation when loader dissolves
+            setTimeout(() => {
+                if (!document.body.classList.contains('content-ready')) {
+                    document.body.classList.add('content-ready');
                 }
-            }
-        }, 10000);
+            }, 8500);
+
+            // Hide loader completely from DOM after animation
+            setTimeout(() => {
+                if (loader.style.display !== 'none') {
+                    loader.style.display = 'none';
+                    if (localStorage.getItem('viego_music') !== 'off') toggleMusic(true);
+                }
+            }, 10000);
+        }
 
         // ─── SCROLL PROGRESS BLADE ───
         window.addEventListener('scroll', () => {
@@ -693,72 +752,7 @@
             }
         }
 
-        // ─── BACKGROUND MUSIC (YOUTUBE API ENGINE) ───
-        let ytPlayer;
-        let isMusicPlaying = false;
-        let isPlayerReady = false;
-
-        // Load the IFrame Player API code asynchronously.
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        function onYouTubeIframeAPIReady() {
-            ytPlayer = new YT.Player('yt-player-container', {
-                height: '0',
-                width: '0',
-                videoId: '1b11z8wXGts', // Official Viego Theme
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'disablekb': 1,
-                    'loop': 1,
-                    'playlist': '1b11z8wXGts' // Required for loop to work
-                },
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            isPlayerReady = true;
-            
-            // Set saved volume
-            const savedVol = localStorage.getItem('viego_music_vol') || '30';
-            document.getElementById('slider-music-vol').value = savedVol;
-            ytPlayer.setVolume(savedVol);
-        }
-
-        function toggleMusic() {
-            if (!isPlayerReady) return;
-            const btn = document.getElementById('music-toggle-btn');
-            
-            if (isMusicPlaying) {
-                ytPlayer.pauseVideo();
-                isMusicPlaying = false;
-                btn.innerHTML = 'PLAY ▶';
-                btn.style.borderColor = 'rgba(255,255,255,0.2)';
-                localStorage.setItem('viego_music', 'off');
-            } else {
-                ytPlayer.playVideo();
-                isMusicPlaying = true;
-                btn.innerHTML = 'PAUSE ⏸';
-                btn.style.borderColor = 'var(--spectral-teal)';
-                localStorage.setItem('viego_music', 'on');
-            }
-            if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
-        }
-
-        function updateMusicVolume() {
-            if (!isPlayerReady) return;
-            const vol = document.getElementById('slider-music-vol').value;
-            ytPlayer.setVolume(vol);
-            localStorage.setItem('viego_music_vol', vol);
-        }
-
-        // ─── INITIALIZATION ───
+        // LOAD SAVED SETTINGS
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('viego_aspect') || 'ruined';
             setViegoTheme(savedTheme);
@@ -768,6 +762,11 @@
             document.getElementById('slider-glow').value = savedGlow;
             document.getElementById('slider-fog').value = savedFog;
             updateSanctumSliders();
+
+            // Setup audio slider
+            const savedMusicVol = localStorage.getItem('viego_music_vol') || '30';
+            document.getElementById('slider-music-vol').value = savedMusicVol;
+            bgAudio.volume = savedMusicVol / 100;
 
             const sfxBtn = document.getElementById('sfx-toggle-btn');
             if (sfxBtn && typeof DopamineAudio !== 'undefined') {
