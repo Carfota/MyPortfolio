@@ -3,690 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carfota | The Ruined King // Luau & Systems Architect</title>
+    <title>Carfota | Architect of Ruin</title>
     
-    <!-- Google Fonts for Camavoran Royalty & Modern Readability -->
+    <!-- Cinzel Decorative for Royalty, Inter for Clean Readability -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600;700;900&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        /* ─── DEFAULT THEME: THE RUINED KING (SPECTRAL MIST) ─── */
         :root {
-            --bg-obsidian: #080B0E;
-            --bg-card: rgba(10, 15, 20, 0.82);
-            --mist-primary: #1CEBBA;
-            --mist-deep: #0A8D74;
-            --mist-glow: rgba(28, 235, 186, 0.45);
-            --gold-accent: #D4AF37;
-            --gold-dim: #8B753A;
-            --text-main: #E6F1F2;
-            --text-muted: rgba(230, 241, 242, 0.7);
-            
-            --vignette-color: rgba(10, 141, 116, 0.25);
-            --card-border: rgba(28, 235, 186, 0.28);
-            
-            --font-title: 'Cinzel Decorative', serif;
-            --font-sub: 'Cinzel', serif;
-            --font-body: 'Raleway', sans-serif;
+            --void-black: #0a0a0f;
+            --spectral-teal: #3ddc97;
+            --mist-deep: #1fbf87;
+            --ruin-purple: #4a2f6b;
+            --ruin-shadow: #6b3fa0;
+            --bone-white: #e8e6e1;
 
-            /* Dynamic Control Settings */
-            --glow-mult: 1;
-            --fog-opacity: 1;
+            --font-display: 'Cinzel Decorative', serif;
+            --font-body: 'Inter', sans-serif;
         }
 
-        /* ─── RAGE THEME: SOUL FIGHTER / ISOLDE'S WRATH (CRIMSON FURY) ─── */
-        body.theme-rage {
-            --bg-obsidian: #0A0608;
-            --bg-card: rgba(22, 10, 14, 0.85);
-            --mist-primary: #FF1E46;
-            --mist-deep: #8E001A;
-            --mist-glow: rgba(255, 30, 70, 0.55);
-            --gold-accent: #00F5D4; /* Soul Chains Cyan Contrast */
-            --gold-dim: #067D6E;
-            --text-main: #FFF0F2;
-            --text-muted: rgba(255, 220, 225, 0.75);
-            
-            --vignette-color: rgba(255, 30, 70, 0.35);
-            --card-border: rgba(255, 30, 70, 0.35);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Hide default cursor for wisp */ }
 
         body {
-            background-color: var(--bg-obsidian);
-            color: var(--text-main);
+            background-color: var(--void-black);
+            color: var(--bone-white);
             font-family: var(--font-body);
             min-height: 100vh;
             overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             position: relative;
-            transition: background-color 0.5s ease, color 0.5s ease;
+            scrollbar-width: none; /* Hide default scrollbar */
         }
+        body::-webkit-scrollbar { display: none; }
 
-        /* ─── ATMOSPHERIC SPOTLIGHT & CREEPING FOG ─── */
-        .mist-background {
-            position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
-            opacity: var(--fog-opacity);
-            transition: opacity 0.3s ease;
-        }
-
-        .throne-spotlight {
-            position: absolute; top: -15%; left: 50%; transform: translateX(-50%);
-            width: min(1100px, 100vw); height: 750px;
-            background: radial-gradient(ellipse at center, var(--mist-glow) 0%, transparent 70%);
-            filter: blur(60px);
-            animation: pulseThrone 7s ease-in-out infinite alternate;
-            transition: background 0.5s ease;
-        }
-
-        .creeping-fog-layer {
-            position: absolute; inset: 0;
-            background: 
-                radial-gradient(ellipse at 10% 85%, var(--vignette-color) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 90%, var(--mist-glow) 0%, transparent 60%);
-            animation: driftFog 14s ease-in-out infinite alternate;
-        }
-
-        /* ─── BLADE OF THE RUINED KING WATERMARK ─── */
-        .blade-watermark {
-            position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: min(520px, 85vw);
-            opacity: 0.06;
+        /* ─── BLADE SCROLL PROGRESS BAR ─── */
+        #blade-scrollbar {
+            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+            background: linear-gradient(90deg, transparent, var(--spectral-teal), var(--bone-white));
+            box-shadow: 0 0 10px var(--spectral-teal);
+            z-index: 9999;
             pointer-events: none;
-            z-index: 1;
-            filter: drop-shadow(0 0 calc(30px * var(--glow-mult)) var(--mist-primary));
-            transition: filter 0.5s ease;
-            animation: bladePulse 8s ease-in-out infinite;
+            transition: width 0.1s ease-out;
+        }
+        #blade-scrollbar::after {
+            content: ''; position: absolute; right: -5px; top: -3px;
+            width: 10px; height: 9px;
+            background: var(--bone-white);
+            clip-path: polygon(0 50%, 100% 0, 100% 100%);
+            box-shadow: 0 0 15px var(--bone-white);
         }
 
-        /* ─── CONTAINER ─── */
-        .container {
-            position: relative; z-index: 10;
-            max-width: 1020px; width: 100%;
-            padding: 48px 24px 90px;
-            display: flex; flex-direction: column;
-            align-items: center; text-align: center;
+        /* ─── CUSTOM CURSOR WISP ─── */
+        .cursor-wisp {
+            position: fixed; top: 0; left: 0; width: 12px; height: 12px;
+            background: var(--spectral-teal); border-radius: 50%;
+            pointer-events: none; z-index: 10000;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px var(--spectral-teal), 0 0 40px var(--mist-deep);
+            transition: width 0.2s, height 0.2s;
+            mix-blend-mode: screen;
         }
+        .cursor-trail {
+            position: fixed; width: 8px; height: 8px;
+            background: var(--ruin-purple); border-radius: 50%;
+            pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%);
+            opacity: 0.6;
+            box-shadow: 0 0 15px var(--ruin-shadow);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        /* ─── THE LOADING SCREEN (CINEMATIC) ─── */
+        #viego-loader {
+            position: fixed; inset: 0; background: var(--void-black);
+            z-index: 50000; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            overflow: hidden;
+            animation: dissolveLoader 1.5s ease-in-out 8.5s forwards;
+        }
+
+        /* The Ring Crack */
+        .shattered-ring {
+            position: absolute; width: 150px; height: 150px;
+            border: 2px solid rgba(61, 220, 151, 0.1);
+            border-radius: 50%;
+            opacity: 0;
+            animation: crackRing 3s ease-out 1s forwards;
+        }
+
+        /* The Ember */
+        .ember {
+            position: absolute; width: 6px; height: 6px;
+            background: var(--spectral-teal); border-radius: 50%;
+            box-shadow: 0 0 20px 5px var(--spectral-teal);
+            animation: pulseEmber 2s ease-in-out infinite;
+        }
+
+        /* Viego Silhouette Reveal */
+        .viego-silhouette {
+            position: absolute; bottom: 0; width: 100vw; height: 70vh;
+            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center/cover no-repeat;
+            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            opacity: 0; filter: contrast(1.5) brightness(0.2) sepia(1) hue-rotate(130deg) saturate(1.5);
+            animation: riseSilhouette 4s ease-out 3s forwards;
+        }
+
+        /* Typewriter Text */
+        .flavor-text {
+            position: absolute; bottom: 15%; width: 80%; max-width: 600px;
+            text-align: center; font-family: var(--font-body);
+            font-size: 1.1rem; color: var(--bone-white); font-weight: 300;
+            letter-spacing: 0.05em; text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            opacity: 0; overflow: hidden; white-space: nowrap;
+            border-right: 2px solid var(--spectral-teal);
+            animation: 
+                fadeInText 0.1s 5s forwards,
+                typing 3.5s steps(60, end) 5s forwards,
+                blinkCursor 0.7s step-end infinite;
+        }
+
+        /* ─── MAIN SITE ATMOSPHERE ─── */
+        .background-art {
+            position: fixed; top: 0; right: 0; width: 70vw; height: 100vh;
+            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center right/cover no-repeat;
+            opacity: 0.15; z-index: -2;
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            filter: grayscale(0.4) contrast(1.2);
+        }
+
+        .fog-layer {
+            position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background: 
+                radial-gradient(ellipse at 80% 20%, rgba(61, 220, 151, 0.05) 0%, transparent 40%),
+                radial-gradient(ellipse at 20% 80%, rgba(74, 47, 107, 0.1) 0%, transparent 50%);
+            animation: driftFog 20s ease-in-out infinite alternate;
+        }
+
+        .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
         /* ─── NAVIGATION ─── */
         nav {
-            display: flex; justify-content: center; gap: 14px; margin-bottom: 50px; flex-wrap: wrap;
+            position: relative; z-index: 10;
+            display: flex; justify-content: center; gap: 40px; padding: 40px 0;
+            border-bottom: 1px solid rgba(232, 230, 225, 0.05);
         }
 
         .nav-link {
-            font-family: var(--font-sub);
-            font-size: 0.82rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            text-decoration: none;
-            padding: 12px 28px;
-            background: rgba(10, 15, 20, 0.7);
-            border: 1px solid var(--card-border);
-            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-            backdrop-filter: blur(12px);
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
-            display: inline-flex; align-items: center; gap: 8px;
+            font-family: var(--font-display); font-size: 1rem;
+            color: rgba(232, 230, 225, 0.6); text-decoration: none; text-transform: uppercase;
+            letter-spacing: 0.15em; transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link::before {
+            content: ''; position: absolute; bottom: -6px; left: 50%;
+            width: 0; height: 1px; background: var(--spectral-teal);
+            transition: all 0.3s ease; transform: translateX(-50%);
+            box-shadow: 0 0 8px var(--spectral-teal);
+        }
+        .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
+        .nav-link:hover::before, .nav-link.active::before { width: 100%; }
+
+        /* ─── HERO SECTION ─── */
+        .hero {
+            position: relative; z-index: 10;
+            min-height: 70vh; display: flex; flex-direction: column;
+            justify-content: center; padding: 0 10vw;
+            opacity: 0; animation: fadeUp 2s ease-out 9s forwards;
         }
 
-        .nav-link:hover, .nav-link.active {
-            color: #FFFFFF;
-            border-color: var(--mist-primary);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--mist-glow), inset 0 0 15px var(--mist-glow);
-            transform: translateY(-3px);
+        .hero-title {
+            font-family: var(--font-display); font-size: clamp(4rem, 8vw, 7rem);
+            font-weight: 900; line-height: 1; color: var(--bone-white);
+            margin-bottom: 10px; position: relative; display: inline-block;
         }
 
-        /* ─── CAMAVORAN CROWN EMBLEM ─── */
-        .crown-emblem {
-            font-size: 2.5rem;
-            color: var(--gold-accent);
-            text-shadow: 0 0 calc(25px * var(--glow-mult)) var(--mist-primary);
-            margin-bottom: 12px;
-            animation: floatCrown 5s ease-in-out infinite;
-            transition: color 0.5s ease, text-shadow 0.5s ease;
-        }
-
-        /* ─── HEADLINE ─── */
-        h1 {
-            font-family: var(--font-title);
-            font-size: clamp(3.4rem, 8.5vw, 6.4rem);
-            font-weight: 900;
-            letter-spacing: 0.06em;
-            line-height: 1.05;
-            background: linear-gradient(180deg, #FFFFFF 20%, var(--mist-primary) 75%, var(--gold-accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 0 calc(30px * var(--glow-mult)) var(--mist-glow));
-            margin-bottom: 8px;
-            transition: filter 0.5s ease;
+        .hero-title::after {
+            content: ''; position: absolute; bottom: -10px; left: 0;
+            height: 2px; background: var(--spectral-teal);
+            box-shadow: 0 0 15px var(--spectral-teal);
+            animation: underlineGrow 1.5s ease-out 10s forwards;
+            width: 0;
         }
 
         .hero-subtitle {
-            font-family: var(--font-sub);
-            font-size: clamp(0.8rem, 2vw, 1.05rem);
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: var(--mist-primary);
-            text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-glow);
-            margin-bottom: 16px;
-            transition: color 0.5s ease;
+            font-family: var(--font-body); font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: var(--spectral-teal); font-weight: 300; letter-spacing: 0.2em;
+            text-transform: uppercase; margin-bottom: 30px; margin-top: 20px;
+            opacity: 0; animation: fadeUp 1s ease-out 10.5s forwards;
         }
 
-        /* Ethereal Seamstress Thread */
-        .spectral-thread {
-            width: min(340px, 80%); height: 1px;
-            background: linear-gradient(90deg, transparent, var(--mist-primary), var(--gold-accent), transparent);
-            margin: 10px auto 35px;
-            position: relative;
-            box-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-glow);
+        .hero-tagline {
+            font-family: var(--font-body); font-size: 1.1rem; color: rgba(232, 230, 225, 0.7);
+            max-width: 500px; line-height: 1.8; font-style: italic;
+            border-left: 2px solid var(--ruin-purple); padding-left: 20px;
+            opacity: 0; animation: fadeUp 1s ease-out 11s forwards;
         }
 
-        .spectral-thread::after {
-            content: '◆';
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: var(--gold-accent); font-size: 0.7rem; background: var(--bg-obsidian); padding: 0 8px;
-            text-shadow: 0 0 10px var(--mist-primary);
+        /* ─── THE RUINS (PROJECT SECTIONS) ─── */
+        .ruins-section {
+            position: relative; z-index: 10; padding: 100px 10vw;
+            opacity: 0; animation: fadeUp 1s ease-out 11.5s forwards;
         }
 
-        /* ─── THE SHATTERED GLASS SHARD CARD ─── */
-        .mirror-shard-card {
-            background: var(--bg-card);
-            border: 1px solid var(--card-border);
-            clip-path: polygon(
-                0 20px, 20px 0, calc(100% - 25px) 0, 100% 25px, 
-                100% calc(100% - 20px), calc(100% - 20px) 100%, 25px 100%, 0 calc(100% - 25px)
-            );
-            backdrop-filter: blur(20px);
-            padding: 45px 38px;
-            width: 100%;
-            margin-bottom: 45px;
-            position: relative;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 calc(30px * var(--glow-mult)) var(--mist-glow);
+        .section-header {
+            font-family: var(--font-display); font-size: 2rem;
+            color: var(--bone-white); margin-bottom: 50px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .ruins-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px;
+        }
+
+        .ruin-card {
+            background: rgba(10, 10, 15, 0.6);
+            border: 1px solid rgba(232, 230, 225, 0.1);
+            padding: 40px; position: relative; overflow: hidden;
+            backdrop-filter: blur(10px);
             transition: all 0.4s ease;
         }
 
-        .mirror-shard-card:hover {
-            border-color: var(--mist-primary);
-            box-shadow: 0 35px 90px rgba(0, 0, 0, 0.9), 0 0 calc(45px * var(--glow-mult)) var(--mist-glow);
-            transform: translateY(-3px);
+        /* The Mist Creep & Cracked Glass Hover */
+        .ruin-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(61, 220, 151, 0.15) 100%);
+            opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+        }
+        
+        .ruin-card::after {
+            content: ''; position: absolute; inset: 0;
+            border: 2px solid transparent;
+            transition: all 0.4s ease; pointer-events: none;
         }
 
-        .card-crest {
-            font-family: var(--font-sub);
-            font-size: 0.68rem;
-            letter-spacing: 0.3em;
-            color: var(--gold-accent);
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            display: inline-flex; align-items: center; gap: 8px;
+        .ruin-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(61, 220, 151, 0.3);
+            box-shadow: inset 0 0 30px rgba(61, 220, 151, 0.1), 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        .card-desc {
-            font-size: clamp(1.05rem, 2.2vw, 1.25rem);
-            line-height: 1.85;
-            color: var(--text-main);
-            font-weight: 300;
+        .ruin-card:hover::before { opacity: 1; }
+        .ruin-card:hover::after {
+            border-color: var(--spectral-teal);
+            clip-path: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+            box-shadow: 0 0 15px var(--spectral-teal);
         }
 
-        .highlight-spectral {
-            color: var(--mist-primary);
-            font-weight: 600;
-            text-shadow: 0 0 calc(12px * var(--glow-mult)) var(--mist-glow);
+        .ruin-number {
+            font-family: var(--font-body); font-size: 0.8rem;
+            color: var(--mist-deep); letter-spacing: 0.2em; margin-bottom: 10px; display: block;
         }
 
-        .highlight-gold {
-            color: var(--gold-accent);
-            font-family: var(--font-sub);
-            font-weight: 700;
+        .ruin-title {
+            font-family: var(--font-display); font-size: 1.8rem;
+            color: var(--bone-white); margin-bottom: 15px;
         }
 
-        .inline-portal {
-            display: inline-flex; align-items: center; gap: 6px;
-            text-decoration: none; font-family: var(--font-sub);
-            font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase;
-            color: #05080A;
-            background: linear-gradient(135deg, var(--mist-primary), var(--mist-deep));
-            padding: 4px 16px;
-            clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
-            margin: 0 4px;
-            font-weight: 700;
-            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--mist-glow);
-            transition: all 0.25s ease;
+        .ruin-desc {
+            font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6;
+            color: rgba(232, 230, 225, 0.6); margin-bottom: 25px;
         }
 
-        .inline-portal:hover {
-            transform: scale(1.08) translateY(-2px);
-            box-shadow: 0 0 25px var(--mist-primary);
-            color: #FFFFFF;
+        /* Shattered Button */
+        .btn-ruin {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 12px 24px; background: transparent;
+            border: 1px solid var(--ruin-purple); color: var(--bone-white);
+            font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 0.1em;
+            text-transform: uppercase; text-decoration: none;
+            position: relative; overflow: hidden; transition: all 0.3s ease;
         }
 
-        /* ─── SHARDED STATS ─── */
-        .stats-shard-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; margin-bottom: 45px;
+        .btn-ruin::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%; background: var(--spectral-teal);
+            transition: all 0.4s ease; z-index: -1;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
 
-        .stat-shard {
-            background: var(--bg-card);
-            border: 1px solid var(--card-border);
-            border-bottom: 2px solid var(--mist-primary);
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
-            padding: 24px 16px;
-            backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
+        .btn-ruin:hover {
+            border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700;
+            box-shadow: 0 0 20px rgba(61, 220, 151, 0.4);
         }
+        .btn-ruin:hover::before { left: 0; }
 
-        .stat-shard:hover {
-            border-color: var(--mist-primary);
-            box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--mist-glow);
-            transform: translateY(-4px);
+        /* ─── ANIMATION KEYFRAMES ─── */
+        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 30px 10px var(--spectral-teal); } }
+        @keyframes crackRing {
+            0% { opacity: 1; transform: scale(0.8); border-color: rgba(61, 220, 151, 0.1); }
+            50% { opacity: 1; transform: scale(1.2); border-color: var(--spectral-teal); box-shadow: inset 0 0 20px var(--spectral-teal); }
+            100% { opacity: 0; transform: scale(2); border-color: transparent; }
         }
+        @keyframes riseSilhouette { 0% { opacity: 0; transform: translateY(50px); filter: brightness(0); } 100% { opacity: 0.6; transform: translateY(0); filter: brightness(0.4) sepia(1) hue-rotate(130deg); } }
+        @keyframes fadeInText { to { opacity: 1; } }
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blinkCursor { 50% { border-color: transparent; } }
+        @keyframes dissolveLoader { 0% { opacity: 1; filter: blur(0); transform: scale(1); } 100% { opacity: 0; filter: blur(20px); transform: scale(1.1); pointer-events: none; visibility: hidden; } }
+        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes underlineGrow { 0% { width: 0; } 100% { width: 100%; } }
+        @keyframes driftFog { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
+        @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
 
-        .stat-num {
-            font-family: var(--font-title);
-            font-size: clamp(2.2rem, 4vw, 3.2rem);
-            color: var(--mist-primary);
-            text-shadow: 0 0 calc(18px * var(--glow-mult)) var(--mist-glow);
-            line-height: 1; margin-bottom: 6px; display: block;
-        }
-
-        .stat-label {
-            font-family: var(--font-sub);
-            font-size: 0.72rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--gold-accent);
-        }
-
-        /* ─── SKILL RUNES ─── */
-        .runes-cloud {
-            display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 50px; width: 100%;
-        }
-
-        .rune-tag {
-            font-family: var(--font-sub);
-            font-size: 0.72rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            padding: 8px 18px;
-            background: var(--bg-card);
-            border: 1px solid var(--card-border);
-            color: var(--text-muted);
-            border-radius: 2px;
-            transition: all 0.25s ease;
-        }
-
-        .rune-tag:hover {
-            color: var(--mist-primary);
-            border-color: var(--mist-primary);
-            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--mist-glow);
-            transform: scale(1.05);
-        }
-
-        /* ─── ACTION PEDESTAL ─── */
-        .actions-row {
-            display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 55px;
-        }
-
-        .btn-viego {
-            font-family: var(--font-sub);
-            font-size: 0.85rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            text-decoration: none;
-            padding: 16px 36px;
-            display: inline-flex; align-items: center; gap: 12px;
-            clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
-            font-weight: 700;
-        }
-
-        .btn-roblox {
-            background: linear-gradient(135deg, rgba(230, 241, 242, 0.95), var(--mist-primary));
-            color: #0A0D10;
-            border: 1px solid #FFFFFF;
-            box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--mist-glow);
-        }
-
-        .btn-discord {
-            background: var(--bg-card);
-            color: var(--mist-primary);
-            border: 1px solid var(--gold-accent);
-            box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-glow);
-        }
-
-        .btn-viego:hover { transform: translateY(-3px) scale(1.03); }
-        .btn-roblox:hover { box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-primary); background: #FFFFFF; }
-        .btn-discord:hover { border-color: var(--mist-primary); color: #FFFFFF; box-shadow: 0 0 30px var(--mist-primary); }
-
-        /* ─── FOOTER ─── */
-        footer {
-            font-family: var(--font-sub);
-            font-size: 0.72rem;
-            letter-spacing: 0.35em;
-            color: var(--gold-accent);
-            text-transform: uppercase;
-            opacity: 0.7;
-        }
-
-        /* ─── VIBE & FORM CONTROLLER PANEL ─── */
-        .vibe-controller-toggle {
-            position: fixed; bottom: 24px; right: 24px; z-index: 99;
-            background: var(--bg-card); color: var(--mist-primary); border: 2px solid var(--gold-accent);
-            width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-glow);
-            font-size: 1.4rem; transition: transform 0.25s ease, border-color 0.3s ease;
-        }
-        .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); border-color: var(--mist-primary); }
-
-        .vibe-panel {
-            position: fixed; bottom: 95px; right: 24px; z-index: 100;
-            background: rgba(10, 14, 18, 0.96); border: 2px solid var(--card-border);
-            box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-glow);
-            border-radius: 20px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
-            display: none; flex-direction: column; gap: 16px;
-        }
-        .vibe-panel.open { display: flex; }
-
-        .vibe-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.15); padding-bottom: 10px;
-        }
-        .vibe-title { font-family: var(--font-sub); font-size: 0.95rem; letter-spacing: 0.15em; color: var(--gold-accent); }
-
-        .theme-switch-row {
-            display: flex; gap: 8px;
-        }
-        .theme-btn {
-            flex: 1; font-family: var(--font-sub); font-size: 0.75rem; letter-spacing: 0.1em;
-            padding: 8px 4px; border-radius: 8px; cursor: pointer; text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: #FFF;
-            transition: all 0.25s ease;
-        }
-        .theme-btn.active {
-            border-color: var(--mist-primary);
-            background: var(--mist-primary);
-            color: #000;
-            font-weight: 700;
-            box-shadow: 0 0 15px var(--mist-glow);
-        }
-
-        .vibe-row { display: flex; flex-direction: column; gap: 6px; }
-        .vibe-row label {
-            font-family: var(--font-sub); font-size: 0.75rem; letter-spacing: 0.1em;
-            text-transform: uppercase; color: var(--mist-primary); display: flex; justify-content: space-between;
-        }
-        .vibe-row input[type="range"] { accent-color: var(--mist-primary); height: 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.15); cursor: pointer; }
-
-        .sfx-btn {
-            padding: 6px 12px; font-family: var(--font-sub); font-size: 0.75rem; border-radius: 6px;
-            background: rgba(0,0,0,0.6); border: 1px solid var(--mist-primary); color: #FFF; cursor: pointer;
-        }
-
-        /* Keyframes */
-        @keyframes driftFog { 0% { transform: translateY(0) scale(1); opacity: 0.7; } 100% { transform: translateY(-30px) scale(1.15); opacity: 1; } }
-        @keyframes pulseThrone { 0% { opacity: 0.4; transform: translateX(-50%) scale(0.95); } 100% { opacity: 0.8; transform: translateX(-50%) scale(1.08); } }
-        @keyframes bladePulse { 0%, 100% { opacity: 0.05; } 50% { opacity: 0.09; } }
-        @keyframes floatCrown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
-        @media (max-width: 768px) {
-            .stats-shard-grid { grid-template-columns: 1fr; }
-            .mirror-shard-card { padding: 32px 22px; }
-            .actions-row { flex-direction: column; width: 100%; align-items: center; }
-            .btn-viego { width: 100%; max-width: 320px; justify-content: center; }
-            .vibe-panel { width: calc(100vw - 48px); right: 24px; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Atmospheric Spotlights & Floating Fog -->
-    <div class="mist-background">
-        <div class="throne-spotlight"></div>
-        <div class="creeping-fog-layer"></div>
+    <!-- ─── THE CINEMATIC LOADER ─── -->
+    <div id="viego-loader">
+        <div class="shattered-ring"></div>
+        <div class="ember"></div>
+        <div class="viego-silhouette"></div>
+        <div class="flavor-text">He would tear the world apart before he let her go. This portfolio is built the same way.</div>
     </div>
 
-    <!-- The Blade of the Ruined King SVG Watermark -->
-    <svg class="blade-watermark" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="var(--mist-deep)" stop-opacity="0.3"/>
-                <stop offset="50%" stop-color="var(--mist-primary)" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="var(--mist-deep)" stop-opacity="0.3"/>
-            </linearGradient>
-            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="var(--gold-accent)"/>
-                <stop offset="100%" stop-color="var(--gold-dim)"/>
-            </linearGradient>
-        </defs>
-        <polygon points="100,20 112,600 100,650 88,600" fill="url(#bladeGrad)"/>
-        <line x1="100" y1="20" x2="100" y2="630" stroke="var(--mist-primary)" stroke-width="1" opacity="0.8"/>
-        <path d="M40,640 Q100,610 160,640 L168,665 Q100,645 32,665 Z" fill="url(#goldGrad)" opacity="0.85"/>
-        <circle cx="100" cy="642" r="7" fill="var(--mist-primary)"/>
-        <rect x="92" y="665" width="16" height="90" rx="3" fill="#0A0D10" stroke="var(--gold-accent)" stroke-width="1.5"/>
-        <polygon points="100,760 115,780 100,795 85,780" fill="url(#goldGrad)"/>
-        <circle cx="100" cy="778" r="4" fill="var(--mist-primary)"/>
-    </svg>
+    <!-- ─── CUSTOM CURSOR & SCROLLBAR ─── -->
+    <div id="blade-scrollbar"></div>
+    <div class="cursor-wisp" id="cursor-wisp"></div>
 
-    <div class="container">
-        
-        <!-- Navigation Bar -->
-        <nav>
-            <a href="index.html" class="nav-link active">
-                <i class="fa-solid fa-crown"></i> Sanctum
-            </a>
-            <a href="games.html" class="nav-link">
-                <i class="fa-solid fa-gamepad"></i> Experiences
-            </a>
-            <a href="systems.html" class="nav-link">
-                <i class="fa-solid fa-gem"></i> Artifacts
-            </a>
-            <a href="hire-me.html" class="nav-link">
-                <i class="fa-solid fa-scroll"></i> Covenant
-            </a>
-        </nav>
+    <!-- ─── ATMOSPHERE ─── -->
+    <div class="background-art"></div>
+    <div class="fog-layer"></div>
+    <div class="soul-particles" id="soul-container"></div>
 
-        <!-- Crown of Camavor -->
-        <div class="crown-emblem">
-            <i class="fa-solid fa-crown"></i>
+    <!-- ─── SITE CONTENT ─── -->
+    <nav>
+        <a href="index.html" class="nav-link active">The Throne</a>
+        <a href="games.html" class="nav-link">Realms</a>
+        <a href="systems.html" class="nav-link">Artifacts</a>
+        <a href="hire-me.html" class="nav-link">Covenant</a>
+    </nav>
+
+    <section class="hero">
+        <h1 class="hero-title">Carfota</h1>
+        <div class="hero-subtitle">Architect of Ruin // Luau Engineering</div>
+        <div class="hero-tagline">
+            "Some kings chase glory. I chase what refuses to stay finished. Every system here was broken at least once before it worked."
         </div>
+    </section>
 
-        <!-- The Empty Throne Headline -->
-        <h1>Carfota</h1>
-        <p class="hero-subtitle">Architect of the Ruined Kingdom // Luau Engineer</p>
-
-        <!-- Stitching Seamstress Thread -->
-        <div class="spectral-thread"></div>
-
-        <!-- The Shattered Mirror Shard -->
-        <div class="mirror-shard-card">
-            <div class="card-crest">
-                <span>✦ CAMAVORAN ROYAL FORGE ✦</span>
+    <section class="ruins-section">
+        <h2 class="section-header">The Ruins Reclaimed</h2>
+        <div class="ruins-grid">
+            
+            <div class="ruin-card">
+                <span class="ruin-number">RUIN 01</span>
+                <h3 class="ruin-title">Blackgate: Breakpoint</h3>
+                <p class="ruin-desc">An isolated correctional complex where every escape has consequences. A multiplayer survival framework built on obsession.</p>
+                <a href="games.html" class="btn-ruin">Enter Realm <i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <p class="card-desc">
-                Forging multiplayer realities with <span class="highlight-spectral">relentless precision</span> and necrotic mastery. 
-                Every framework is crafted to conquer limits, binding backend logic and combat flow into an unbroken realm.
-                <br><br>
-                Traverse my created
-                <a href="games.html" class="inline-portal">
-                    <i class="fa-solid fa-dungeon"></i> Experiences
-                </a>
-                or unveil the core
-                <a href="systems.html" class="inline-portal">
-                    <i class="fa-solid fa-code-branch"></i> Artifacts
-                </a>
-                stitched inside <span class="highlight-gold">Roblox Studio</span>.
-            </p>
-        </div>
 
-        <!-- Sharded Stats Pedestal -->
-        <div class="stats-shard-grid">
-            <div class="stat-shard">
-                <span class="stat-num">WIP</span>
-                <span class="stat-label">⚔️ Realms Forged</span>
+            <div class="ruin-card">
+                <span class="ruin-number">RUIN 02</span>
+                <h3 class="ruin-title">Spectral Combat</h3>
+                <p class="ruin-desc">A modular combo-based combat system. Hitboxes, camera shakes, and necrotic knockbacks refined through iteration.</p>
+                <a href="systems.html" class="btn-ruin">Inspect Artifact <i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div class="stat-shard">
-                <span class="stat-num">7+</span>
-                <span class="stat-label">✦ Living Systems</span>
-            </div>
-            <div class="stat-shard">
-                <span class="stat-num">2+</span>
-                <span class="stat-label">⏳ Years Reign</span>
-            </div>
+
         </div>
+    </section>
 
-        <!-- Isolde's Thread Skill Runes -->
-        <div class="runes-cloud">
-            <span class="rune-tag">✦ Luau Architecture</span>
-            <span class="rune-tag">✦ Combat Hitboxes & Combos</span>
-            <span class="rune-tag">✦ ProfileService & Cloud Save</span>
-            <span class="rune-tag">✦ AI & External API Bridges</span>
-            <span class="rune-tag">✦ Fluid UI/UX Animation</span>
-        </div>
-
-        <!-- Pedestal Action Buttons -->
-        <div class="actions-row">
-            <a href="https://www.roblox.com/users/348153219/profile" target="_blank" class="btn-viego btn-roblox">
-                <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6.073 0L0 25.927 25.927 32 32 6.073ZM20.314 20.615l-8.656-2.299 2.3-8.656 8.655 2.3z"/>
-                </svg>
-                Roblox Presence
-            </a>
-
-            <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-viego btn-discord">
-                <i class="fa-brands fa-discord" style="font-size: 1.1rem;"></i>
-                Summon via Discord
-            </a>
-        </div>
-
-        <!-- Footer -->
-        <footer>
-            <span>✦ No Distance Is Too Great · Sanctum of Cairo ✦</span>
-        </footer>
-
-    </div>
-
-    <!-- ── THE SANCTUM VIBE & FORM TUNER ── -->
-    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Sanctum Controls">
-        <i class="fa-solid fa-sliders"></i>
-    </button>
-
-    <div class="vibe-panel" id="vibe-panel">
-        <div class="vibe-header">
-            <span class="vibe-title">👑 SANCTUM CONTROLS</span>
-            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:#FFF; cursor:pointer; font-size:1.1rem;">✕</button>
-        </div>
-
-        <!-- Dual Theme Switcher (Ruined King vs Rage Form) -->
-        <div class="vibe-row">
-            <label><span>Viego Aspect</span></label>
-            <div class="theme-switch-row">
-                <button class="theme-btn active" id="btn-theme-king" onclick="setViegoTheme('king')">
-                    👑 Ruined King
-                </button>
-                <button class="theme-btn" id="btn-theme-rage" onclick="setViegoTheme('rage')">
-                    🩸 Wrath
-                </button>
-            </div>
-        </div>
-
-        <!-- Audio Control -->
-        <div class="vibe-row" style="flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
-            <span style="font-family: var(--font-sub); font-size: 0.8rem; color: var(--gold-accent); text-transform: uppercase;">
-                <i class="fa-solid fa-volume-high"></i> Sound FX
-            </span>
-            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn">
-                ON 🔊
-            </button>
-        </div>
-
-        <!-- Glow & Mist Intensity -->
-        <div class="vibe-row">
-            <label><span>Spectral Aura</span> <span id="val-glow">100%</span></label>
-            <input type="range" id="slider-glow" min="10" max="150" value="100" oninput="updateSanctumSliders()">
-        </div>
-
-        <!-- Mist Fog Transparency -->
-        <div class="vibe-row">
-            <label><span>Black Mist Fog</span> <span id="val-fog">100%</span></label>
-            <input type="range" id="slider-fog" min="0" max="100" value="100" oninput="updateSanctumSliders()">
-        </div>
-    </div>
-
-    <!-- Sound Effects Engine Script -->
+    <!-- Connects to your existing SFX engine -->
     <script src="sfx.js"></script>
 
     <script>
-        // ─── THEME & ASPECT SWITCHER ENGINE ───
-        function setViegoTheme(theme) {
-            const isRage = (theme === 'rage');
-            document.body.classList.toggle('theme-rage', isRage);
-
-            document.getElementById('btn-theme-king').classList.toggle('active', !isRage);
-            document.getElementById('btn-theme-rage').classList.toggle('active', isRage);
-
-            localStorage.setItem('viego_aspect', theme);
-
-            // Trigger click sound
-            if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
-        }
-
-        // ─── SANCTUM SLIDERS ───
-        function updateSanctumSliders() {
-            const glow = document.getElementById('slider-glow').value;
-            const fog = document.getElementById('slider-fog').value;
-
-            document.getElementById('val-glow').textContent = glow + '%';
-            document.getElementById('val-fog').textContent = fog + '%';
-
-            document.documentElement.style.setProperty('--glow-mult', glow / 100);
-            document.documentElement.style.setProperty('--fog-opacity', fog / 100);
-
-            localStorage.setItem('viego_glow', glow);
-            localStorage.setItem('viego_fog', fog);
-        }
-
-        function toggleVibeMenu() {
-            document.getElementById('vibe-panel').classList.toggle('open');
-        }
-
-        function handleSFXToggle() {
-            if (typeof DopamineAudio !== 'undefined') {
-                const enabled = DopamineAudio.toggleSFX();
-                const btn = document.getElementById('sfx-toggle-btn');
-                if (btn) {
-                    btn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
-                    btn.style.borderColor = enabled ? 'var(--mist-primary)' : '#555';
-                }
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            // Restore chosen Aspect Theme
-            const savedTheme = localStorage.getItem('viego_aspect') || 'king';
-            setViegoTheme(savedTheme);
-
-            // Restore sliders
-            const savedGlow = localStorage.getItem('viego_glow') || '100';
-            const savedFog = localStorage.getItem('viego_fog') || '100';
-            document.getElementById('slider-glow').value = savedGlow;
-            document.getElementById('slider-fog').value = savedFog;
-            updateSanctumSliders();
-
-            // Sync SFX Button
-            const sfxBtn = document.getElementById('sfx-toggle-btn');
-            if (sfxBtn && typeof DopamineAudio !== 'undefined') {
-                const enabled = DopamineAudio.isEnabled();
-                sfxBtn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
-                sfxBtn.style.borderColor = enabled ? 'var(--mist-primary)' : '#555';
-            }
+        // ─── SCROLL PROGRESS BLADE ───
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("blade-scrollbar").style.width = scrolled + "%";
         });
+
+        // ─── CUSTOM WISP CURSOR ───
+        const wisp = document.getElementById('cursor-wisp');
+        const trails = [];
+        const maxTrails = 8;
+
+        // Create trail elements
+        for(let i=0; i<maxTrails; i++) {
+            const t = document.createElement('div');
+            t.className = 'cursor-trail';
+            document.body.appendChild(t);
+            trails.push({ el: t, x: 0, y: 0, alpha: 0 });
+        }
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            wisp.style.left = mouseX + 'px';
+            wisp.style.top = mouseY + 'px';
+        });
+
+        // Hover effect for interactive elements
+        document.querySelectorAll('a, .btn-ruin').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                wisp.style.transform = 'translate(-50%, -50%) scale(2.5)';
+                wisp.style.background = 'transparent';
+                wisp.style.border = '1px solid var(--spectral-teal)';
+            });
+            el.addEventListener('mouseleave', () => {
+                wisp.style.transform = 'translate(-50%, -50%) scale(1)';
+                wisp.style.background = 'var(--spectral-teal)';
+                wisp.style.border = 'none';
+            });
+        });
+
+        // Animate trails trailing the main wisp
+        function animateTrails() {
+            let prevX = mouseX;
+            let prevY = mouseY;
+
+            trails.forEach((trail, index) => {
+                trail.x += (prevX - trail.x) * 0.3;
+                trail.y += (prevY - trail.y) * 0.3;
+                
+                trail.el.style.left = trail.x + 'px';
+                trail.el.style.top = trail.y + 'px';
+                
+                // Shrink and fade based on index
+                const scale = (maxTrails - index) / maxTrails;
+                trail.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
+
+                prevX = trail.x;
+                prevY = trail.y;
+            });
+            requestAnimationFrame(animateTrails);
+        }
+        animateTrails();
+
+        // ─── GREEN SOUL PARTICLES GENERATOR ───
+        const soulContainer = document.getElementById('soul-container');
+        function createSoul() {
+            const soul = document.createElement('div');
+            const size = Math.random() * 4 + 2;
+            
+            soul.style.position = 'absolute';
+            soul.style.left = Math.random() * 100 + 'vw';
+            soul.style.width = size + 'px';
+            soul.style.height = size + 'px';
+            soul.style.background = 'var(--spectral-teal)';
+            soul.style.borderRadius = '50%';
+            soul.style.boxShadow = '0 0 10px var(--mist-deep)';
+            soul.style.opacity = '0';
+            soul.style.animation = `soulRise ${Math.random() * 10 + 10}s linear forwards`;
+            
+            soulContainer.appendChild(soul);
+            
+            setTimeout(() => { soul.remove(); }, 20000);
+        }
+        
+        // Start spawning souls after loader finishes
+        setTimeout(() => {
+            setInterval(createSoul, 800);
+        }, 8000);
+
     </script>
 </body>
 </html>
