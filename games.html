@@ -8,27 +8,23 @@
     <!-- Cinzel Decorative for Royalty, Inter for Clean Readability -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600;800&family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         /* ─── DEFAULT THEME: THE RUINED KING (SPECTRAL MIST) ─── */
         :root {
-            --bg-obsidian: #080B0E;
-            --bg-card: rgba(10, 15, 20, 0.75);
-            --mist-primary: #1CEBBA;
-            --mist-deep: #0A8D74;
-            --mist-glow: rgba(28, 235, 186, 0.45);
-            --gold-accent: #D4AF37;
-            --gold-dim: #8B753A;
-            --text-main: #E6F1F2;
-            --text-muted: rgba(230, 241, 242, 0.7);
+            --void-black: #0a0a0f;
+            --spectral-teal: #3ddc97;
+            --mist-deep: #1fbf87;
+            --ruin-purple: #4a2f6b;
+            --ruin-shadow: #6b3fa0;
+            --bone-white: #e8e6e1;
             
-            --vignette-color: rgba(10, 141, 116, 0.25);
-            --card-border: rgba(232, 230, 225, 0.15);
+            --vignette-color: rgba(61, 220, 151, 0.1);
+            --card-border: rgba(232, 230, 225, 0.1);
             
-            --font-title: 'Cinzel Decorative', serif;
-            --font-sub: 'Cinzel', serif;
+            --font-display: 'Cinzel Decorative', serif;
             --font-body: 'Inter', sans-serif;
 
             --glow-mult: 1;
@@ -37,25 +33,22 @@
 
         /* ─── RAGE THEME: SOUL FIGHTER / ISOLDE'S WRATH (CRIMSON FURY) ─── */
         body.theme-rage {
-            --bg-obsidian: #0A0608;
-            --bg-card: rgba(22, 10, 14, 0.8);
-            --mist-primary: #FF1E46;
+            --void-black: #0a0406;
+            --spectral-teal: #FF1E46;
             --mist-deep: #8E001A;
-            --mist-glow: rgba(255, 30, 70, 0.55);
-            --gold-accent: #00F5D4; 
-            --gold-dim: #067D6E;
-            --text-main: #FFF0F2;
-            --text-muted: rgba(255, 220, 225, 0.75);
+            --ruin-purple: #5c0b1e;
+            --ruin-shadow: #3b030e;
+            --bone-white: #FFF0F2;
             
-            --vignette-color: rgba(255, 30, 70, 0.35);
-            --card-border: rgba(255, 30, 70, 0.25);
+            --vignette-color: rgba(255, 30, 70, 0.15);
+            --card-border: rgba(255, 30, 70, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
-            background-color: var(--bg-obsidian);
-            color: var(--text-main);
+            background-color: var(--void-black);
+            color: var(--bone-white);
             font-family: var(--font-body);
             min-height: 100vh;
             overflow-x: hidden;
@@ -68,32 +61,32 @@
         /* ─── BLADE SCROLL PROGRESS BAR ─── */
         #blade-scrollbar {
             position: fixed; top: 0; left: 0; height: 3px; width: 0%;
-            background: linear-gradient(90deg, transparent, var(--mist-primary), var(--text-main));
-            box-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-primary);
+            background: linear-gradient(90deg, transparent, var(--spectral-teal), var(--bone-white));
+            box-shadow: 0 0 calc(10px * var(--glow-mult)) var(--spectral-teal);
             z-index: 9999; pointer-events: none; transition: width 0.1s ease-out;
         }
         #blade-scrollbar::after {
             content: ''; position: absolute; right: -5px; top: -3px;
-            width: 10px; height: 9px; background: var(--text-main);
+            width: 10px; height: 9px; background: var(--bone-white);
             clip-path: polygon(0 50%, 100% 0, 100% 100%);
-            box-shadow: 0 0 15px var(--text-main);
+            box-shadow: 0 0 15px var(--bone-white);
         }
 
         /* ─── CUSTOM CURSOR WISP & TRAIL ─── */
         .cursor-wisp {
             position: fixed; top: 0; left: 0; width: 12px; height: 12px;
-            background: var(--mist-primary); border-radius: 50%;
+            background: var(--spectral-teal); border-radius: 50%;
             pointer-events: none; z-index: 999999;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-primary), 0 0 calc(40px * var(--glow-mult)) var(--mist-deep);
+            box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--spectral-teal), 0 0 calc(40px * var(--glow-mult)) var(--mist-deep);
             transition: width 0.2s, height 0.2s; mix-blend-mode: screen;
         }
         .cursor-trail {
             position: fixed; width: 8px; height: 8px;
-            background: var(--mist-deep); border-radius: 50%;
+            background: var(--ruin-purple); border-radius: 50%;
             pointer-events: none; z-index: 999998;
             transform: translate(-50%, -50%); opacity: 0.6;
-            box-shadow: 0 0 15px var(--mist-deep);
+            box-shadow: 0 0 15px var(--ruin-shadow);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
 
@@ -109,14 +102,14 @@
         }
         body.theme-rage .background-art {
             background: url('image_e6c92c.jpg') center right/cover no-repeat;
-            opacity: 0.18; filter: grayscale(0.2) contrast(1.3);
+            opacity: 0.15; filter: grayscale(0.2) contrast(1.3);
         }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
             background: 
                 radial-gradient(ellipse at 80% 20%, var(--vignette-color) 0%, transparent 40%),
-                radial-gradient(ellipse at 20% 80%, var(--mist-glow) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 80%, rgba(74, 47, 107, 0.1) 0%, transparent 50%);
             opacity: var(--fog-opacity);
             animation: driftFog 20s ease-in-out infinite alternate;
             transition: opacity 0.3s ease, background 0.5s ease;
@@ -127,157 +120,164 @@
         /* ─── NAVIGATION ─── */
         nav {
             position: relative; z-index: 10; display: flex; justify-content: center; gap: 40px; padding: 40px 0;
-            border-bottom: 1px solid rgba(232, 230, 225, 0.05); margin-bottom: 40px;
+            border-bottom: 1px solid rgba(232, 230, 225, 0.05); margin-bottom: 50px;
         }
         .nav-link {
-            font-family: var(--font-title); font-size: 1.05rem;
-            color: var(--text-muted); text-decoration: none; text-transform: uppercase;
+            font-family: var(--font-display); font-size: 1rem;
+            color: rgba(232, 230, 225, 0.6); text-decoration: none; text-transform: uppercase;
             letter-spacing: 0.15em; transition: all 0.3s ease; position: relative;
         }
         .nav-link::before {
             content: ''; position: absolute; bottom: -6px; left: 50%;
-            width: 0; height: 1px; background: var(--mist-primary);
-            transition: all 0.3s ease; transform: translateX(-50%); box-shadow: 0 0 calc(8px * var(--glow-mult)) var(--mist-primary);
+            width: 0; height: 1px; background: var(--spectral-teal);
+            transition: all 0.3s ease; transform: translateX(-50%); box-shadow: 0 0 calc(8px * var(--glow-mult)) var(--spectral-teal);
         }
-        .nav-link:hover, .nav-link.active { color: var(--text-main); text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-deep); }
+        .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── HEADER ─── */
-        .container {
-            position: relative; z-index: 10; max-width: 1100px; margin: 0 auto;
-            padding: 0 24px 80px; display: flex; flex-direction: column; align-items: center;
+        /* ─── HEADER & FILTERS ─── */
+        .hero {
+            position: relative; z-index: 10; display: flex; flex-direction: column;
+            align-items: center; text-align: center; padding: 0 10vw 40px;
         }
 
-        .crown-icon { font-size: 2rem; color: var(--gold-accent); text-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-primary); margin-bottom: 10px; animation: floatCrown 4s ease-in-out infinite; }
-        
-        h1 {
-            font-family: var(--font-title); font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 900;
-            line-height: 1; letter-spacing: 0.05em; text-transform: uppercase; text-align: center;
-            background: linear-gradient(180deg, #FFFFFF 20%, var(--mist-primary) 80%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            filter: drop-shadow(0 0 calc(20px * var(--glow-mult)) var(--mist-glow)); margin-bottom: 10px;
+        .hero-title {
+            font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900; line-height: 1; color: var(--bone-white);
+            margin-bottom: 10px; position: relative; display: inline-block;
+            text-shadow: 0 0 calc(20px * var(--glow-mult)) rgba(255,255,255,0.1);
         }
 
         .hero-subtitle {
-            font-family: var(--font-sub); font-size: clamp(0.85rem, 2vw, 1.1rem); color: var(--gold-accent);
-            text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-glow); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 40px;
+            font-family: var(--font-body); font-size: clamp(0.85rem, 2vw, 1.1rem);
+            color: var(--spectral-teal); font-weight: 300; letter-spacing: 0.2em;
+            text-transform: uppercase; margin-bottom: 40px;
+            text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-deep);
         }
 
-        /* ─── FILTERS ─── */
-        .filter-container { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 50px; width: 100%; }
+        .filter-container { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 60px; width: 100%; }
 
         .filter-btn {
-            font-family: var(--font-sub); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.15em;
-            text-transform: uppercase; color: var(--text-muted); background: rgba(10, 15, 20, 0.6);
-            padding: 10px 24px; border: 1px solid var(--card-border); cursor: pointer;
-            transition: all 0.3s ease; backdrop-filter: blur(5px);
-            clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+            font-family: var(--font-body); font-weight: 600; font-size: 0.8rem; letter-spacing: 0.15em;
+            text-transform: uppercase; color: rgba(232, 230, 225, 0.6); background: rgba(10, 10, 15, 0.6);
+            padding: 10px 24px; border: 1px solid var(--card-border); transition: all 0.3s ease; backdrop-filter: blur(5px);
+            position: relative; overflow: hidden;
         }
 
         .filter-btn:hover, .filter-btn.active {
-            transform: translateY(-2px); background: rgba(255,255,255,0.05); color: #FFF;
-            border-color: var(--mist-primary); box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--mist-glow);
+            color: var(--void-black); font-weight: 800; border-color: var(--spectral-teal);
+            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--spectral-teal);
         }
 
-        /* ─── GAMES STREAM (THE RUINS) ─── */
-        .games-stream { display: flex; flex-direction: column; gap: 60px; width: 100%; }
+        .filter-btn::before {
+            content: ''; position: absolute; inset: 0; background: var(--spectral-teal);
+            transform: scaleX(0); transform-origin: right; transition: transform 0.4s ease; z-index: -1;
+        }
+        .filter-btn:hover::before, .filter-btn.active::before { transform: scaleX(1); transform-origin: left; }
 
-        .game-showcase {
-            display: flex; background: var(--bg-card);
-            border: 1px solid var(--card-border);
-            overflow: hidden; backdrop-filter: blur(12px);
-            transition: all 0.4s ease; text-align: left; position: relative;
-            clip-path: polygon(0 20px, 20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+        /* ─── GAMES GRID (INDEX STYLE) ─── */
+        .ruins-section {
+            position: relative; z-index: 10; padding: 0 10vw 100px;
         }
 
-        .game-showcase.hidden { display: none !important; }
-
-        .game-showcase:nth-child(even) { flex-direction: row-reverse; }
-
-        .game-showcase::after {
-            content: ''; position: absolute; inset: 0; border: 2px solid transparent; transition: all 0.4s ease; pointer-events: none;
+        .ruins-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 40px; 
+            max-width: 1200px; margin: 0 auto;
         }
 
-        .game-showcase:hover {
-            transform: translateY(-5px); border-color: rgba(255,255,255,0.1);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 calc(30px * var(--glow-mult)) var(--mist-glow);
+        .ruin-card {
+            background: rgba(10, 10, 15, 0.6); border: 1px solid var(--card-border);
+            padding: 40px; position: relative; overflow: hidden; backdrop-filter: blur(10px); transition: all 0.4s ease;
+            display: flex; flex-direction: column;
+        }
+        .ruin-card.hidden { display: none !important; }
+
+        /* The Mist Creep & Cracked Glass Hover */
+        .ruin-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, var(--vignette-color) 100%);
+            opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+        }
+        .ruin-card::after {
+            content: ''; position: absolute; inset: 0; border: 2px solid transparent;
+            transition: all 0.4s ease; pointer-events: none;
+        }
+
+        .ruin-card:hover {
+            transform: translateY(-5px); border-color: rgba(255,255,255,0.15);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .ruin-card:hover::before { opacity: 1; }
+        .ruin-card:hover::after {
+            border-color: var(--spectral-teal); clip-path: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--spectral-teal);
+        }
+
+        /* ─── NEW MEDIA CONTAINER (INSIDE CARD) ─── */
+        .ruin-media {
+            width: calc(100% + 80px); /* negate padding */
+            margin: -40px -40px 25px -40px;
+            aspect-ratio: 16/9; background: #000;
+            position: relative; overflow: hidden;
+            border-bottom: 2px solid var(--mist-deep);
         }
         
-        .game-showcase:hover::after {
-            border-color: var(--mist-primary);
-            clip-path: polygon(0 20px, 20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
-            box-shadow: inset 0 0 20px var(--mist-glow);
+        .ruin-media video { 
+            width: 100%; height: 100%; object-fit: cover; 
+            opacity: 0.5; filter: grayscale(0.6); transition: all 0.5s ease; display: block; 
         }
-
-        .media-container {
-            flex: 1.25; min-width: 50%; max-width: 55%; aspect-ratio: 16/9; background: #000;
-            overflow: hidden; position: relative; border-right: 1px solid var(--card-border);
-        }
-
-        .game-showcase:nth-child(even) .media-container { border-right: none; border-left: 1px solid var(--card-border); }
-        .media-container video { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.6; filter: grayscale(0.5); transition: all 0.5s ease; }
-        .game-showcase:hover .media-container video { opacity: 1; filter: grayscale(0); transform: scale(1.05); }
+        .ruin-card:hover .ruin-media video { opacity: 1; filter: grayscale(0); transform: scale(1.05); }
 
         .media-placeholder {
             width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(28, 235, 186, 0.1) 0%, transparent 70%);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; color: var(--mist-primary); text-align: center; padding: 20px;
+            background: radial-gradient(circle at center, rgba(61, 220, 151, 0.08) 0%, transparent 70%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+            color: var(--spectral-teal); text-align: center; padding: 20px;
         }
-        .media-placeholder i { font-size: 3rem; filter: drop-shadow(0 0 calc(15px * var(--glow-mult)) var(--mist-primary)); animation: pulseEmber 2s infinite; }
-        .media-placeholder span { font-family: var(--font-sub); font-size: 1rem; letter-spacing: 0.15em; color: var(--text-main); }
+        .media-placeholder i { font-size: 2.5rem; filter: drop-shadow(0 0 calc(10px * var(--glow-mult)) var(--spectral-teal)); animation: pulseEmber 2s infinite; }
+        .media-placeholder span { font-family: var(--font-body); font-size: 0.9rem; letter-spacing: 0.2em; color: var(--bone-white); text-transform: uppercase; }
 
         .media-overlay {
             position: absolute; inset: 0; background: rgba(0, 0, 0, 0.4);
             display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; z-index: 3;
         }
-        .media-container:hover .media-overlay { opacity: 1; }
+        .ruin-media:hover .media-overlay { opacity: 1; }
         .media-overlay i {
-            color: var(--bg-obsidian); background: var(--mist-primary); border: 1px solid var(--text-main);
-            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem; box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--mist-primary);
+            color: var(--void-black); background: var(--spectral-teal);
+            width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--spectral-teal);
         }
 
-        .info-container { flex: 1; padding: 40px 35px; display: flex; flex-direction: column; justify-content: center; }
-        
-        .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
-        .badge { font-family: var(--font-sub); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 6px 12px; border: 1px solid rgba(255,255,255,0.2); }
-        .badge-wip { color: var(--mist-primary); background: rgba(28, 235, 186, 0.05); border-color: var(--mist-primary); }
-        .badge-role { color: var(--gold-accent); background: rgba(212, 175, 55, 0.05); border-color: var(--gold-dim); }
-
-        .game-title {
-            font-family: var(--font-title); font-size: clamp(1.8rem, 2.5vw, 2.4rem);
-            line-height: 1.1; color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.1); margin-bottom: 15px;
-        }
-
-        .game-desc { font-family: var(--font-body); font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; font-weight: 300; margin-bottom: 25px; white-space: pre-line; }
+        /* Card Content Text */
+        .ruin-number { font-family: var(--font-body); font-size: 0.75rem; color: var(--mist-deep); font-weight: 800; letter-spacing: 0.25em; margin-bottom: 10px; display: block; text-transform: uppercase; }
+        .ruin-title { font-family: var(--font-display); font-size: 1.6rem; color: var(--bone-white); margin-bottom: 15px; }
+        .ruin-desc { font-family: var(--font-body); font-size: 0.92rem; line-height: 1.6; color: rgba(232, 230, 225, 0.6); margin-bottom: 25px; white-space: pre-line; flex-grow: 1; }
 
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
-        .tag {
-            font-family: var(--font-body); font-weight: 600; font-size: 0.7rem; letter-spacing: 0.1em;
-            text-transform: uppercase; padding: 4px 12px; border-radius: 2px; background: rgba(0,0,0,0.5);
-            color: var(--mist-deep); border: 1px solid var(--card-border);
-        }
+        .tag { font-family: var(--font-body); font-weight: 600; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; background: rgba(0,0,0,0.5); color: var(--bone-white); border: 1px solid rgba(255,255,255,0.1); }
 
-        .action-tray { display: flex; gap: 15px; flex-wrap: wrap; }
-
-        /* Cinematic Button */
+        /* Action Buttons */
+        .action-tray { display: flex; gap: 15px; flex-wrap: wrap; margin-top: auto; }
+        
         .btn-ruin {
-            display: inline-flex; align-items: center; gap: 10px; padding: 12px 26px; background: transparent;
-            border: 1px solid var(--mist-deep); color: var(--text-main);
-            font-family: var(--font-sub); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em;
-            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; background: transparent;
+            border: 1px solid var(--ruin-purple); color: var(--bone-white);
+            font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.1em;
+            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: all 0.3s ease; flex: 1; justify-content: center;
         }
+
         .btn-ruin::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--mist-primary);
-            transition: all 0.4s ease; z-index: -1; clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--spectral-teal);
+            transition: all 0.4s ease; z-index: -1; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
-        .btn-ruin:hover { border-color: var(--mist-primary); color: var(--bg-obsidian); box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-glow); }
+
+        .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 calc(20px * var(--glow-mult)) rgba(61, 220, 151, 0.4); }
         .btn-ruin:hover::before { left: 0; }
+        
+        .btn-discord-action { border-color: var(--mist-deep); }
 
-        .btn-discord-action { border-color: var(--gold-accent); color: var(--gold-accent); }
-        .btn-discord-action::before { background: var(--gold-accent); }
-
-        footer { margin-top: 70px; font-family: var(--font-sub); font-size: 0.75rem; letter-spacing: 0.3em; color: var(--gold-accent); text-transform: uppercase; opacity: 0.6; }
+        footer { margin-top: 40px; font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.3em; color: var(--spectral-teal); text-transform: uppercase; opacity: 0.6; text-align: center; }
 
         /* ─── LIGHTBOX MODAL ─── */
         .modal-overlay {
@@ -288,9 +288,9 @@
         .modal-overlay.open { opacity: 1; pointer-events: all; }
 
         .modal {
-            background: var(--bg-obsidian); border: 2px solid var(--mist-primary);
+            background: var(--void-black); border: 2px solid var(--spectral-teal);
             max-width: 900px; width: 100%; max-height: 88vh; display: flex; flex-direction: column; position: relative;
-            box-shadow: 0 0 calc(50px * var(--glow-mult)) var(--mist-glow);
+            box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-glow);
             transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
         }
@@ -299,61 +299,59 @@
         .modal-video-box { width: 100%; max-height: 55vh; aspect-ratio: 16/9; background: #000; border-bottom: 2px solid var(--mist-deep); flex-shrink: 1; overflow: hidden; }
         .modal-video-box video { width: 100%; height: 100%; object-fit: contain; display: block; }
         
-        .modal-details { padding: 30px 40px; text-align: left; overflow-y: auto; flex-shrink: 0; background: var(--bg-card); }
-        .modal-title { font-family: var(--font-title); font-size: 2rem; color: var(--text-main); margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px var(--mist-glow); }
-        .modal-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.7; font-weight: 300; white-space: pre-line; }
+        .modal-details { padding: 30px 40px; text-align: left; overflow-y: auto; flex-shrink: 0; background: rgba(10, 10, 15, 0.8); }
+        .modal-title { font-family: var(--font-display); font-size: 1.8rem; color: var(--bone-white); margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.1); }
+        .modal-desc { font-size: 0.95rem; color: rgba(232, 230, 225, 0.7); line-height: 1.7; font-weight: 300; white-space: pre-line; }
 
         .modal-close {
-            position: absolute; top: 15px; right: 20px; background: transparent; border: 1px solid var(--mist-primary);
-            width: 40px; height: 40px; cursor: pointer; color: var(--mist-primary); font-size: 1.2rem;
+            position: absolute; top: 15px; right: 20px; background: transparent; border: 1px solid var(--spectral-teal);
+            width: 40px; height: 40px; cursor: pointer; color: var(--spectral-teal); font-size: 1.2rem;
             display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10;
         }
-        .modal-close:hover { background: var(--mist-primary); color: var(--bg-obsidian); box-shadow: 0 0 20px var(--mist-glow); transform: rotate(90deg); }
+        .modal-close:hover { background: var(--spectral-teal); color: var(--void-black); box-shadow: 0 0 20px var(--mist-glow); transform: rotate(90deg); }
 
         /* ─── SANCTUM CONTROLS (VIBE TUNER) ─── */
         .vibe-controller-toggle {
             position: fixed; bottom: 24px; right: 24px; z-index: 99;
-            background: var(--bg-card); color: var(--mist-primary); border: 2px solid var(--gold-accent);
+            background: rgba(10, 10, 15, 0.8); color: var(--bone-white); border: 1px solid var(--spectral-teal);
             width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             cursor: pointer; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-glow);
-            font-size: 1.4rem; transition: transform 0.25s ease, border-color 0.3s ease;
+            font-size: 1.2rem; transition: transform 0.25s ease, border-color 0.3s ease; backdrop-filter: blur(10px);
         }
-        .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); border-color: var(--mist-primary); }
+        .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); border-color: var(--bone-white); color: var(--spectral-teal); }
 
         .vibe-panel {
             position: fixed; bottom: 95px; right: 24px; z-index: 100;
-            background: rgba(10, 14, 18, 0.96); border: 2px solid var(--card-border);
+            background: rgba(10, 10, 15, 0.96); border: 1px solid var(--spectral-teal);
             box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-glow);
-            border-radius: 20px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
+            border-radius: 8px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
             display: none; flex-direction: column; gap: 16px;
         }
         .vibe-panel.open { display: flex; }
         .vibe-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255, 255, 255, 0.15); padding-bottom: 10px; }
-        .vibe-title { font-family: var(--font-sub); font-size: 0.95rem; letter-spacing: 0.15em; color: var(--gold-accent); }
+        .vibe-title { font-family: var(--font-display); font-size: 1.05rem; color: var(--bone-white); letter-spacing: 0.1em; }
 
         .theme-switch-row { display: flex; gap: 8px; }
         .theme-btn {
-            flex: 1; font-family: var(--font-sub); font-size: 0.75rem; letter-spacing: 0.1em;
-            padding: 8px 4px; border-radius: 8px; cursor: pointer; text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: #FFF; transition: all 0.25s ease;
+            flex: 1; font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em;
+            padding: 8px 4px; border-radius: 4px; cursor: pointer; text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: var(--bone-white); transition: all 0.25s ease;
         }
-        .theme-btn.active { border-color: var(--mist-primary); background: var(--mist-primary); color: #000; font-weight: 700; box-shadow: 0 0 15px var(--mist-glow); }
+        .theme-btn.active { border-color: var(--spectral-teal); background: var(--spectral-teal); color: var(--void-black); font-weight: 800; box-shadow: 0 0 15px var(--mist-glow); }
 
         .vibe-row { display: flex; flex-direction: column; gap: 6px; }
-        .vibe-row label { font-family: var(--font-sub); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist-primary); display: flex; justify-content: space-between; }
-        .vibe-row input[type="range"] { accent-color: var(--mist-primary); height: 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.15); cursor: pointer; }
-        .sfx-btn { padding: 6px 12px; font-family: var(--font-sub); font-size: 0.75rem; border-radius: 6px; background: rgba(0,0,0,0.6); border: 1px solid var(--mist-primary); color: #FFF; cursor: pointer; }
+        .vibe-row label { font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232, 230, 225, 0.8); display: flex; justify-content: space-between; }
+        .vibe-row input[type="range"] { accent-color: var(--spectral-teal); height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); cursor: pointer; }
+        .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s; }
+        .sfx-btn:hover { background: var(--spectral-teal); color: var(--void-black); }
 
         @keyframes driftFog { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
-        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 calc(25px * var(--glow-mult)) var(--mist-primary)); } }
-        @keyframes floatCrown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 calc(25px * var(--glow-mult)) var(--spectral-teal)); } }
         @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
 
         @media (max-width: 900px) {
-            .game-showcase, .game-showcase:nth-child(even) { flex-direction: column; clip-path: none; border-radius: 12px; }
-            .game-showcase:hover::after { clip-path: none; border-radius: 12px; }
-            .media-container { max-width: 100%; min-width: 100%; border-right: none !important; border-left: none !important; border-bottom: 1px solid var(--card-border); }
-            .info-container { padding: 30px 24px; }
+            .ruin-media { margin: -40px -30px 25px -30px; width: calc(100% + 60px); }
+            .ruin-card { padding: 40px 30px; }
             .vibe-panel { width: calc(100vw - 48px); right: 24px; }
             .modal { clip-path: none; border-radius: 16px; }
         }
@@ -378,94 +376,85 @@
         <a href="hire-me.html" class="nav-link">Covenant</a>
     </nav>
 
-    <div class="container">
-        
-        <i class="fa-solid fa-crown crown-icon"></i>
-        <h1>Realms of Ruin</h1>
+    <div class="hero">
+        <h1 class="hero-title">Realms of Ruin</h1>
         <p class="hero-subtitle">Multiplayer Worlds // Scripter Portfolio</p>
 
         <div class="filter-container">
-            <button class="filter-btn active" onclick="filterGames('all')">⚡ All Realms</button>
-            <button class="filter-btn" onclick="filterGames('wip')">🛠️ In Forge</button>
-            <button class="filter-btn" onclick="filterGames('released')">🚀 Released</button>
-            <button class="filter-btn" onclick="filterGames('main-scripter')">👑 Main Scripter</button>
+            <button class="filter-btn active" onclick="filterGames('all')">All Realms</button>
+            <button class="filter-btn" onclick="filterGames('wip')">In Forge</button>
+            <button class="filter-btn" onclick="filterGames('released')">Released</button>
+            <button class="filter-btn" onclick="filterGames('main-scripter')">Main Scripter</button>
         </div>
+    </div>
 
-        <div class="games-stream">
+    <section class="ruins-section">
+        <div class="ruins-grid">
 
             <!-- GAME 1: BLACKGATE: BREAKPOINT -->
-            <div class="game-showcase" data-tags="wip main-scripter">
-                <div class="media-container" onclick="expandGameModal('', 'BLACKGATE: BREAKPOINT', `Welcome to Blackgate: Breakpoint — a new multiplayer experience built around a prison that was never meant to be escaped from.\n\nBlackgate is an isolated correctional complex where every escape has consequences. Break out, regroup, and decide what comes next. The prison doesn't simply end when you reach the outside.\n\nThe Wall is waiting.\n\nWe’re currently building Blackgate into a unique, immersive experience with its own world, lore, and gameplay.\n\nEscape Blackgate. Break the system.`)">
+            <div class="ruin-card" data-tags="wip main-scripter">
+                <div class="ruin-media" onclick="expandGameModal('', 'BLACKGATE: BREAKPOINT', `Welcome to Blackgate: Breakpoint — a new multiplayer experience built around a prison that was never meant to be escaped from.\n\nBlackgate is an isolated correctional complex where every escape has consequences. Break out, regroup, and decide what comes next. The prison doesn't simply end when you reach the outside.\n\nThe Wall is waiting.\n\nWe’re currently building Blackgate into a unique, immersive experience with its own world, lore, and gameplay.\n\nEscape Blackgate. Break the system.`)">
                     <div class="media-placeholder">
                         <i class="fa-solid fa-dungeon"></i>
-                        <span>BLACKGATE: BREAKPOINT<br><small style="color:var(--gold-accent); font-size: 0.8rem; font-family: var(--font-body);">IN ACTIVE FORGE</small></span>
+                        <span>IN ACTIVE FORGE</span>
                     </div>
                     <div class="media-overlay"><i class="fas fa-expand"></i></div>
                 </div>
-                <div class="info-container">
-                    <div class="badge-row">
-                        <span class="badge badge-wip">● WIP / IN DEV</span>
-                        <span class="badge badge-role">👑 Main Scripter</span>
-                    </div>
-                    <div class="game-title">BLACKGATE: BREAKPOINT</div>
-                    <p class="game-desc">Welcome to Blackgate: Breakpoint — a new multiplayer experience built around a prison that was never meant to be escaped from. 
+                
+                <span class="ruin-number">WIP // MAIN SCRIPTER</span>
+                <h3 class="ruin-title">Blackgate: Breakpoint</h3>
+                <p class="ruin-desc">Welcome to Blackgate: Breakpoint — a new multiplayer experience built around a prison that was never meant to be escaped from. 
 
 Blackgate is an isolated correctional complex where every escape has consequences. Break out, regroup, and decide what comes next. The prison doesn't simply end when you reach the outside.
 
 <strong>The Wall is waiting.</strong> Escape Blackgate. Break the system.</p>
-                    <div class="tags">
-                        <span class="tag">Main Scripter</span>
-                        <span class="tag">Multiplayer Prison</span>
-                        <span class="tag">Survival / Escape</span>
-                        <span class="tag">WIP</span>
-                    </div>
-                    <div class="action-tray">
-                        <a href="https://discord.gg/EKU3tUeQ3" target="_blank" class="btn-ruin btn-discord-action">
-                            <i class="fa-brands fa-discord"></i> Join Discord
-                        </a>
-                        <button class="btn-ruin" onclick="expandGameModal('', 'BLACKGATE: BREAKPOINT', `Welcome to Blackgate: Breakpoint — a new multiplayer experience built around a prison that was never meant to be escaped from.\n\nBlackgate is an isolated correctional complex where every escape has consequences. Break out, regroup, and decide what comes next. The prison doesn't simply end when you reach the outside.\n\nThe Wall is waiting.\n\nWe’re currently building Blackgate into a unique, immersive experience with its own world, lore, and gameplay.\n\nEscape Blackgate. Break the system.`)">
-                            <i class="fas fa-eye"></i> Lore & Info
-                        </button>
-                    </div>
+                
+                <div class="tags">
+                    <span class="tag">Main Scripter</span>
+                    <span class="tag">Multiplayer Prison</span>
+                    <span class="tag">Survival / Escape</span>
+                    <span class="tag">WIP</span>
+                </div>
+                
+                <div class="action-tray">
+                    <a href="https://discord.gg/EKU3tUeQ3" target="_blank" class="btn-ruin btn-discord-action">
+                        <i class="fa-brands fa-discord"></i> Discord
+                    </a>
+                    <button class="btn-ruin" onclick="expandGameModal('', 'BLACKGATE: BREAKPOINT', `Welcome to Blackgate: Breakpoint — a new multiplayer experience built around a prison that was never meant to be escaped from.\n\nBlackgate is an isolated correctional complex where every escape has consequences. Break out, regroup, and decide what comes next. The prison doesn't simply end when you reach the outside.\n\nThe Wall is waiting.\n\nWe’re currently building Blackgate into a unique, immersive experience with its own world, lore, and gameplay.\n\nEscape Blackgate. Break the system.`)">
+                        <i class="fas fa-eye"></i> Lore & Info
+                    </button>
                 </div>
             </div>
 
             <!-- GAME 2: OBSTACLES -->
-            <div class="game-showcase" data-tags="wip main-scripter">
-                <div class="media-container" onclick="expandGameModal('https://www.dropbox.com/scl/fi/mwj5sewh98qvl3slrrrx9/RobloxStudioBeta_nwi1cUYzGq.mp4?rlkey=g0oekbyojfudlbnihuw5nodam&raw=1', 'OBSTACLES', 'A competitive obstacle course game featuring a custom ranked matchmaking system built in Roblox Studio.')">
+            <div class="ruin-card" data-tags="wip main-scripter">
+                <div class="ruin-media" onclick="expandGameModal('https://www.dropbox.com/scl/fi/mwj5sewh98qvl3slrrrx9/RobloxStudioBeta_nwi1cUYzGq.mp4?rlkey=g0oekbyojfudlbnihuw5nodam&raw=1', 'OBSTACLES', 'A competitive obstacle course game featuring a custom ranked matchmaking system built in Roblox Studio.')">
                     <div class="media-overlay"><i class="fas fa-expand"></i></div>
                     <video autoplay loop muted playsinline>
                         <source src="https://www.dropbox.com/scl/fi/mwj5sewh98qvl3slrrrx9/RobloxStudioBeta_nwi1cUYzGq.mp4?rlkey=g0oekbyojfudlbnihuw5nodam&raw=1" type="video/mp4">
                     </video>
                 </div>
-                <div class="info-container">
-                    <div class="badge-row">
-                        <span class="badge badge-wip">● WIP</span>
-                        <span class="badge badge-role">👑 Main Scripter</span>
-                    </div>
-                    <div class="game-title">Obstacles</div>
-                    <p class="game-desc">A simple ranked obstacle course game currently in development featuring real-time competitive matchmaking and leaderboards.</p>
-                    <div class="tags">
-                        <span class="tag">Main Scripter</span>
-                        <span class="tag">Ranked Matchmaking</span>
-                        <span class="tag">Obby</span>
-                        <span class="tag">Competitive</span>
-                    </div>
-                    <div class="action-tray">
-                        <button class="btn-ruin" onclick="expandGameModal('https://www.dropbox.com/scl/fi/mwj5sewh98qvl3slrrrx9/RobloxStudioBeta_nwi1cUYzGq.mp4?rlkey=g0oekbyojfudlbnihuw5nodam&raw=1', 'OBSTACLES', 'A competitive obstacle course game featuring a custom ranked matchmaking system built in Roblox Studio.')">
-                            <i class="fas fa-eye"></i> Inspect
-                        </button>
-                    </div>
+                
+                <span class="ruin-number">WIP // MAIN SCRIPTER</span>
+                <h3 class="ruin-title">Obstacles</h3>
+                <p class="ruin-desc">A simple ranked obstacle course game currently in development featuring real-time competitive matchmaking and leaderboards.</p>
+                
+                <div class="tags">
+                    <span class="tag">Main Scripter</span>
+                    <span class="tag">Ranked Matchmaking</span>
+                    <span class="tag">Obby</span>
+                    <span class="tag">Competitive</span>
+                </div>
+                
+                <div class="action-tray">
+                    <button class="btn-ruin" onclick="expandGameModal('https://www.dropbox.com/scl/fi/mwj5sewh98qvl3slrrrx9/RobloxStudioBeta_nwi1cUYzGq.mp4?rlkey=g0oekbyojfudlbnihuw5nodam&raw=1', 'OBSTACLES', 'A competitive obstacle course game featuring a custom ranked matchmaking system built in Roblox Studio.')">
+                        <i class="fas fa-eye"></i> Inspect Realm
+                    </button>
                 </div>
             </div>
 
         </div>
-
-        <footer>
-            <span>✦ Forged in Obsession · Roblox Worlds Live ✦</span>
-        </footer>
-
-    </div>
+    </section>
 
     <!-- Lightbox Modal -->
     <div class="modal-overlay" id="lightbox" onclick="closeLightboxOutside(event)">
@@ -488,22 +477,20 @@ Blackgate is an isolated correctional complex where every escape has consequence
 
     <div class="vibe-panel" id="vibe-panel">
         <div class="vibe-header">
-            <span class="vibe-title">👑 SANCTUM CONTROLS</span>
-            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:#FFF; cursor:pointer; font-size:1.1rem;">✕</button>
+            <span class="vibe-title">SANCTUM CONTROLS</span>
+            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:var(--bone-white); cursor:pointer; font-size:1.1rem;">✕</button>
         </div>
 
         <div class="vibe-row">
             <label><span>Viego Aspect</span></label>
             <div class="theme-switch-row">
-                <button class="theme-btn active" id="btn-theme-king" onclick="setViegoTheme('king')">👑 Ruined King</button>
-                <button class="theme-btn" id="btn-theme-rage" onclick="setViegoTheme('rage')">🩸 Wrath</button>
+                <button class="theme-btn active" id="btn-theme-king" onclick="setViegoTheme('king')">Ruined King</button>
+                <button class="theme-btn" id="btn-theme-rage" onclick="setViegoTheme('rage')">Wrath</button>
             </div>
         </div>
 
         <div class="vibe-row" style="flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
-            <span style="font-family: var(--font-sub); font-size: 0.8rem; color: var(--gold-accent); text-transform: uppercase;">
-                <i class="fa-solid fa-volume-high"></i> Sound FX
-            </span>
+            <label style="margin:0;"><i class="fa-solid fa-volume-high"></i> Sound FX</label>
             <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn">ON 🔊</button>
         </div>
 
@@ -526,7 +513,7 @@ Blackgate is an isolated correctional complex where every escape has consequence
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            document.querySelectorAll('.game-showcase').forEach(card => {
+            document.querySelectorAll('.ruin-card').forEach(card => {
                 const tags = card.getAttribute('data-tags').split(' ');
                 if (category === 'all' || tags.includes(category)) {
                     card.classList.remove('hidden');
@@ -611,7 +598,7 @@ Blackgate is an isolated correctional complex where every escape has consequence
                 const btn = document.getElementById('sfx-toggle-btn');
                 if (btn) {
                     btn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
-                    btn.style.borderColor = enabled ? 'var(--mist-primary)' : '#555';
+                    btn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
                 }
             }
         }
@@ -646,15 +633,15 @@ Blackgate is an isolated correctional complex where every escape has consequence
             wisp.style.top = mouseY + 'px';
         });
 
-        document.querySelectorAll('a, button, .btn-ruin, .filter-btn').forEach(el => {
+        document.querySelectorAll('a, button, .btn-ruin, .filter-btn, .ruin-media').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 wisp.style.transform = 'translate(-50%, -50%) scale(3)';
                 wisp.style.background = 'transparent';
-                wisp.style.border = '1px solid var(--mist-primary)';
+                wisp.style.border = '1px solid var(--spectral-teal)';
             });
             el.addEventListener('mouseleave', () => {
                 wisp.style.transform = 'translate(-50%, -50%) scale(1)';
-                wisp.style.background = 'var(--mist-primary)';
+                wisp.style.background = 'var(--spectral-teal)';
                 wisp.style.border = 'none';
             });
         });
@@ -685,7 +672,7 @@ Blackgate is an isolated correctional complex where every escape has consequence
             soul.style.left = Math.random() * 100 + 'vw';
             soul.style.width = size + 'px';
             soul.style.height = size + 'px';
-            soul.style.background = 'var(--mist-primary)';
+            soul.style.background = 'var(--spectral-teal)';
             soul.style.borderRadius = '50%';
             soul.style.boxShadow = '0 0 10px var(--mist-deep)';
             soul.style.opacity = '0';
@@ -695,26 +682,22 @@ Blackgate is an isolated correctional complex where every escape has consequence
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Restore chosen Aspect Theme
             const savedTheme = localStorage.getItem('viego_aspect') || 'king';
             setViegoTheme(savedTheme);
 
-            // Restore sliders
             const savedGlow = localStorage.getItem('viego_glow') || '100';
             const savedFog = localStorage.getItem('viego_fog') || '100';
             document.getElementById('slider-glow').value = savedGlow;
             document.getElementById('slider-fog').value = savedFog;
             updateSanctumSliders();
 
-            // Sync SFX Button
             const sfxBtn = document.getElementById('sfx-toggle-btn');
             if (sfxBtn && typeof DopamineAudio !== 'undefined') {
                 const enabled = DopamineAudio.isEnabled();
                 sfxBtn.textContent = enabled ? 'ON 🔊' : 'OFF 🔇';
-                sfxBtn.style.borderColor = enabled ? 'var(--mist-primary)' : '#555';
+                sfxBtn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
             }
 
-            // Start Souls Immediately (No Loading Screen here)
             setInterval(createSoul, 800);
         });
     </script>
