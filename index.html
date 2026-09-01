@@ -12,7 +12,6 @@
 
     <style>
         :root {
-            /* 👑 DEFAULT: THE RUINED KING (SPECTRAL MIST) */
             --void-black: #0a0a0f;
             --spectral-teal: #3ddc97;
             --mist-deep: #1fbf87;
@@ -31,7 +30,6 @@
         }
 
         body.theme-king {
-            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY) */
             --void-black: #080a12; 
             --spectral-teal: #E2C06A; 
             --mist-deep: #142440; 
@@ -43,7 +41,6 @@
             --card-border: rgba(212, 175, 55, 0.25); 
         }
 
-        /* NATIVE CURSOR HIDDEN COMPLETELY */
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
@@ -54,7 +51,8 @@
             overflow-x: hidden;
             position: relative;
             scrollbar-width: none;
-            transition: background-color 1.5s ease, color 1.5s ease;
+            transition: background-color 0.8s ease, color 0.8s ease;
+            transform: translateZ(0);
         }
         body::-webkit-scrollbar { display: none; }
 
@@ -62,74 +60,63 @@
         #blade-scrollbar {
             position: fixed; top: 0; left: 0; height: 3px; width: 0%;
             background: linear-gradient(90deg, transparent, var(--spectral-teal), var(--bone-white));
-            box-shadow: 0 0 calc(10px * var(--glow-mult)) var(--spectral-teal);
-            z-index: 9999; pointer-events: none; transition: width 0.1s ease-out, background 1.5s, box-shadow 1.5s;
-        }
-        #blade-scrollbar::after {
-            content: ''; position: absolute; right: -5px; top: -3px;
-            width: 10px; height: 9px; background: var(--bone-white);
-            clip-path: polygon(0 50%, 100% 0, 100% 100%);
-            box-shadow: 0 0 15px var(--bone-white);
-            transition: background 1.5s, box-shadow 1.5s;
+            box-shadow: 0 0 calc(8px * var(--glow-mult)) var(--spectral-teal);
+            z-index: 9999; pointer-events: none;
+            will-change: width;
         }
 
-        /* ─── CUSTOM CURSOR WISP & TRAIL ─── */
+        /* ─── HARDWARE-ACCELERATED CURSOR WISP ─── */
         .cursor-wisp {
             position: fixed; top: 0; left: 0; width: 14px; height: 14px;
             background: var(--spectral-teal); border-radius: 50%;
             pointer-events: none; z-index: 999999;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--spectral-teal);
-            transition: width 0.2s, height 0.2s, background 1.5s, box-shadow 1.5s; 
+            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--spectral-teal);
+            will-change: transform;
             mix-blend-mode: screen;
         }
         .cursor-trail {
-            position: fixed; width: 8px; height: 8px;
+            position: fixed; top: 0; left: 0; width: 8px; height: 8px;
             background: var(--ruin-purple); border-radius: 50%;
             pointer-events: none; z-index: 999998;
-            transform: translate(-50%, -50%); opacity: 0.5;
-            box-shadow: 0 0 15px var(--ruin-shadow);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
+            opacity: 0.4;
+            will-change: transform;
         }
 
-        /* ─── THE LOADING SCREEN (CINEMATIC) ─── */
+        /* ─── THE LOADING SCREEN ─── */
         #viego-loader {
             position: fixed; inset: 0; background: var(--void-black);
             z-index: 50000; display: flex; flex-direction: column;
             align-items: center; justify-content: center; overflow: hidden;
-            animation: dissolveLoader 1.5s ease-in-out 8.5s forwards;
-            transition: background 1.5s;
+            animation: dissolveLoader 1.2s ease-in-out 8.5s forwards;
+            will-change: opacity, transform;
         }
 
         .skip-btn {
             position: absolute; bottom: 30px; right: 40px;
-            background: rgba(0,0,0,0.5); border: 1px solid rgba(61, 220, 151, 0.4);
+            background: rgba(10, 10, 15, 0.7); border: 1px solid rgba(61, 220, 151, 0.4);
             color: rgba(232, 230, 225, 0.9); font-family: var(--font-body);
             font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
-            padding: 12px 24px; z-index: 50001; transition: all 0.3s ease;
+            padding: 12px 24px; z-index: 50001; transition: transform 0.2s ease, background 0.2s ease;
             clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
         }
         body.theme-king .skip-btn { border-color: rgba(226, 192, 106, 0.4); }
         .skip-btn:hover {
             color: var(--void-black); background: var(--spectral-teal);
-            border-color: var(--spectral-teal); box-shadow: 0 0 20px var(--spectral-teal);
-            font-weight: 800; transform: scale(1.05);
+            border-color: var(--spectral-teal); font-weight: 800; transform: scale(1.05);
         }
 
         .shattered-ring {
             position: absolute; width: 150px; height: 150px;
             border: 2px solid rgba(61, 220, 151, 0.1); border-radius: 50%;
             opacity: 0; animation: crackRing 3s ease-out 1s forwards;
-            transition: border-color 1.5s;
         }
         body.theme-king .shattered-ring { border-color: rgba(212, 175, 55, 0.2); }
 
         .ember {
             position: absolute; width: 6px; height: 6px;
             background: var(--spectral-teal); border-radius: 50%;
-            box-shadow: 0 0 20px 5px var(--spectral-teal);
+            box-shadow: 0 0 15px 3px var(--spectral-teal);
             animation: pulseEmber 2s ease-in-out infinite;
-            transition: background 1.5s, box-shadow 1.5s;
         }
 
         .viego-silhouette {
@@ -137,49 +124,51 @@
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center/cover no-repeat;
             mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
             -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            opacity: 0; filter: contrast(1.5) brightness(0.2) sepia(1) hue-rotate(130deg) saturate(1.5);
+            opacity: 0; filter: brightness(0.2) sepia(1) hue-rotate(130deg);
             animation: riseSilhouette 4s ease-out 3s forwards; pointer-events: none;
+            will-change: transform, opacity;
         }
 
         .flavor-text {
             position: absolute; bottom: 15%; text-align: center; font-family: var(--font-body);
             font-size: 1.15rem; color: var(--bone-white); font-weight: 300;
-            letter-spacing: 0.05em; text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            opacity: 0; overflow: hidden; white-space: nowrap;
+            letter-spacing: 0.05em; opacity: 0; overflow: hidden; white-space: nowrap;
             border-right: 2px solid var(--spectral-teal);
             animation: fadeInText 0.1s 4s forwards, typing 3.5s steps(93, end) 4s forwards, blinkCursor 0.7s step-end infinite;
-            transition: color 1.5s, border-color 1.5s;
         }
 
-        /* ─── SMOOTH DUAL BACKGROUND ART ENGINE ─── */
+        /* ─── OPTIMIZED BACKGROUND ART (GPU LAYERED) ─── */
         .background-art {
             position: fixed; top: 0; right: 0; width: 70vw; height: 100vh;
             z-index: -2; pointer-events: none;
             mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
             -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), filter 1.5s ease;
+            transition: opacity 1s ease;
+            will-change: opacity;
+            transform: translateZ(0);
         }
         
         .art-ruined {
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center right/cover no-repeat;
-            opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
+            opacity: 0.15;
         }
         .art-king {
             background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_21.jpg') center right/cover no-repeat;
-            opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
+            opacity: 0;
         }
 
-        body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
+        body.theme-king .art-ruined { opacity: 0; }
+        body.theme-king .art-king { opacity: 0.25; }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
             background: 
                 radial-gradient(ellipse at 80% 20%, rgba(61, 220, 151, 0.05) 0%, transparent 40%),
                 radial-gradient(ellipse at 20% 80%, rgba(74, 47, 107, 0.1) 0%, transparent 50%);
-            animation: driftFog 20s ease-in-out infinite alternate;
+            animation: driftFog 25s ease-in-out infinite alternate;
             opacity: var(--fog-opacity);
-            transition: opacity 0.5s ease, background 1.5s ease;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         body.theme-king .fog-layer {
@@ -188,7 +177,7 @@
                 radial-gradient(ellipse at 20% 80%, rgba(20, 36, 64, 0.12) 0%, transparent 55%);
         }
 
-        .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--fog-opacity); }
+        .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
         /* ─── NAVIGATION ─── */
         nav {
@@ -199,26 +188,26 @@
         .nav-link {
             font-family: var(--font-display); font-size: 1rem;
             color: rgba(232, 230, 225, 0.6); text-decoration: none; text-transform: uppercase;
-            letter-spacing: 0.15em; transition: all 0.3s ease, color 1.5s; position: relative;
+            letter-spacing: 0.15em; transition: color 0.25s ease; position: relative;
         }
         .nav-link::before {
             content: ''; position: absolute; bottom: -6px; left: 50%;
             width: 0; height: 1px; background: var(--spectral-teal);
-            transition: all 0.3s ease, background 1.5s, box-shadow 1.5s; transform: translateX(-50%); box-shadow: 0 0 8px var(--spectral-teal);
+            transition: width 0.25s ease, background 0.5s ease; transform: translateX(-50%);
         }
-        .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
+        .nav-link:hover, .nav-link.active { color: var(--bone-white); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── DYNAMIC FAST ENTRY ANIMATIONS ─── */
-        .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
+        /* ─── ENTRY ANIMATIONS ─── */
+        .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; will-change: transform, opacity; }
         .hero-title::after { width: 0; }
 
-        body.content-ready .hero { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        body.content-ready .hero-title::after { animation: underlineGrow 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
-        body.content-ready .hero-subtitle { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
-        body.content-ready .hero-tagline { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards; }
-        body.content-ready .stats-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards; }
-        body.content-ready .ruins-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1s forwards; }
+        body.content-ready .hero { animation: fadeUp 0.8s ease forwards; }
+        body.content-ready .hero-title::after { animation: underlineGrow 0.8s ease 0.1s forwards; }
+        body.content-ready .hero-subtitle { animation: fadeUp 0.8s ease 0.2s forwards; }
+        body.content-ready .hero-tagline { animation: fadeUp 0.8s ease 0.3s forwards; }
+        body.content-ready .stats-section { animation: fadeUp 0.8s ease 0.4s forwards; }
+        body.content-ready .ruins-section { animation: fadeUp 0.8s ease 0.5s forwards; }
 
         /* ─── HERO SECTION ─── */
         .hero {
@@ -229,27 +218,24 @@
         .hero-title {
             font-family: var(--font-display); font-size: clamp(4rem, 8vw, 7rem);
             font-weight: 900; line-height: 1; color: var(--bone-white);
-            margin-bottom: 10px; position: relative; display: inline-block; transition: color 1.5s;
+            margin-bottom: 10px; position: relative; display: inline-block;
         }
 
         .hero-title::after {
             content: ''; position: absolute; bottom: -10px; left: 0;
-            height: 2px; background: var(--spectral-teal); box-shadow: 0 0 15px var(--spectral-teal);
-            transition: background 1.5s, box-shadow 1.5s;
+            height: 2px; background: var(--spectral-teal); box-shadow: 0 0 10px var(--spectral-teal);
         }
 
         .hero-subtitle {
             font-family: var(--font-body); font-size: clamp(1rem, 1.5vw, 1.2rem);
             color: var(--spectral-teal); font-weight: 300; letter-spacing: 0.2em;
             text-transform: uppercase; margin-bottom: 30px; margin-top: 20px;
-            transition: color 1.5s;
         }
 
         .hero-tagline {
             font-family: var(--font-body); font-size: 1.1rem; color: rgba(232, 230, 225, 0.7);
             max-width: 500px; line-height: 1.8; font-style: italic;
             border-left: 2px solid var(--ruin-purple); padding-left: 20px;
-            transition: border-color 1.5s;
         }
 
         /* ─── STATS SECTION ─── */
@@ -261,23 +247,22 @@
         }
 
         .stat-card {
-            background: rgba(10, 10, 15, 0.6);
+            background: rgba(14, 16, 22, 0.85); /* Solid high-performance fallback */
             border: 1px solid var(--card-border);
             border-bottom: 2px solid var(--spectral-teal);
             padding: 25px 20px; text-align: center;
-            backdrop-filter: blur(10px); transition: all 0.3s ease, border-color 1.5s;
+            transition: transform 0.2s ease, border-color 0.2s ease;
             clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            transform: translateZ(0);
         }
 
         .stat-card:hover {
-            transform: translateY(-5px); border-color: var(--spectral-teal);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px var(--vignette-color);
+            transform: translateY(-4px); border-color: var(--spectral-teal);
         }
 
         .stat-value {
             font-family: var(--font-display); font-size: 3rem; font-weight: 900;
-            color: var(--spectral-teal); text-shadow: 0 0 15px var(--vignette-color);
-            margin-bottom: 5px; line-height: 1; transition: color 1.5s, text-shadow 1.5s;
+            color: var(--spectral-teal); margin-bottom: 5px; line-height: 1;
         }
 
         .stat-label {
@@ -290,39 +275,23 @@
 
         .section-header {
             font-family: var(--font-display); font-size: 2rem;
-            color: var(--bone-white); margin-bottom: 50px; text-shadow: 0 0 20px rgba(255,255,255,0.1);
+            color: var(--bone-white); margin-bottom: 50px;
         }
 
         .ruins-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
 
         .ruin-card {
-            background: rgba(10, 10, 15, 0.6); border: 1px solid var(--card-border);
-            padding: 40px; position: relative; overflow: hidden; backdrop-filter: blur(10px); transition: all 0.4s ease, border-color 1.5s;
-        }
-
-        .ruin-card::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(circle at center, transparent 0%, var(--vignette-color) 100%);
-            opacity: 0; transition: opacity 0.5s ease, background 1.5s; pointer-events: none;
-        }
-        
-        .ruin-card::after {
-            content: ''; position: absolute; inset: 0; border: 2px solid transparent;
-            transition: all 0.4s ease, border-color 1.5s; pointer-events: none;
+            background: rgba(14, 16, 22, 0.85); border: 1px solid var(--card-border);
+            padding: 40px; position: relative; overflow: hidden;
+            transition: transform 0.25s ease, border-color 0.25s ease;
+            transform: translateZ(0);
         }
 
         .ruin-card:hover {
-            transform: translateY(-5px); border-color: rgba(255,255,255,0.15);
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8);
+            transform: translateY(-4px); border-color: var(--spectral-teal);
         }
 
-        .ruin-card:hover::before { opacity: 1; }
-        .ruin-card:hover::after {
-            border-color: var(--spectral-teal); clip-path: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
-            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--spectral-teal);
-        }
-
-        .ruin-number { font-family: var(--font-body); font-size: 0.8rem; color: var(--mist-deep); letter-spacing: 0.2em; margin-bottom: 10px; display: block; transition: color 1.5s; }
+        .ruin-number { font-family: var(--font-body); font-size: 0.8rem; color: var(--mist-deep); letter-spacing: 0.2em; margin-bottom: 10px; display: block; }
         .ruin-title { font-family: var(--font-display); font-size: 1.8rem; color: var(--bone-white); margin-bottom: 15px; }
         .ruin-desc { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; color: rgba(232, 230, 225, 0.6); margin-bottom: 25px; }
 
@@ -330,33 +299,33 @@
             display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; background: transparent;
             border: 1px solid var(--ruin-purple); color: var(--bone-white);
             font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 0.1em;
-            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: all 0.3s ease, border-color 1.5s;
+            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: color 0.2s ease, border-color 0.2s ease;
         }
 
         .btn-ruin::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--spectral-teal);
-            transition: all 0.4s ease, background 1.5s; z-index: -1; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            transition: transform 0.25s ease; z-index: -1; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
 
-        .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 20px var(--vignette-color); }
-        .btn-ruin:hover::before { left: 0; }
+        .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; }
+        .btn-ruin:hover::before { transform: translateX(100%); }
 
         /* ─── SANCTUM CONTROLS (VIBE TUNER) ─── */
         .vibe-controller-toggle {
             position: fixed; bottom: 24px; right: 24px; z-index: 99;
-            background: rgba(10, 10, 15, 0.8); color: var(--bone-white); border: 1px solid var(--spectral-teal);
+            background: rgba(14, 16, 22, 0.9); color: var(--bone-white); border: 1px solid var(--spectral-teal);
             width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-deep);
-            font-size: 1.2rem; transition: transform 0.25s ease, border-color 1.5s, box-shadow 1.5s; backdrop-filter: blur(10px);
+            font-size: 1.2rem; transition: transform 0.2s ease;
+            transform: translateZ(0);
         }
-        .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); border-color: var(--bone-white); color: var(--spectral-teal); }
+        .vibe-controller-toggle:hover { transform: scale(1.08); color: var(--spectral-teal); }
 
         .vibe-panel {
             position: fixed; bottom: 95px; right: 24px; z-index: 100;
-            background: rgba(10, 10, 15, 0.96); border: 1px solid var(--spectral-teal);
-            box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-deep);
-            border-radius: 8px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
-            display: none; flex-direction: column; gap: 16px; transition: border-color 1.5s, box-shadow 1.5s;
+            background: rgba(10, 12, 16, 0.98); border: 1px solid var(--spectral-teal);
+            border-radius: 8px; padding: 24px 26px; width: 330px;
+            display: none; flex-direction: column; gap: 16px;
+            transform: translateZ(0);
         }
         .vibe-panel.open { display: flex; }
         .vibe-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255, 255, 255, 0.15); padding-bottom: 10px; }
@@ -365,34 +334,34 @@
         .theme-switch-row { display: flex; gap: 8px; }
         .theme-btn {
             flex: 1; font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em;
-            padding: 8px 4px; border-radius: 4px; cursor: pointer; text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: var(--bone-white); transition: all 0.25s ease;
+            padding: 8px 4px; border-radius: 4px; text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: var(--bone-white);
+            transition: background 0.2s ease, border-color 0.2s ease;
         }
-        .theme-btn.active { border-color: var(--spectral-teal); background: var(--spectral-teal); color: var(--void-black); font-weight: 800; box-shadow: 0 0 15px var(--vignette-color); }
+        .theme-btn.active { border-color: var(--spectral-teal); background: var(--spectral-teal); color: var(--void-black); font-weight: 800; }
 
         .vibe-row { display: flex; flex-direction: column; gap: 6px; }
         .vibe-row label { font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232, 230, 225, 0.8); display: flex; justify-content: space-between; }
-        .vibe-row input[type="range"] { accent-color: var(--spectral-teal); height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); cursor: pointer; }
+        .vibe-row input[type="range"] { accent-color: var(--spectral-teal); height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); }
 
-        .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s, border-color 1.5s; width: 100%; margin-top: 5px; }
+        .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); transition: background 0.2s ease; width: 100%; margin-top: 5px; }
         .sfx-btn:hover { background: var(--spectral-teal); color: var(--void-black); }
 
-        /* ─── KEYFRAMES ─── */
-        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 30px 10px var(--spectral-teal); } }
-        @keyframes crackRing { 0% { opacity: 1; transform: scale(0.8); border-color: rgba(61, 220, 151, 0.1); } 50% { opacity: 1; transform: scale(1.2); border-color: var(--spectral-teal); box-shadow: inset 0 0 20px var(--spectral-teal); } 100% { opacity: 0; transform: scale(2); border-color: transparent; } }
-        @keyframes riseSilhouette { 0% { opacity: 0; transform: translateY(50px); filter: brightness(0); } 100% { opacity: 0.6; transform: translateY(0); filter: brightness(0.4) sepia(1) hue-rotate(130deg); } }
+        /* ─── ANIMATIONS ─── */
+        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.3); opacity: 1; } }
+        @keyframes crackRing { 0% { opacity: 1; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0; transform: scale(1.6); } }
+        @keyframes riseSilhouette { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 0.6; transform: translateY(0); } }
         @keyframes fadeInText { to { opacity: 1; } }
         @keyframes typing { from { width: 0; } to { width: 94ch; } }
         @keyframes blinkCursor { 50% { border-color: transparent; } }
-        @keyframes dissolveLoader { 0% { opacity: 1; filter: blur(0); transform: scale(1); } 100% { opacity: 0; filter: blur(20px); transform: scale(1.1); pointer-events: none; visibility: hidden; display: none; } }
-        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes dissolveLoader { 0% { opacity: 1; } 100% { opacity: 0; visibility: hidden; display: none; } }
+        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes underlineGrow { 0% { width: 0; } 100% { width: 100%; } }
-        @keyframes driftFog { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
-        @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+        @keyframes driftFog { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-15px, 15px, 0); } }
+        @keyframes soulRise { 0% { transform: translate3d(0, 100vh, 0); opacity: 0; } 20% { opacity: 0.4; } 80% { opacity: 0.3; } 100% { transform: translate3d(0, -10vh, 0); opacity: 0; } }
 
         @media (max-width: 900px) {
-            .ruin-media { margin: -40px -30px 25px -30px; width: calc(100% + 60px); }
-            .ruin-card { padding: 40px 30px; }
+            .ruin-card { padding: 30px 20px; }
             .vibe-panel { width: calc(100vw - 48px); right: 24px; }
         }
     </style>
@@ -409,18 +378,18 @@
         <button class="skip-btn" id="btn-skip">Skip Sequence <i class="fa-solid fa-forward-step"></i></button>
     </div>
 
-    <!-- ─── CUSTOM CURSOR & SCROLLBAR ─── -->
+    <!-- ─── SCROLLBAR & CURSOR ─── -->
     <div id="blade-scrollbar"></div>
     <div class="cursor-wisp" id="cursor-wisp"></div>
 
-    <!-- ─── SMOOTH DUAL BACKGROUND ART ─── -->
+    <!-- ─── BACKGROUND ART ─── -->
     <div class="background-art art-ruined"></div>
     <div class="background-art art-king"></div>
     
     <div class="fog-layer"></div>
     <div class="soul-particles" id="soul-container"></div>
 
-    <!-- ─── SITE CONTENT ─── -->
+    <!-- ─── NAVIGATION ─── -->
     <nav>
         <a href="index.html" class="nav-link active">The Throne</a>
         <a href="games.html" class="nav-link">Realms</a>
@@ -436,7 +405,7 @@
         </div>
     </section>
 
-    <!-- ─── THE RUINED STATS ─── -->
+    <!-- ─── STATS ─── -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-card">
@@ -475,7 +444,7 @@
         </div>
     </section>
 
-    <!-- ─── SANCTUM CONTROLS (VIBE TUNER) ─── -->
+    <!-- ─── SANCTUM CONTROLS ─── -->
     <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Sanctum Controls">
         <i class="fa-solid fa-sliders"></i>
     </button>
@@ -483,7 +452,7 @@
     <div class="vibe-panel" id="vibe-panel">
         <div class="vibe-header">
             <span class="vibe-title">SANCTUM CONTROLS</span>
-            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:var(--bone-white); cursor:pointer; font-size:1.1rem;">✕</button>
+            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:var(--bone-white); font-size:1.1rem;">✕</button>
         </div>
 
         <div class="vibe-row">
@@ -512,123 +481,112 @@
     <script src="sfx.js"></script>
 
     <script>
-        // ─── EVERY-TIME CINEMATIC LOGIC ───
+        // ─── CINEMATIC LOGIC ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
 
-        function skipCinematic() {
+        function revealContent() {
             loader.style.display = 'none';
             document.body.classList.add('content-ready');
             startSouls(); 
         }
 
-        skipBtn.addEventListener('click', skipCinematic);
+        skipBtn.addEventListener('click', revealContent);
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && loader.style.display !== 'none') skipCinematic();
+            if (e.key === 'Escape' && loader.style.display !== 'none') revealContent();
         });
 
-        // Always plays, fades out after 10s naturally
+        setTimeout(() => {
+            if (!document.body.classList.contains('content-ready')) {
+                document.body.classList.add('content-ready');
+            }
+        }, 8500);
+
         setTimeout(() => {
             if (loader.style.display !== 'none') {
                 loader.style.display = 'none';
-                document.body.classList.add('content-ready');
                 startSouls();
             }
         }, 10000);
 
-        // ─── SCROLL PROGRESS BLADE ───
+        // ─── SCROLL PROGRESS ───
         window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const winScroll = document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("blade-scrollbar").style.width = scrolled + "%";
-        });
+            document.getElementById("blade-scrollbar").style.width = ((winScroll / height) * 100) + "%";
+        }, { passive: true });
 
-        // ─── CUSTOM WISP CURSOR ───
+        // ─── OPTIMIZED TRANSFORM-BASED CURSOR ───
         const wisp = document.getElementById('cursor-wisp');
+        const maxTrails = 4; // Lower count prevents GC stutter
         const trails = [];
-        const maxTrails = 8;
 
         for(let i=0; i<maxTrails; i++) {
             const t = document.createElement('div');
             t.className = 'cursor-trail';
             document.body.appendChild(t);
-            trails.push({ el: t, x: 0, y: 0, alpha: 0 });
+            trails.push({ el: t, x: 0, y: 0 });
         }
 
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
 
-        document.addEventListener('mousemove', (e) => {
+        window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            wisp.style.left = mouseX + 'px';
-            wisp.style.top = mouseY + 'px';
-        });
-
-        document.querySelectorAll('a, button, .btn-ruin, .stat-card, .skip-btn').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                wisp.style.transform = 'translate(-50%, -50%) scale(2.5)';
-                wisp.style.background = 'transparent';
-                wisp.style.border = '1px solid var(--spectral-teal)';
-            });
-            el.addEventListener('mouseleave', () => {
-                wisp.style.transform = 'translate(-50%, -50%) scale(1)';
-                wisp.style.background = 'var(--spectral-teal)';
-                wisp.style.border = 'none';
-            });
-        });
+            wisp.style.transform = `translate3d(${mouseX - 7}px, ${mouseY - 7}px, 0)`;
+        }, { passive: true });
 
         function animateTrails() {
             let prevX = mouseX;
             let prevY = mouseY;
 
-            trails.forEach((trail, index) => {
-                trail.x += (prevX - trail.x) * 0.3;
-                trail.y += (prevY - trail.y) * 0.3;
-                
-                trail.el.style.left = trail.x + 'px';
-                trail.el.style.top = trail.y + 'px';
-                
-                const scale = (maxTrails - index) / maxTrails;
-                trail.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            for(let i=0; i<maxTrails; i++) {
+                const trail = trails[i];
+                trail.x += (prevX - trail.x) * 0.35;
+                trail.y += (prevY - trail.y) * 0.35;
+                trail.el.style.transform = `translate3d(${trail.x - 4}px, ${trail.y - 4}px, 0)`;
                 prevX = trail.x;
                 prevY = trail.y;
-            });
+            }
             requestAnimationFrame(animateTrails);
         }
-        animateTrails();
+        requestAnimationFrame(animateTrails);
 
-        // ─── GREEN SOUL PARTICLES GENERATOR ───
+        // ─── CAPPED SOUL PARTICLES POOL ───
         const soulContainer = document.getElementById('soul-container');
-        let soulsStarted = false;
+        let activeSouls = 0;
+        const MAX_SOULS = 12;
 
         function createSoul() {
+            if (activeSouls >= MAX_SOULS) return;
+            activeSouls++;
+
             const soul = document.createElement('div');
-            const size = Math.random() * 4 + 2;
-            
+            const size = (Math.random() * 3 + 2).toFixed(1);
             soul.style.position = 'absolute';
-            soul.style.left = Math.random() * 100 + 'vw';
+            soul.style.left = (Math.random() * 100).toFixed(1) + 'vw';
             soul.style.width = size + 'px';
             soul.style.height = size + 'px';
             soul.style.background = 'var(--spectral-teal)';
             soul.style.borderRadius = '50%';
-            soul.style.boxShadow = '0 0 10px var(--mist-deep)';
-            soul.style.opacity = '0';
-            soul.style.animation = `soulRise ${Math.random() * 10 + 10}s linear forwards`;
+            soul.style.animation = `soulRise ${(Math.random() * 6 + 8).toFixed(1)}s linear forwards`;
             
             soulContainer.appendChild(soul);
-            setTimeout(() => { soul.remove(); }, 20000);
+            setTimeout(() => { 
+                soul.remove(); 
+                activeSouls--;
+            }, 14000);
         }
         
+        let soulsInterval = null;
         function startSouls() {
-            if(!soulsStarted) {
-                soulsStarted = true;
-                setInterval(createSoul, 800);
+            if (!soulsInterval) {
+                soulsInterval = setInterval(createSoul, 1200);
             }
         }
 
-        // ─── THEME & SETTINGS CONTROLS ───
+        // ─── SETTINGS & THEME ───
         function setViegoTheme(theme) {
             const isKing = (theme === 'king');
             document.body.classList.toggle('theme-king', isKing);
@@ -667,7 +625,6 @@
             }
         }
 
-        // LOAD SAVED SETTINGS
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('viego_aspect') || 'ruined';
             setViegoTheme(savedTheme);
