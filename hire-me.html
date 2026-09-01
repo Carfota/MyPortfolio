@@ -3,417 +3,442 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commissions & Services | Carfota</title>
+    <title>Covenant & Services | Carfota</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600;800&family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
-            --bg: #0D0D1A;
-            --fg: #FFFFFF;
-            --muted-container: rgba(45, 27, 78, 0.88);
+            /* 👑 DEFAULT: THE RUINED KING (SPECTRAL MIST) */
+            --void-black: #0a0a0f;
+            --spectral-teal: #3ddc97;
+            --mist-deep: #1fbf87;
+            --ruin-purple: #4a2f6b;
+            --ruin-shadow: #6b3fa0;
+            --bone-white: #e8e6e1;
+
+            --font-display: 'Cinzel Decorative', serif;
+            --font-sub: 'Cinzel', serif;
+            --font-body: 'Inter', sans-serif;
             
-            --accent-1: #FF3AF2;
-            --accent-2: #00F5D4;
-            --accent-3: #FFE600;
-            --accent-4: #FF6B35;
-            --accent-5: #7B2FFF;
-
-            --font-head: 'Outfit', sans-serif;
-            --font-body: 'DM Sans', sans-serif;
-            --font-display: 'Bungee', cursive;
-
-            --glow-intensity: 1;
-            --boom-tilt: 1;
-            --pattern-opacity: 1;
-            --anim-speed-mult: 1;
+            --glow-mult: 1;
+            --fog-opacity: 1;
+            
+            --vignette-color: rgba(61, 220, 151, 0.1);
+            --card-border: rgba(232, 230, 225, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body.theme-king {
+            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY) */
+            --void-black: #080a12; 
+            --spectral-teal: #E2C06A; 
+            --mist-deep: #142440; 
+            --ruin-purple: #9EABB8; 
+            --ruin-shadow: #7A6332; 
+            --bone-white: #F9F6EE; 
+            
+            --vignette-color: rgba(226, 192, 106, 0.12); 
+            --card-border: rgba(212, 175, 55, 0.25); 
+        }
+
+        /* NATIVE CURSOR HIDDEN COMPLETELY */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
-            background-color: var(--bg);
-            color: var(--fg);
+            background-color: var(--void-black);
+            color: var(--bone-white);
             font-family: var(--font-body);
             min-height: 100vh;
             overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             position: relative;
-            filter: saturate(calc(0.5 + (0.5 * var(--glow-intensity))));
+            scrollbar-width: none;
+            transition: background-color 1.5s ease, color 1.5s ease;
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        /* ─── BLADE SCROLL PROGRESS BAR ─── */
+        #blade-scrollbar {
+            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+            background: linear-gradient(90deg, transparent, var(--spectral-teal), var(--bone-white));
+            box-shadow: 0 0 calc(10px * var(--glow-mult)) var(--spectral-teal);
+            z-index: 9999; pointer-events: none; transition: width 0.1s ease-out, background 1.5s, box-shadow 1.5s;
+        }
+        #blade-scrollbar::after {
+            content: ''; position: absolute; right: -5px; top: -3px;
+            width: 10px; height: 9px; background: var(--bone-white);
+            clip-path: polygon(0 50%, 100% 0, 100% 100%);
+            box-shadow: 0 0 15px var(--bone-white);
+            transition: background 1.5s, box-shadow 1.5s;
         }
 
-        .bg-pattern-layer {
-            position: fixed; inset: 0; pointer-events: none; z-index: 0;
-            opacity: var(--pattern-opacity);
-            transition: opacity 0.3s ease;
+        /* ─── CUSTOM CURSOR WISP & TRAIL ─── */
+        .cursor-wisp {
+            position: fixed; top: 0; left: 0; width: 14px; height: 14px;
+            background: var(--spectral-teal); border-radius: 50%;
+            pointer-events: none; z-index: 999999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--spectral-teal);
+            transition: width 0.2s, height 0.2s, background 1.5s, box-shadow 1.5s; 
+            mix-blend-mode: screen;
+        }
+        .cursor-trail {
+            position: fixed; width: 8px; height: 8px;
+            background: var(--ruin-purple); border-radius: 50%;
+            pointer-events: none; z-index: 999998;
+            transform: translate(-50%, -50%); opacity: 0.5;
+            box-shadow: 0 0 15px var(--ruin-shadow);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
         }
 
-        .pattern-dots {
-            position: absolute; inset: 0;
-            background-image: radial-gradient(circle, var(--accent-1) 1.5px, transparent 1.5px);
-            background-size: 28px 28px;
-            opacity: 0.15;
+        /* ─── SMOOTH DUAL BACKGROUND ART ENGINE ─── */
+        .background-art {
+            position: fixed; top: 0; right: 0; width: 70vw; height: 100vh;
+            z-index: -2; pointer-events: none;
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), filter 1.5s ease;
+        }
+        
+        .art-ruined {
+            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center right/cover no-repeat;
+            opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
+        }
+        .art-king {
+            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_21.jpg') center right/cover no-repeat;
+            opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
         }
 
-        .pattern-stripes {
-            position: absolute; inset: 0;
-            background-image: repeating-linear-gradient(
-                45deg, transparent, transparent 14px,
-                rgba(255, 230, 0, 0.05) 14px, rgba(255, 230, 0, 0.05) 28px
-            );
+        body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
+        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
+
+        .fog-layer {
+            position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background: 
+                radial-gradient(ellipse at 80% 20%, rgba(61, 220, 151, 0.05) 0%, transparent 40%),
+                radial-gradient(ellipse at 20% 80%, rgba(74, 47, 107, 0.1) 0%, transparent 50%);
+            animation: driftFog 20s ease-in-out infinite alternate;
+            opacity: var(--fog-opacity);
+            transition: opacity 0.5s ease, background 1.5s ease;
         }
 
-        .pattern-mesh {
-            position: absolute; inset: 0;
-            background:
-                radial-gradient(ellipse at 10% 20%, rgba(255, 58, 242, 0.22) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 30%, rgba(0, 245, 212, 0.18) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(123, 47, 255, 0.25) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 70%, rgba(255, 107, 53, 0.15) 0%, transparent 50%);
+        body.theme-king .fog-layer {
+            background: 
+                radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 45%),
+                radial-gradient(ellipse at 20% 80%, rgba(20, 36, 64, 0.12) 0%, transparent 55%);
         }
 
-        .bg-watermark {
-            position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(calc(-10deg * var(--boom-tilt)));
-            font-family: var(--font-display);
-            font-size: clamp(7rem, 16vw, 16rem);
-            line-height: 0.8;
-            color: rgba(255, 230, 0, calc(0.03 * var(--pattern-opacity)));
-            text-shadow: 4px 4px 0px rgba(255, 58, 242, calc(0.03 * var(--pattern-opacity))), -4px -4px 0px rgba(0, 245, 212, calc(0.03 * var(--pattern-opacity)));
-            white-space: nowrap; user-select: none; pointer-events: none; z-index: 1;
+        .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--fog-opacity); }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: relative; z-index: 10; display: flex; justify-content: center; gap: 40px; padding: 40px 0;
+            border-bottom: 1px solid rgba(232, 230, 225, 0.05); margin-bottom: 40px;
         }
-
-        .floating-shape {
-            position: absolute; pointer-events: none; z-index: 2;
-            filter: drop-shadow(0 0 calc(15px * var(--glow-intensity)) currentColor);
-            opacity: calc(0.2 + (0.8 * var(--pattern-opacity)));
-        }
-
-        .shape-1 { top: 6%; left: 4%; color: var(--accent-3); animation: wiggle calc(2s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 2.8rem; }
-        .shape-2 { top: 18%; right: 5%; color: var(--accent-2); animation: float calc(5s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 2.6rem; }
-        .shape-3 { top: 45%; left: 2%; color: var(--accent-1); animation: spin-slow calc(16s / var(--anim-speed-mult)) linear infinite; font-size: 3.2rem; }
-        .shape-4 { bottom: 15%; right: 4%; color: var(--accent-4); animation: bounce-subtle calc(2.5s / var(--anim-speed-mult)) ease-in-out infinite; font-size: 3rem; }
-
-        .container {
-            position: relative; z-index: 10; max-width: 1100px; width: 100%;
-            padding: 40px 24px 80px; display: flex; flex-direction: column; align-items: center;
-        }
-
-        nav { display: flex; justify-content: center; gap: 14px; margin-bottom: 45px; flex-wrap: wrap; }
 
         .nav-link {
-            font-family: var(--font-head); font-weight: 900; font-size: 0.95rem;
-            letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg); text-decoration: none;
-            padding: 12px 30px; border-radius: 9999px; background: var(--muted-container);
-            border: 4px solid var(--accent-1);
-            box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-5), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-2);
-            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            display: inline-flex; align-items: center; gap: 8px;
+            font-family: var(--font-display); font-size: 1rem;
+            color: rgba(232, 230, 225, 0.6); text-decoration: none; text-transform: uppercase;
+            letter-spacing: 0.15em; transition: all 0.3s ease, color 1.5s; position: relative;
         }
+        .nav-link::before {
+            content: ''; position: absolute; bottom: -6px; left: 50%;
+            width: 0; height: 1px; background: var(--spectral-teal);
+            transition: all 0.3s ease, background 1.5s, box-shadow 1.5s; transform: translateX(-50%); box-shadow: 0 0 8px var(--spectral-teal);
+        }
+        .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
+        .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        .nav-link:nth-child(2) { border-color: var(--accent-2); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-1), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-3); }
-        .nav-link:nth-child(3) { border-color: var(--accent-3); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-4), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-5); }
-        .nav-link:nth-child(4) { border-color: var(--accent-4); box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-2), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-1); }
-
-        .nav-link:hover, .nav-link.active {
-            transform: scale(calc(1 + (0.1 * var(--boom-tilt)))) translateY(-4px) rotate(calc(-1deg * var(--boom-tilt)));
-            border-color: var(--accent-3); background: var(--accent-1); color: #0D0D1A;
-            box-shadow: 0 0 calc(25px * var(--glow-intensity)) rgba(255, 58, 242, 0.8), 6px 6px 0px var(--accent-3), 12px 12px 0px var(--accent-2);
+        /* ─── CONTAINER & HERO ─── */
+        .container {
+            position: relative; z-index: 10; max-width: 1200px; width: 100%;
+            padding: 0 24px 90px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;
         }
 
         .hero-badge {
-            font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 0.15em; color: #0D0D1A;
-            background: var(--accent-2); padding: 8px 24px; border-radius: 9999px;
-            border: 4px dashed var(--accent-1); transform: rotate(calc(-2deg * var(--boom-tilt)));
-            box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-3), calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-5);
+            font-family: var(--font-sub); font-size: 0.75rem; letter-spacing: 0.25em; color: var(--void-black);
+            background: var(--spectral-teal); padding: 6px 20px; font-weight: 800;
+            clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--spectral-teal);
             margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px;
-            animation: wiggle calc(3s / var(--anim-speed-mult)) ease-in-out infinite;
+            transition: background 1.5s, box-shadow 1.5s;
         }
 
         .payment-status-banner {
-            width: 100%;
-            background: rgba(255, 107, 53, 0.18);
-            border: 3px solid var(--accent-4);
-            border-radius: 16px;
-            padding: 14px 20px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-family: var(--font-head);
-            font-weight: 800;
-            font-size: 0.95rem;
-            color: #FFFFFF;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            box-shadow: calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-3);
-            text-align: center;
+            width: 100%; max-width: 900px;
+            background: rgba(10, 10, 15, 0.7);
+            border: 1px solid var(--card-border);
+            border-left: 3px solid var(--spectral-teal);
+            padding: 14px 24px; margin-bottom: 35px;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            font-family: var(--font-body); font-weight: 600; font-size: 0.85rem;
+            color: var(--bone-white); letter-spacing: 0.08em; text-transform: uppercase;
+            box-shadow: inset 0 0 20px var(--vignette-color);
+            backdrop-filter: blur(10px);
+            transition: border-color 1.5s;
         }
 
-        .payment-status-banner i {
-            color: var(--accent-3);
-            font-size: 1.3rem;
-            animation: bounce-subtle 1.5s infinite;
-        }
+        .payment-status-banner i { color: var(--spectral-teal); font-size: 1.1rem; }
 
         h1 {
-            font-family: var(--font-head); font-size: clamp(3.2rem, 8vw, 6.2rem); font-weight: 900;
-            line-height: 0.95; letter-spacing: -0.04em; text-transform: uppercase; text-align: center; color: var(--fg);
-            text-shadow: calc(3px * var(--boom-tilt)) calc(3px * var(--boom-tilt)) 0px var(--accent-5), calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-1), calc(9px * var(--boom-tilt)) calc(9px * var(--boom-tilt)) 0px var(--accent-2), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-3);
-            margin-bottom: 12px;
-        }
-
-        .gradient-text {
-            background: linear-gradient(90deg, var(--accent-3), var(--accent-1), var(--accent-2), var(--accent-4), var(--accent-3));
-            background-size: 300% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            animation: gradient-shift 4s ease infinite;
+            font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900; line-height: 1; color: var(--bone-white);
+            margin-bottom: 10px; text-align: center; text-transform: uppercase;
+            text-shadow: 0 0 calc(20px * var(--glow-mult)) rgba(255,255,255,0.1);
         }
 
         .hero-subtitle {
-            font-family: var(--font-display); font-size: clamp(0.95rem, 2vw, 1.25rem); color: var(--accent-3);
-            text-shadow: calc(2px * var(--boom-tilt)) calc(2px * var(--boom-tilt)) 0px var(--accent-5), calc(4px * var(--boom-tilt)) calc(4px * var(--boom-tilt)) 0px var(--accent-1);
-            letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 30px; transform: rotate(calc(1deg * var(--boom-tilt)));
+            font-family: var(--font-body); font-size: clamp(0.85rem, 2vw, 1.1rem);
+            color: var(--spectral-teal); font-weight: 300; letter-spacing: 0.25em;
+            text-transform: uppercase; margin-bottom: 45px; text-align: center;
+            text-shadow: 0 0 calc(10px * var(--glow-mult)) var(--mist-deep); transition: color 1.5s;
         }
 
-        /* ─── SERVICE TIERS ─── */
+        /* ─── PRICING TIERS GRID ─── */
         .pricing-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 28px; width: 100%; margin-bottom: 40px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px; width: 100%; margin-bottom: 50px;
         }
 
         .price-card {
-            background: var(--muted-container); border-radius: 28px; padding: 36px 28px;
-            backdrop-filter: blur(16px); transition: all 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            text-align: left; position: relative;
+            background: rgba(10, 10, 15, 0.6); border: 1px solid var(--card-border);
+            padding: 40px 32px; backdrop-filter: blur(12px); position: relative;
+            overflow: hidden; display: flex; flex-direction: column;
+            transition: all 0.4s ease, border-color 1.5s;
+            clip-path: polygon(0 15px, 15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
         }
 
-        .price-card:nth-child(1) {
-            border: 4px solid var(--accent-2);
-            box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-5), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-1);
-            transform: rotate(calc(-1deg * var(--boom-tilt)));
+        .price-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, var(--vignette-color) 100%);
+            opacity: 0; transition: opacity 0.5s ease, background 1.5s; pointer-events: none;
         }
 
-        .price-card:nth-child(2) {
-            border: 5px solid var(--accent-1);
-            box-shadow: calc(8px * var(--boom-tilt)) calc(8px * var(--boom-tilt)) 0px var(--accent-3), calc(16px * var(--boom-tilt)) calc(16px * var(--boom-tilt)) 0px var(--accent-4);
-            transform: scale(calc(1 + (0.03 * var(--boom-tilt)))) rotate(calc(1deg * var(--boom-tilt)));
-        }
-
-        .price-card:nth-child(3) {
-            border: 4px dashed var(--accent-4);
-            box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-2), calc(12px * var(--boom-tilt)) calc(12px * var(--boom-tilt)) 0px var(--accent-3);
-            transform: rotate(calc(-0.5deg * var(--boom-tilt)));
+        .price-card::after {
+            content: ''; position: absolute; inset: 0; border: 2px solid transparent;
+            transition: all 0.4s ease, border-color 1.5s; pointer-events: none;
         }
 
         .price-card:hover {
-            transform: scale(1.05) translateY(-8px) rotate(0deg) !important;
-            box-shadow: 0 0 calc(30px * var(--glow-intensity)) var(--accent-1), 10px 10px 0px var(--accent-3) !important;
+            transform: translateY(-6px); border-color: rgba(255,255,255,0.15);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 15px 35px rgba(0,0,0,0.8);
+        }
+
+        .price-card:hover::before { opacity: 1; }
+        .price-card:hover::after {
+            border-color: var(--spectral-teal);
+            clip-path: polygon(0 15px, 15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--spectral-teal);
         }
 
         .tier-tag {
-            font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.15em;
-            display: inline-block; padding: 4px 12px; border-radius: 9999px; margin-bottom: 12px;
-            color: #0D0D1A;
+            font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.2em;
+            font-weight: 800; color: var(--mist-deep); text-transform: uppercase;
+            margin-bottom: 12px; display: block; transition: color 1.5s;
         }
 
-        .price-card:nth-child(1) .tier-tag { background: var(--accent-2); }
-        .price-card:nth-child(2) .tier-tag { background: var(--accent-1); color: #FFF; }
-        .price-card:nth-child(3) .tier-tag { background: var(--accent-4); }
-
         .tier-title {
-            font-family: var(--font-head); font-size: 1.7rem; font-weight: 900;
-            color: #FFF; margin-bottom: 8px; text-transform: uppercase;
+            font-family: var(--font-display); font-size: 1.8rem; font-weight: 700;
+            color: var(--bone-white); margin-bottom: 10px;
         }
 
         .service-rate-label {
-            font-family: var(--font-head); font-size: 1.25rem; font-weight: 900;
-            color: var(--accent-3); text-shadow: 2px 2px 0px var(--accent-5);
-            text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+            font-family: var(--font-sub); font-size: 1.25rem; font-weight: 900;
+            color: var(--spectral-teal); text-shadow: 0 0 10px var(--vignette-color);
+            text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;
+            transition: color 1.5s;
         }
 
         .service-note {
-            font-size: 0.9rem; color: var(--accent-2); font-weight: 700; margin-bottom: 20px;
+            font-size: 0.85rem; color: rgba(232, 230, 225, 0.5); font-weight: 400; margin-bottom: 25px;
         }
 
-        .feature-list { list-style: none; padding: 0; margin: 0 0 24px 0; display: flex; flex-direction: column; gap: 10px; }
+        .feature-list {
+            list-style: none; padding: 0; margin: 0 0 30px 0; display: flex;
+            flex-direction: column; gap: 12px; flex-grow: 1;
+        }
 
         .feature-list li {
-            font-size: 0.95rem; color: #ddd; display: flex; align-items: center; gap: 10px;
+            font-size: 0.92rem; color: rgba(232, 230, 225, 0.75); display: flex;
+            align-items: center; gap: 12px; line-height: 1.5;
         }
 
-        .feature-list li i { color: var(--accent-2); font-size: 0.85rem; }
+        .feature-list li i { color: var(--spectral-teal); font-size: 0.85rem; transition: color 1.5s; }
 
-        /* ─── TOS CONTAINER ─── */
+        /* ─── TERMS OF SERVICE (COVENANT PARCHMENT) ─── */
         .tos-box {
-            background: rgba(13, 13, 26, 0.9); border: 3px dashed var(--accent-3);
-            border-radius: 20px; padding: 28px 32px; width: 100%; text-align: left;
-            box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-1);
-            margin-bottom: 40px;
+            background: rgba(10, 10, 15, 0.6); border: 1px solid var(--card-border);
+            border-left: 2px solid var(--spectral-teal); padding: 32px 36px;
+            width: 100%; max-width: 900px; text-align: left;
+            backdrop-filter: blur(10px); margin-bottom: 45px;
+            transition: border-color 1.5s;
         }
 
         .tos-title {
-            font-family: var(--font-head); font-weight: 900; font-size: 1.25rem;
-            color: var(--accent-3); text-transform: uppercase; margin-bottom: 14px;
-            display: flex; align-items: center; gap: 8px;
+            font-family: var(--font-display); font-size: 1.35rem; color: var(--bone-white);
+            margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
         }
 
-        .tos-list { padding-left: 20px; color: #ccc; font-size: 0.92rem; line-height: 1.8; margin: 0; }
-        .tos-list strong { color: var(--accent-2); }
+        .tos-list {
+            padding-left: 20px; color: rgba(232, 230, 225, 0.7);
+            font-size: 0.92rem; line-height: 1.8; margin: 0;
+        }
+        .tos-list strong { color: var(--spectral-teal); font-weight: 600; transition: color 1.5s; }
 
+        /* ─── ORDER BUTTON ─── */
         .btn-order {
-            font-family: var(--font-head); font-weight: 900; font-size: 1.1rem; letter-spacing: 0.15em;
-            text-transform: uppercase; text-decoration: none; color: #FFFFFF;
-            background: linear-gradient(90deg, #5865F2, var(--accent-1)); border: 4px solid var(--accent-3);
-            padding: 16px 42px; border-radius: 9999px; cursor: pointer;
-            box-shadow: calc(6px * var(--boom-tilt)) calc(6px * var(--boom-tilt)) 0px var(--accent-2), 0 0 calc(25px * var(--glow-intensity)) rgba(88, 101, 242, 0.6);
-            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            display: inline-flex; align-items: center; gap: 12px;
+            display: inline-flex; align-items: center; gap: 12px; padding: 16px 38px;
+            background: transparent; border: 1px solid var(--ruin-purple); color: var(--bone-white);
+            font-family: var(--font-display); font-size: 0.95rem; letter-spacing: 0.15em;
+            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden;
+            transition: all 0.3s ease, border-color 1.5s;
+        }
+
+        .btn-order::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--spectral-teal); transition: all 0.4s ease, background 1.5s; z-index: -1;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
 
         .btn-order:hover {
-            transform: scale(1.1) translateY(-4px) rotate(calc(1.5deg * var(--boom-tilt)));
-            background: linear-gradient(90deg, var(--accent-2), #5865F2); color: #0D0D1A;
-            border-color: var(--accent-1);
-            box-shadow: 0 0 35px rgba(0, 245, 212, 0.8), 10px 10px 0px var(--accent-3);
+            border-color: var(--spectral-teal); color: var(--void-black); font-weight: 800;
+            box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--spectral-teal);
+            transform: translateY(-3px);
+        }
+        .btn-order:hover::before { left: 0; }
+
+        footer {
+            margin-top: 50px; font-family: var(--font-body); font-size: 0.75rem;
+            letter-spacing: 0.3em; color: var(--spectral-teal); text-transform: uppercase;
+            opacity: 0.6; text-align: center; transition: color 1.5s;
         }
 
-        footer { margin-top: 70px; font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.25em; color: var(--accent-2); text-shadow: 2px 2px 0px var(--accent-5); text-transform: uppercase; text-align: center; }
-
-        /* VIBE TUNER */
+        /* ─── SANCTUM CONTROLS (VIBE TUNER) ─── */
         .vibe-controller-toggle {
             position: fixed; bottom: 24px; right: 24px; z-index: 99;
-            background: var(--accent-3); color: #0D0D1A; border: 4px solid var(--accent-1);
-            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 4px 4px 0px var(--accent-5), 0 0 20px var(--accent-3);
-            font-size: 1.5rem; transition: transform 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            background: rgba(10, 10, 15, 0.8); color: var(--bone-white); border: 1px solid var(--spectral-teal);
+            width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-deep);
+            font-size: 1.2rem; transition: transform 0.25s ease, border-color 1.5s, box-shadow 1.5s; backdrop-filter: blur(10px);
         }
-        .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); background: var(--accent-2); }
+        .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); border-color: var(--bone-white); color: var(--spectral-teal); }
+
         .vibe-panel {
             position: fixed; bottom: 95px; right: 24px; z-index: 100;
-            background: rgba(13, 13, 26, 0.96); border: 5px solid var(--accent-2);
-            box-shadow: 0 0 40px rgba(0, 245, 212, 0.4), 8px 8px 0px var(--accent-1);
-            border-radius: 24px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
-            display: none; flex-direction: column; gap: 16px;
+            background: rgba(10, 10, 15, 0.96); border: 1px solid var(--spectral-teal);
+            box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-deep);
+            border-radius: 8px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
+            display: none; flex-direction: column; gap: 16px; transition: border-color 1.5s, box-shadow 1.5s;
         }
         .vibe-panel.open { display: flex; }
-        .vibe-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed rgba(255, 255, 255, 0.15); padding-bottom: 10px; }
-        .vibe-title { font-family: var(--font-display); font-size: 1.05rem; color: var(--accent-3); }
-        .vibe-tip { font-size: 0.78rem; line-height: 1.4; color: #bbb; background: rgba(255, 58, 242, 0.1); border-left: 3px solid var(--accent-1); padding: 8px 10px; border-radius: 4px; }
+        .vibe-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255, 255, 255, 0.15); padding-bottom: 10px; }
+        .vibe-title { font-family: var(--font-display); font-size: 1.05rem; color: var(--bone-white); letter-spacing: 0.1em; }
+
+        .theme-switch-row { display: flex; gap: 8px; }
+        .theme-btn {
+            flex: 1; font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em;
+            padding: 8px 4px; border-radius: 4px; cursor: pointer; text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: var(--bone-white); transition: all 0.25s ease;
+        }
+        .theme-btn.active { border-color: var(--spectral-teal); background: var(--spectral-teal); color: var(--void-black); font-weight: 800; box-shadow: 0 0 15px var(--vignette-color); }
+
         .vibe-row { display: flex; flex-direction: column; gap: 6px; }
-        .vibe-row label { font-family: var(--font-head); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: var(--accent-2); display: flex; justify-content: space-between; }
-        .vibe-row input[type="range"] { accent-color: var(--accent-1); height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.15); cursor: pointer; }
-        .preset-buttons { display: flex; gap: 6px; margin-top: 4px; }
-        .preset-btn { flex: 1; font-family: var(--font-head); font-weight: 900; font-size: 0.7rem; padding: 6px 4px; border-radius: 8px; border: 2px solid var(--accent-3); background: var(--muted-container); color: #FFFFFF; cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; }
-        .preset-btn:hover { background: var(--accent-3); color: #0D0D1A; }
+        .vibe-row label { font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232, 230, 225, 0.8); display: flex; justify-content: space-between; }
+        .vibe-row input[type="range"] { accent-color: var(--spectral-teal); height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); cursor: pointer; }
+        
+        .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s, border-color 1.5s; width: 100%; margin-top: 5px; }
+        .sfx-btn:hover { background: var(--spectral-teal); color: var(--void-black); }
 
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-22px) rotate(8deg); } }
-        @keyframes wiggle { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
-        @keyframes bounce-subtle { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.06); } }
-        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes driftFog { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
+        @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .pricing-grid { grid-template-columns: 1fr; }
             .vibe-panel { width: calc(100vw - 48px); right: 24px; }
+            .tos-box { padding: 24px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-pattern-layer">
-        <div class="pattern-dots"></div>
-        <div class="pattern-stripes"></div>
-        <div class="pattern-mesh"></div>
-    </div>
+    <!-- ─── CUSTOM CURSOR & SCROLLBAR ─── -->
+    <div id="blade-scrollbar"></div>
+    <div class="cursor-wisp" id="cursor-wisp"></div>
 
-    <div class="bg-watermark" aria-hidden="true">HIRE // SERVICES</div>
+    <!-- ─── SMOOTH DUAL BACKGROUND ART ─── -->
+    <div class="background-art art-ruined"></div>
+    <div class="background-art art-king"></div>
+    
+    <div class="fog-layer"></div>
+    <div class="soul-particles" id="soul-container"></div>
 
-    <div class="floating-shape shape-1" aria-hidden="true">💵</div>
-    <div class="floating-shape shape-2" aria-hidden="true">⚡</div>
-    <div class="floating-shape shape-3" aria-hidden="true">💎</div>
-    <div class="floating-shape shape-4" aria-hidden="true">🔥</div>
+    <!-- ─── NAVIGATION ─── -->
+    <nav>
+        <a href="index.html" class="nav-link">The Throne</a>
+        <a href="games.html" class="nav-link">Realms</a>
+        <a href="systems.html" class="nav-link">Artifacts</a>
+        <a href="hire-me.html" class="nav-link active">Covenant</a>
+    </nav>
 
     <div class="container">
         
-        <!-- Navigation Menu -->
-        <nav>
-            <a href="index.html" class="nav-link">
-                <i class="fa-solid fa-bolt"></i> Home
-            </a>
-            <a href="games.html" class="nav-link">
-                <i class="fa-solid fa-gamepad"></i> Games
-            </a>
-            <a href="systems.html" class="nav-link">
-                <i class="fa-solid fa-gears"></i> Systems
-            </a>
-            <a href="hire-me.html" class="nav-link active">
-                <i class="fa-solid fa-handshake"></i> Hire Me
-            </a>
-        </nav>
-
         <div class="hero-badge">
             <span id="hero-badge-text">🟢 COMMISSIONS OPEN</span>
         </div>
 
-        <!-- Dynamic Payment Status Alert Banner -->
+        <!-- Payment Notice Banner -->
         <div class="payment-status-banner" id="payment-status-banner">
             <i class="fa-solid fa-circle-exclamation"></i>
             <span id="payment-status-text">Payment Notice Loading...</span>
         </div>
 
-        <h1>
-            <span class="gradient-text">Commission Services</span>
-        </h1>
-        <p class="hero-subtitle">Luau Scripting // Systems Engineering</p>
+        <h1>Covenant & Services</h1>
+        <p class="hero-subtitle">Luau Engineering // Systems Architecture</p>
 
         <!-- Service Tiers -->
         <div class="pricing-grid">
             
             <!-- Tier 1 -->
             <div class="price-card">
-                <span class="tier-tag">TIER 1 // BASIC</span>
+                <span class="tier-tag">TIER 01 // FOUNDATION</span>
                 <div class="tier-title">Small Systems</div>
                 <div class="service-rate-label">Quote On Scope</div>
-                <div class="service-note">Fast turnaround & custom pricing</div>
+                <div class="service-note">Fast turnaround & single mechanics</div>
                 <ul class="feature-list">
-                    <li><i class="fa-solid fa-check"></i> Single mechanic / standalone script</li>
-                    <li><i class="fa-solid fa-check"></i> Daily Rewards / Leaderboards</li>
-                    <li><i class="fa-solid fa-check"></i> Bug fixes & optimization</li>
-                    <li><i class="fa-solid fa-check"></i> Turnaround: 1–2 Days</li>
+                    <li><i class="fa-solid fa-gem"></i> Standalone script / single mechanic</li>
+                    <li><i class="fa-solid fa-gem"></i> Daily Rewards & Global Leaderboards</li>
+                    <li><i class="fa-solid fa-gem"></i> Bug fixing, refactoring & optimization</li>
+                    <li><i class="fa-solid fa-gem"></i> Turnaround: 1–2 Days</li>
                 </ul>
             </div>
 
-            <!-- Tier 2 (Highlighted) -->
+            <!-- Tier 2 -->
             <div class="price-card">
-                <span class="tier-tag">TIER 2 // POPULAR</span>
-                <div class="tier-title">Advanced Mechanics</div>
+                <span class="tier-tag">TIER 02 // ADVANCED</span>
+                <div class="tier-title">Complex Loops</div>
                 <div class="service-rate-label">Quote On Scope</div>
-                <div class="service-note">Custom combat & gameplay loops</div>
+                <div class="service-note">Custom combat & gameplay frameworks</div>
                 <ul class="feature-list">
-                    <li><i class="fa-solid fa-check"></i> Full Combat / Hitbox Frameworks</li>
-                    <li><i class="fa-solid fa-check"></i> Territory & Map Control Systems</li>
-                    <li><i class="fa-solid fa-check"></i> Inventory / Custom Shiftlock UI</li>
-                    <li><i class="fa-solid fa-check"></i> Turnaround: 3–5 Days</li>
+                    <li><i class="fa-solid fa-gem"></i> Full Combat & Raycast Hitbox Engine</li>
+                    <li><i class="fa-solid fa-gem"></i> Territory & Zone Control Systems</li>
+                    <li><i class="fa-solid fa-gem"></i> Inventory & Custom Shiftlock Viewports</li>
+                    <li><i class="fa-solid fa-gem"></i> Turnaround: 3–5 Days</li>
                 </ul>
             </div>
 
             <!-- Tier 3 -->
             <div class="price-card">
-                <span class="tier-tag">TIER 3 // FULL SUITE</span>
+                <span class="tier-tag">TIER 03 // FULL SUITE</span>
                 <div class="tier-title">Custom Backend</div>
                 <div class="service-rate-label">Quote On Scope</div>
                 <div class="service-note">Full-stack & long-term development</div>
                 <ul class="feature-list">
-                    <li><i class="fa-solid fa-check"></i> External API Bridges (AI / Webhooks)</li>
-                    <li><i class="fa-solid fa-check"></i> Secure Custom DataStore architecture</li>
-                    <li><i class="fa-solid fa-check"></i> Full Game Core Loop Framework</li>
-                    <li><i class="fa-solid fa-check"></i> Turnaround: Flexible / Based on Scope</li>
+                    <li><i class="fa-solid fa-gem"></i> External API Bridges (AI / Discord Webhooks)</li>
+                    <li><i class="fa-solid fa-gem"></i> Secure ProfileService / DataStore architecture</li>
+                    <li><i class="fa-solid fa-gem"></i> Full Game Core Loop Framework</li>
+                    <li><i class="fa-solid fa-gem"></i> Turnaround: Flexible / Based on Scope</li>
                 </ul>
             </div>
 
@@ -422,7 +447,7 @@
         <!-- Terms of Service (TOS) -->
         <div class="tos-box">
             <div class="tos-title">
-                <i class="fa-solid fa-scroll"></i> Terms of Service (TOS)
+                <i class="fa-solid fa-scroll"></i> Terms of the Covenant
             </div>
             <ul class="tos-list" id="tos-list">
                 <li><strong>50% upfront deposit</strong> is required before development begins.</li>
@@ -434,57 +459,53 @@
 
         <!-- Order Button -->
         <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-order">
-            <i class="fa-brands fa-discord" style="font-size: 1.4rem;"></i> Get a Quote via Discord
+            <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Summon via Discord
         </a>
 
         <footer>
-            <span>⚡ Crafted in Cairo, Egypt · Commissions Open ⚡</span>
+            <span>✦ Sealed in Cairo · The Sovereign Covenant ✦</span>
         </footer>
 
     </div>
 
-    <!-- VIBE TUNER -->
-    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Tune Brightness & Boomness">
+    <!-- ── SANCTUM CONTROLS ── -->
+    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Sanctum Controls">
         <i class="fa-solid fa-sliders"></i>
     </button>
 
     <div class="vibe-panel" id="vibe-panel">
         <div class="vibe-header">
-            <span class="vibe-title">🎛️ VIBE TUNER</span>
-            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:#FFF; cursor:pointer; font-size:1.1rem;">✕</button>
-        </div>
-        
-        <div class="vibe-tip">
-            💡 <strong>Tip:</strong> If the site feels too shiny or too playful, use these sliders to tone down the glow & boomness!
+            <span class="vibe-title">SANCTUM CONTROLS</span>
+            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:var(--bone-white); cursor:pointer; font-size:1.1rem;">✕</button>
         </div>
 
         <div class="vibe-row">
-            <label><span>Glow & Brightness</span> <span id="val-glow">100%</span></label>
-            <input type="range" id="slider-glow" min="0" max="100" value="100" oninput="updateVibeSettings()">
+            <label><span>Viego Aspect</span></label>
+            <div class="theme-switch-row">
+                <button class="theme-btn active" id="btn-theme-ruined" onclick="setViegoTheme('ruined')">RUINED</button>
+                <button class="theme-btn" id="btn-theme-king" onclick="setViegoTheme('king')">KING</button>
+            </div>
+        </div>
+
+        <div class="vibe-row" style="flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
+            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn" style="margin-top: 0;">SOUND FX: ON 🔊</button>
         </div>
 
         <div class="vibe-row">
-            <label><span>Boomness & Tilt</span> <span id="val-boom">100%</span></label>
-            <input type="range" id="slider-boom" min="0" max="100" value="100" oninput="updateVibeSettings()">
+            <label><span>Spectral Aura</span> <span id="val-glow">100%</span></label>
+            <input type="range" id="slider-glow" min="10" max="150" value="100" oninput="updateSanctumSliders()">
         </div>
 
         <div class="vibe-row">
-            <label><span>Pattern Contrast</span> <span id="val-pattern">100%</span></label>
-            <input type="range" id="slider-pattern" min="0" max="100" value="100" oninput="updateVibeSettings()">
-        </div>
-
-        <div class="preset-buttons">
-            <button class="preset-btn" onclick="applyPreset(100, 100, 100)">⚡ Max</button>
-            <button class="preset-btn" onclick="applyPreset(50, 40, 40)">🛡️ Balanced</button>
-            <button class="preset-btn" onclick="applyPreset(10, 0, 15)">🌙 Chill</button>
+            <label><span>Black Mist Fog</span> <span id="val-fog">100%</span></label>
+            <input type="range" id="slider-fog" min="0" max="100" value="100" oninput="updateSanctumSliders()">
         </div>
     </div>
 
+    <script src="sfx.js"></script>
+
     <script>
-        // =========================================================================
-        // ⚙️ PAYMENT CONFIGURATION
-        // Options: "USD_ONLY" or "BOTH"
-        // =========================================================================
+        // ─── PAYMENT CONFIGURATION ───
         const CURRENT_PAYMENT_MODE = "USD_ONLY"; 
 
         function applyPaymentMode(mode) {
@@ -505,43 +526,149 @@
             }
         }
 
+        // ─── SCROLL PROGRESS BLADE ───
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("blade-scrollbar").style.width = scrolled + "%";
+        });
+
+        // ─── CUSTOM WISP CURSOR ───
+        const wisp = document.getElementById('cursor-wisp');
+        const trails = [];
+        const maxTrails = 8;
+
+        for(let i=0; i<maxTrails; i++) {
+            const t = document.createElement('div');
+            t.className = 'cursor-trail';
+            document.body.appendChild(t);
+            trails.push({ el: t, x: 0, y: 0, alpha: 0 });
+        }
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            wisp.style.left = mouseX + 'px';
+            wisp.style.top = mouseY + 'px';
+        });
+
+        document.querySelectorAll('a, button, .price-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                wisp.style.transform = 'translate(-50%, -50%) scale(2.5)';
+                wisp.style.background = 'transparent';
+                wisp.style.border = '1px solid var(--spectral-teal)';
+            });
+            el.addEventListener('mouseleave', () => {
+                wisp.style.transform = 'translate(-50%, -50%) scale(1)';
+                wisp.style.background = 'var(--spectral-teal)';
+                wisp.style.border = 'none';
+            });
+        });
+
+        function animateTrails() {
+            let prevX = mouseX;
+            let prevY = mouseY;
+
+            trails.forEach((trail, index) => {
+                trail.x += (prevX - trail.x) * 0.3;
+                trail.y += (prevY - trail.y) * 0.3;
+                
+                trail.el.style.left = trail.x + 'px';
+                trail.el.style.top = trail.y + 'px';
+                
+                const scale = (maxTrails - index) / maxTrails;
+                trail.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
+                prevX = trail.x;
+                prevY = trail.y;
+            });
+            requestAnimationFrame(animateTrails);
+        }
+        animateTrails();
+
+        // ─── GREEN SOUL PARTICLES GENERATOR ───
+        const soulContainer = document.getElementById('soul-container');
+        function createSoul() {
+            const soul = document.createElement('div');
+            const size = Math.random() * 4 + 2;
+            
+            soul.style.position = 'absolute';
+            soul.style.left = Math.random() * 100 + 'vw';
+            soul.style.width = size + 'px';
+            soul.style.height = size + 'px';
+            soul.style.background = 'var(--spectral-teal)';
+            soul.style.borderRadius = '50%';
+            soul.style.boxShadow = '0 0 10px var(--mist-deep)';
+            soul.style.opacity = '0';
+            soul.style.animation = `soulRise ${Math.random() * 10 + 10}s linear forwards`;
+            
+            soulContainer.appendChild(soul);
+            setTimeout(() => { soul.remove(); }, 20000);
+        }
+
+        // ─── THEME & SETTINGS CONTROLS ───
+        function setViegoTheme(theme) {
+            const isKing = (theme === 'king');
+            document.body.classList.toggle('theme-king', isKing);
+            document.getElementById('btn-theme-ruined').classList.toggle('active', !isKing);
+            document.getElementById('btn-theme-king').classList.toggle('active', isKing);
+            localStorage.setItem('viego_aspect', theme);
+            if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
+        }
+
         function toggleVibeMenu() {
             document.getElementById('vibe-panel').classList.toggle('open');
         }
 
-        function updateVibeSettings() {
+        function updateSanctumSliders() {
             const glow = document.getElementById('slider-glow').value;
-            const boom = document.getElementById('slider-boom').value;
-            const pattern = document.getElementById('slider-pattern').value;
+            const fog = document.getElementById('slider-fog').value;
 
             document.getElementById('val-glow').textContent = glow + '%';
-            document.getElementById('val-boom').textContent = boom + '%';
-            document.getElementById('val-pattern').textContent = pattern + '%';
+            document.getElementById('val-fog').textContent = fog + '%';
 
-            document.documentElement.style.setProperty('--glow-intensity', glow / 100);
-            document.documentElement.style.setProperty('--boom-tilt', boom / 100);
-            document.documentElement.style.setProperty('--pattern-opacity', pattern / 100);
-            document.documentElement.style.setProperty('--anim-speed-mult', Math.max(0.2, boom / 100));
+            document.documentElement.style.setProperty('--glow-mult', glow / 100);
+            document.documentElement.style.setProperty('--fog-opacity', fog / 100);
 
-            localStorage.setItem('vibe_glow', glow);
-            localStorage.setItem('vibe_boom', boom);
-            localStorage.setItem('vibe_pattern', pattern);
+            localStorage.setItem('viego_glow', glow);
+            localStorage.setItem('viego_fog', fog);
         }
 
-        function applyPreset(glow, boom, pattern) {
-            document.getElementById('slider-glow').value = glow;
-            document.getElementById('slider-boom').value = boom;
-            document.getElementById('slider-pattern').value = pattern;
-            updateVibeSettings();
+        function handleSFXToggle() {
+            if (typeof DopamineAudio !== 'undefined') {
+                const enabled = DopamineAudio.toggleSFX();
+                const btn = document.getElementById('sfx-toggle-btn');
+                if (btn) {
+                    btn.textContent = enabled ? 'SOUND FX: ON 🔊' : 'SOUND FX: OFF 🔇';
+                    btn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
+                }
+            }
         }
 
+        // LOAD SAVED SETTINGS
         window.addEventListener('DOMContentLoaded', () => {
             applyPaymentMode(CURRENT_PAYMENT_MODE);
 
-            const savedGlow = localStorage.getItem('vibe_glow') || '100';
-            const savedBoom = localStorage.getItem('vibe_boom') || '100';
-            const savedPattern = localStorage.getItem('vibe_pattern') || '100';
-            applyPreset(savedGlow, savedBoom, savedPattern);
+            const savedTheme = localStorage.getItem('viego_aspect') || 'ruined';
+            setViegoTheme(savedTheme);
+
+            const savedGlow = localStorage.getItem('viego_glow') || '100';
+            const savedFog = localStorage.getItem('viego_fog') || '100';
+            document.getElementById('slider-glow').value = savedGlow;
+            document.getElementById('slider-fog').value = savedFog;
+            updateSanctumSliders();
+
+            const sfxBtn = document.getElementById('sfx-toggle-btn');
+            if (sfxBtn && typeof DopamineAudio !== 'undefined') {
+                const enabled = DopamineAudio.isEnabled();
+                sfxBtn.textContent = enabled ? 'SOUND FX: ON 🔊' : 'SOUND FX: OFF 🔇';
+                sfxBtn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
+            }
+
+            setInterval(createSoul, 800);
         });
     </script>
 </body>
