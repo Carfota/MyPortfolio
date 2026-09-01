@@ -43,12 +43,8 @@
             --card-border: rgba(212, 175, 55, 0.25); 
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        /* Only hide default cursor on devices with a physical mouse */
-        @media (pointer: fine) {
-            * { cursor: none !important; }
-        }
+        /* NATIVE CURSOR HIDDEN COMPLETELY */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
         body {
             background-color: var(--void-black);
@@ -96,7 +92,7 @@
             transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
         }
 
-        /* ─── THE LOADING SCREEN ─── */
+        /* ─── THE LOADING SCREEN (CINEMATIC) ─── */
         #viego-loader {
             position: fixed; inset: 0; background: var(--void-black);
             z-index: 50000; display: flex; flex-direction: column;
@@ -174,7 +170,7 @@
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
+        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -213,7 +209,7 @@
         .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── ENTRY ANIMATIONS ─── */
+        /* ─── DYNAMIC FAST ENTRY ANIMATIONS ─── */
         .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
         .hero-title::after { width: 0; }
 
@@ -395,76 +391,13 @@
         @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
 
         @media (max-width: 900px) {
-            /* 1. Disable Custom Cursor & Trails on Touch Devices */
-            .cursor-wisp, .cursor-trail { display: none !important; }
-            
-            /* 2. Navigation Wrapping */
-            nav { 
-                gap: 15px; 
-                padding: 20px 5vw; 
-                flex-wrap: wrap; 
-                margin-bottom: 30px;
-            }
-            .nav-link { font-size: 0.85rem; }
-
-            /* 3. Grid Layout Overrides (Fixes Horizontal Scroll) */
-            .ruins-grid { 
-                grid-template-columns: 1fr; 
-                gap: 25px; 
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            /* 4. Card Padding & Media Alignment */
-            .ruin-card { 
-                padding: 25px 20px; 
-            }
-            .ruin-media { 
-                width: calc(100% + 40px) !important; 
-                margin: -25px -20px 20px -20px !important; 
-            }
-
-            /* 5. Vibe Controller Panel */
-            .vibe-panel { 
-                width: calc(100vw - 40px); 
-                right: 20px; 
-                bottom: 90px;
-                padding: 20px;
-            }
-
-            /* 6. Buttons & Modals */
-            .action-tray { 
-                flex-direction: column; 
-            }
-            .btn-ruin { 
-                width: 100%; 
-                justify-content: center; 
-            }
-            
-            .modal { 
-                clip-path: none; 
-                border-radius: 12px; 
-            }
-            .modal-details { 
-                padding: 20px; 
-            }
-            .modal-title { 
-                font-size: 1.4rem; 
-            }
-            .modal-video-box { 
-                max-height: 35vh; 
-            }
+            .ruin-media { margin: -40px -30px 25px -30px; width: calc(100% + 60px); }
+            .ruin-card { padding: 40px 30px; }
+            .vibe-panel { width: calc(100vw - 48px); right: 24px; }
         }
     </style>
 </head>
 <body>
-
-    <!-- LOCAL MUSIC PLAYER -->
-    <audio id="bg-audio" loop preload="auto">
-        <source src="theme.mp3" type="audio/mpeg">
-    </audio>
 
     <!-- ─── THE CINEMATIC LOADER ─── -->
     <div id="viego-loader">
@@ -574,90 +507,32 @@
             <label><span>Black Mist Fog</span> <span id="val-fog">100%</span></label>
             <input type="range" id="slider-fog" min="0" max="100" value="100" oninput="updateSanctumSliders()">
         </div>
-
-        <!-- RUINED SYMPHONY MUSIC CONTROLS -->
-        <div class="vibe-row" style="margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <label style="margin:0; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-music"></i> RUINED SYMPHONY
-                </label>
-                <button id="music-toggle-btn" onclick="toggleMusic()" class="sfx-btn" style="width: auto; margin-top: 0; padding: 4px 12px; background: transparent; border: 1px solid var(--bone-white);">PLAY ▶</button>
-            </div>
-            <span style="font-family: var(--font-body); font-size: 0.65rem; color: rgba(232, 230, 225, 0.5); display: block; margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase;">TRACK: VIEGO, THE RUINED KING</span>
-            <input type="range" id="slider-music-vol" min="0" max="100" value="30" oninput="updateMusicVolume()">
-        </div>
     </div>
 
     <script src="sfx.js"></script>
 
     <script>
-        // ─── LOCAL BACKGROUND MUSIC ENGINE ───
-        const bgAudio = document.getElementById('bg-audio');
-        let isMusicPlaying = false;
-
-        function toggleMusic(forcePlay = false) {
-            const btn = document.getElementById('music-toggle-btn');
-            
-            if (isMusicPlaying && !forcePlay) {
-                bgAudio.pause();
-                isMusicPlaying = false;
-                btn.innerHTML = 'PLAY ▶';
-                btn.style.borderColor = 'rgba(255,255,255,0.2)';
-                localStorage.setItem('viego_music', 'off');
-            } else {
-                let playPromise = bgAudio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(_ => {
-                        isMusicPlaying = true;
-                        btn.innerHTML = 'PAUSE ⏸';
-                        btn.style.borderColor = 'var(--spectral-teal)';
-                        localStorage.setItem('viego_music', 'on');
-                    }).catch(error => {
-                        isMusicPlaying = false;
-                    });
-                }
-            }
-            if (typeof DopamineAudio !== 'undefined' && !forcePlay) DopamineAudio.playClick();
-        }
-
-        function updateMusicVolume() {
-            const vol = document.getElementById('slider-music-vol').value;
-            bgAudio.volume = vol / 100;
-            localStorage.setItem('viego_music_vol', vol);
-        }
-
-        // ─── CINEMATIC LOGIC ───
+        // ─── EVERY-TIME CINEMATIC LOGIC ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
 
-        function revealContent() {
+        function skipCinematic() {
             loader.style.display = 'none';
             document.body.classList.add('content-ready');
             startSouls(); 
-            
-            if (localStorage.getItem('viego_music') !== 'off' && bgAudio.paused) {
-                toggleMusic(true);
-            }
         }
 
-        skipBtn.addEventListener('click', revealContent);
+        skipBtn.addEventListener('click', skipCinematic);
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && loader.style.display !== 'none') revealContent();
+            if (e.key === 'Escape' && loader.style.display !== 'none') skipCinematic();
         });
 
-        setTimeout(() => {
-            if (!document.body.classList.contains('content-ready')) {
-                document.body.classList.add('content-ready');
-            }
-        }, 8500);
-
+        // Always plays, fades out after 10s naturally
         setTimeout(() => {
             if (loader.style.display !== 'none') {
                 loader.style.display = 'none';
+                document.body.classList.add('content-ready');
                 startSouls();
-                if (localStorage.getItem('viego_music') !== 'off' && bgAudio.paused) {
-                    toggleMusic(true);
-                }
             }
         }, 10000);
 
@@ -802,10 +677,6 @@
             document.getElementById('slider-glow').value = savedGlow;
             document.getElementById('slider-fog').value = savedFog;
             updateSanctumSliders();
-
-            const savedMusicVol = localStorage.getItem('viego_music_vol') || '30';
-            document.getElementById('slider-music-vol').value = savedMusicVol;
-            bgAudio.volume = savedMusicVol / 100;
 
             const sfxBtn = document.getElementById('sfx-toggle-btn');
             if (sfxBtn && typeof DopamineAudio !== 'undefined') {
