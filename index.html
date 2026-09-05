@@ -743,7 +743,7 @@
         }
 
         // ─── POPUP DISCORD AUTH (KEEPS SITE OPEN) ───
-        async function handleDiscordVouch() {
+async function handleDiscordVouch() {
             if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
             
             if (!supabaseClient) {
@@ -767,16 +767,44 @@
             const popup = window.open(data.url, 'DiscordAuth', 'width=500,height=750');
             
             const checkTimer = setInterval(async () => {
+                try {
+                    if (popup && popup.location && popup.location.href.includes(window.location.origin)) {
+                        const popupUrl = new URL(popup.location.href);
+                        
+                        if (popupUrl.searchParams.has('error')) {
+                            const errDesc = popupUrl.searchParams.get('error_description') || 'Discord server rejected the handshake.';
+                            showSanctumToast(errDesc, false);
+                            popup.close();
+                            clearInterval(checkTimer);
+                            return;
+                        }
+
+                        popup.close();
+                        clearInterval(checkTimer);
+                        await checkAuthCallback();
+                    }
+                } catch (crossOriginErr) {
+                }
+
                 if (popup && popup.closed) {
                     clearInterval(checkTimer);
                     await checkAuthCallback();
                 }
-            }, 1000);
+            }, 500);
         }
 
+        
         // ─── VERIFY AUTH RESULT & SEAL STATUS ───
-        async function checkAuthCallback() {
+async function checkAuthCallback() {
             if (!supabaseClient) return;
+
+            // Check URL parameters for errors
+            const currentParams = new URLSearchParams(window.location.search);
+            if (currentParams.has('error')) {
+                showSanctumToast(currentParams.get('error_description') || 'Authentication failed.', false);
+                window.history.replaceState({}, document.title, window.location.pathname);
+                return;
+            }
 
             try {
                 const { data: { session } } = await supabaseClient.auth.getSession();
@@ -795,10 +823,11 @@
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
             } catch (err) {
-                showSanctumToast('Verification failed to complete.', false);
+                showSanctumToast('Verification check encountered an error.', false);
             }
         }
 
+        
         // ─── CINEMATIC LOGIC ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
