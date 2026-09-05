@@ -174,7 +174,7 @@
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
+        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -213,7 +213,7 @@
         .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── DYNAMIC ENTRY ANIMATIONS ─── */
+        /* ─── DYNAMIC FAST ENTRY ANIMATIONS ─── */
         .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
         .hero-title::after { width: 0; }
 
@@ -315,7 +315,7 @@
             transition: border-color 1.5s;
         }
 
-        /* ─── STATS SECTION (4 CARDS GRID) ─── */
+        /* ─── STATS SECTION ─── */
         .stats-section { position: relative; z-index: 10; padding: 0 10vw 60px; }
 
         .stats-grid {
@@ -351,10 +351,10 @@
             color: rgba(232, 230, 225, 0.7); letter-spacing: 0.25em; text-transform: uppercase;
         }
 
-        /* ─── VOUCH CARD STYLING ─── */
+        /* ─── REFINED CLIENT VOUCH CARD ─── */
         .stat-card-vouch {
             border-bottom: 2px solid var(--spectral-teal);
-            background: radial-gradient(circle at top, rgba(61, 220, 151, 0.05) 0%, rgba(10, 10, 15, 0.6) 100%);
+            background: radial-gradient(circle at top, rgba(61, 220, 151, 0.08) 0%, rgba(10, 10, 15, 0.75) 100%);
         }
 
         .vouch-action-link {
@@ -369,7 +369,7 @@
             text-transform: uppercase;
             font-weight: 800;
             transition: all 0.3s ease;
-            opacity: 0.85;
+            opacity: 0.9;
         }
 
         .stat-card-vouch:hover .vouch-action-link {
@@ -382,8 +382,8 @@
             bottom: calc(100% + 12px);
             left: 50%;
             transform: translateX(-50%);
-            width: 260px;
-            background: rgba(10, 10, 15, 0.95);
+            width: 270px;
+            background: rgba(10, 10, 15, 0.96);
             border: 1px solid var(--spectral-teal);
             padding: 10px 14px;
             font-size: 0.72rem;
@@ -401,6 +401,36 @@
         .stat-card-vouch:hover .vouch-tooltip {
             opacity: 1;
             transform: translateX(-50%) translateY(-5px);
+        }
+
+        /* ─── SAFEGUARD NOTICE / DISCLAIMER ─── */
+        .vouch-disclaimer-box {
+            max-width: 1200px;
+            margin: 18px auto 0;
+            padding: 12px 20px;
+            background: rgba(10, 10, 15, 0.5);
+            border: 1px dashed rgba(232, 230, 225, 0.18);
+            border-left: 3px solid var(--spectral-teal);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            color: rgba(232, 230, 225, 0.75);
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(8px);
+            transition: border-color 1.5s;
+        }
+
+        .vouch-disclaimer-box i {
+            color: var(--spectral-teal);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            transition: color 1.5s;
+        }
+
+        .vouch-disclaimer-box strong {
+            color: var(--bone-white);
         }
 
         /* ─── THE RUINS (PROJECT SECTIONS) ─── */
@@ -547,6 +577,7 @@
             .ruin-card { padding: 40px 30px; }
             .vibe-panel { width: calc(100vw - 48px); right: 24px; }
             .partner-shard { width: 100%; }
+            .vouch-disclaimer-box { flex-direction: column; text-align: center; gap: 8px; }
         }
     </style>
 </head>
@@ -606,7 +637,7 @@
         </div>
     </section>
 
-    <!-- ─── THE RUINED STATS (4 CARDS GRID) ─── -->
+    <!-- ─── THE RUINED STATS (4 CARDS GRID + DISCLAIMER) ─── -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-card">
@@ -622,16 +653,24 @@
                 <div class="stat-label">Living Systems</div>
             </div>
 
-            <!-- 4TH CARD: SOVEREIGN ENDORSEMENT / VOUCHES -->
+            <!-- 4TH CARD: VERIFIED CLIENT VOUCH -->
             <div class="stat-card stat-card-vouch" id="vouch-card" onclick="handleDiscordVouch()">
                 <div class="stat-value" id="vouch-count">...</div>
-                <div class="stat-label">Verified Patrons</div>
+                <div class="stat-label">Client Vouches</div>
                 <div class="vouch-action-link">
-                    <i class="fa-brands fa-discord"></i> Endorse via Discord
+                    <i class="fa-brands fa-discord"></i> Vouch As Past Client
                 </div>
                 <div class="vouch-tooltip">
-                    Only verified clients and studio leads on the client ledger can endorse. Every count represents a completed contract.
+                    Official proof of delivery. Only clients who have commissioned and paid for systems from me can leave their vouch.
                 </div>
+            </div>
+        </div>
+
+        <!-- REASSURING CLIENT DISCLAIMER -->
+        <div class="vouch-disclaimer-box">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <strong>Notice for Visitors & Clients:</strong> The <em>Client Vouches</em> card uses Discord OAuth strictly to read your public User ID to verify completed contracts. <strong>Please do not authorize unless we have worked together on a commission</strong>, as unlisted IDs will be automatically rejected.
             </div>
         </div>
     </section>
@@ -696,7 +735,7 @@
     <script>
         // ─── SUPABASE CREDENTIALS CONFIGURATION ───
         const SUPABASE_URL = 'https://gqxitwkhefshdzbvvyzq.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_v8UJGKUlDRY8U8V7gkYLyA_usWmEj5_'; // Paste your actual Anon Public Key from Supabase Project Settings -> API
+        const SUPABASE_ANON_KEY = 'YOUR_ANON_PUBLIC_KEY'; // Ensure your actual Anon public key is kept here
 
         let supabaseClient = null;
         if (typeof supabase !== 'undefined' && !SUPABASE_ANON_KEY.includes('YOUR_ANON')) {
@@ -716,7 +755,7 @@
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 5000);
+            }, 5500);
         }
 
         // ─── LIVE VOUCH COUNTER ───
@@ -743,7 +782,7 @@
         }
 
         // ─── POPUP DISCORD AUTH (KEEPS SITE OPEN) ───
-async function handleDiscordVouch() {
+        async function handleDiscordVouch() {
             if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
             
             if (!supabaseClient) {
@@ -772,7 +811,7 @@ async function handleDiscordVouch() {
                         const popupUrl = new URL(popup.location.href);
                         
                         if (popupUrl.searchParams.has('error')) {
-                            const errDesc = popupUrl.searchParams.get('error_description') || 'Discord server rejected the handshake.';
+                            const errDesc = popupUrl.searchParams.get('error_description') || 'Discord authentication rejected.';
                             showSanctumToast(errDesc, false);
                             popup.close();
                             clearInterval(checkTimer);
@@ -784,6 +823,7 @@ async function handleDiscordVouch() {
                         await checkAuthCallback();
                     }
                 } catch (crossOriginErr) {
+                    // Ignored while on discord domain
                 }
 
                 if (popup && popup.closed) {
@@ -793,15 +833,13 @@ async function handleDiscordVouch() {
             }, 500);
         }
 
-        
-        // ─── VERIFY AUTH RESULT & SEAL STATUS ───
-async function checkAuthCallback() {
+        // ─── FIXED AUTH CALLBACK (REJECTS UNWHITELISTED ACCURATELY) ───
+        async function checkAuthCallback() {
             if (!supabaseClient) return;
 
-            // Check URL parameters for errors
             const currentParams = new URLSearchParams(window.location.search);
             if (currentParams.has('error')) {
-                showSanctumToast(currentParams.get('error_description') || 'Authentication failed.', false);
+                showSanctumToast(currentParams.get('error_description') || 'Authentication cancelled.', false);
                 window.history.replaceState({}, document.title, window.location.pathname);
                 return;
             }
@@ -812,12 +850,18 @@ async function checkAuthCallback() {
                 if (session) {
                     const { data, error } = await supabaseClient.rpc('submit_vouch');
                     
-                    if (data) {
-                        showSanctumToast(data.message, data.success);
-                    } else if (error) {
+                    if (error) {
                         showSanctumToast(error.message, false);
+                    } else if (data) {
+                        // Explicit validation check
+                        if (data.success) {
+                            showSanctumToast(data.message, true); // Green aura success
+                        } else {
+                            showSanctumToast(data.message, false); // Red alert for unwhitelisted or claimed ID
+                        }
                     }
 
+                    // Keep visitor state unauthenticated
                     await supabaseClient.auth.signOut();
                     loadVouchCount();
                     window.history.replaceState({}, document.title, window.location.pathname);
@@ -827,7 +871,6 @@ async function checkAuthCallback() {
             }
         }
 
-        
         // ─── CINEMATIC LOGIC ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
