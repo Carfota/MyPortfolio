@@ -7,11 +7,8 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600;800&family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Supabase Client Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         :root {
@@ -24,7 +21,6 @@
             --bone-white: #e8e6e1;
 
             --font-display: 'Cinzel Decorative', serif;
-            --font-sub: 'Cinzel', serif;
             --font-body: 'Inter', sans-serif;
             
             --glow-mult: 1;
@@ -315,14 +311,14 @@
             transition: border-color 1.5s;
         }
 
-        /* ─── STATS SECTION ─── */
+        /* ─── STATS SECTION (CLEAN ORIGINAL 3 CARDS) ─── */
         .stats-section { position: relative; z-index: 10; padding: 0 10vw 60px; }
 
         .stats-grid {
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-            gap: 24px;
-            max-width: 1200px;
+            gap: 30px;
+            max-width: 900px;
         }
 
         .stat-card {
@@ -332,7 +328,6 @@
             padding: 25px 20px; text-align: center;
             backdrop-filter: blur(10px); transition: all 0.3s ease, border-color 1.5s;
             clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
-            position: relative;
         }
 
         .stat-card:hover {
@@ -349,88 +344,6 @@
         .stat-label {
             font-family: var(--font-body); font-size: 0.75rem; font-weight: 600;
             color: rgba(232, 230, 225, 0.7); letter-spacing: 0.25em; text-transform: uppercase;
-        }
-
-        /* ─── REFINED CLIENT VOUCH CARD ─── */
-        .stat-card-vouch {
-            border-bottom: 2px solid var(--spectral-teal);
-            background: radial-gradient(circle at top, rgba(61, 220, 151, 0.08) 0%, rgba(10, 10, 15, 0.75) 100%);
-        }
-
-        .vouch-action-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-family: var(--font-body);
-            font-size: 0.65rem;
-            color: var(--spectral-teal);
-            letter-spacing: 0.12em;
-            margin-top: 10px;
-            text-transform: uppercase;
-            font-weight: 800;
-            transition: all 0.3s ease;
-            opacity: 0.9;
-        }
-
-        .stat-card-vouch:hover .vouch-action-link {
-            opacity: 1;
-            text-shadow: 0 0 10px var(--spectral-teal);
-        }
-
-        .vouch-tooltip {
-            position: absolute;
-            bottom: calc(100% + 12px);
-            left: 50%;
-            transform: translateX(-50%);
-            width: 270px;
-            background: rgba(10, 10, 15, 0.96);
-            border: 1px solid var(--spectral-teal);
-            padding: 10px 14px;
-            font-size: 0.72rem;
-            color: var(--bone-white);
-            line-height: 1.5;
-            border-radius: 4px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 50;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.9), 0 0 15px var(--vignette-color);
-            backdrop-filter: blur(10px);
-        }
-
-        .stat-card-vouch:hover .vouch-tooltip {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-5px);
-        }
-
-        /* ─── SAFEGUARD NOTICE / DISCLAIMER ─── */
-        .vouch-disclaimer-box {
-            max-width: 1200px;
-            margin: 18px auto 0;
-            padding: 12px 20px;
-            background: rgba(10, 10, 15, 0.5);
-            border: 1px dashed rgba(232, 230, 225, 0.18);
-            border-left: 3px solid var(--spectral-teal);
-            font-family: var(--font-body);
-            font-size: 0.75rem;
-            color: rgba(232, 230, 225, 0.75);
-            line-height: 1.6;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            backdrop-filter: blur(8px);
-            transition: border-color 1.5s;
-        }
-
-        .vouch-disclaimer-box i {
-            color: var(--spectral-teal);
-            font-size: 1.1rem;
-            flex-shrink: 0;
-            transition: color 1.5s;
-        }
-
-        .vouch-disclaimer-box strong {
-            color: var(--bone-white);
         }
 
         /* ─── THE RUINS (PROJECT SECTIONS) ─── */
@@ -489,40 +402,6 @@
         .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 20px var(--vignette-color); }
         .btn-ruin:hover::before { left: 0; }
 
-        /* ─── IN-SITE TOAST NOTIFICATION ─── */
-        .sanctum-toast {
-            position: fixed;
-            top: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: rgba(10, 10, 15, 0.96);
-            border: 1px solid var(--spectral-teal);
-            padding: 14px 28px;
-            border-radius: 4px;
-            color: var(--bone-white);
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            letter-spacing: 0.08em;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 0 25px var(--vignette-color), 0 10px 30px rgba(0,0,0,0.9);
-            z-index: 999999;
-            backdrop-filter: blur(15px);
-            opacity: 0;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
-        }
-
-        .sanctum-toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        .sanctum-toast i {
-            color: var(--spectral-teal);
-            font-size: 1.1rem;
-        }
-
         /* ─── SANCTUM CONTROLS (VIBE TUNER) ─── */
         .vibe-controller-toggle {
             position: fixed; bottom: 24px; right: 24px; z-index: 99;
@@ -577,40 +456,29 @@
             .ruin-card { padding: 40px 30px; }
             .vibe-panel { width: calc(100vw - 48px); right: 24px; }
             .partner-shard { width: 100%; }
-            .vouch-disclaimer-box { flex-direction: column; text-align: center; gap: 8px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ─── SANCTUM SEAL TOAST NOTIFICATION ─── -->
-    <div class="sanctum-toast" id="sanctum-toast">
-        <i class="fa-solid fa-shield-halved" id="toast-icon"></i>
-        <span id="toast-msg">Notification</span>
-    </div>
-
-    <!-- ─── THE CINEMATIC LOADER ─── -->
     <div id="viego-loader">
         <div class="shattered-ring"></div>
         <div class="ember"></div>
         <div class="viego-silhouette"></div>
-        <div class="flavor-text">He would tear the world apart before he let her go. This portfolio is built the same way.</div>
+        <div class="flavor-text">I want precious little, yet I am forced to kill for it</div>
         
         <button class="skip-btn" id="btn-skip">Skip Sequence <i class="fa-solid fa-forward-step"></i></button>
     </div>
 
-    <!-- ─── CUSTOM CURSOR & SCROLLBAR ─── -->
     <div id="blade-scrollbar"></div>
     <div class="cursor-wisp" id="cursor-wisp"></div>
 
-    <!-- ─── SMOOTH DUAL BACKGROUND ART ─── -->
     <div class="background-art art-ruined"></div>
     <div class="background-art art-king"></div>
     
     <div class="fog-layer"></div>
     <div class="soul-particles" id="soul-container"></div>
 
-    <!-- ─── SITE CONTENT ─── -->
     <nav>
         <a href="index.html" class="nav-link active">The Throne</a>
         <a href="games.html" class="nav-link">Realms</a>
@@ -622,7 +490,6 @@
         <h1 class="hero-title">Carfota</h1>
         <div class="hero-subtitle">Architect of Ruin // Luau Engineering</div>
         
-        <!-- CURRENTLY WORKING WITH: PLAYMISTIC BANNER -->
         <a href="https://playmistic.com/" target="_blank" class="partner-shard">
             <img src="https://cdn.discordapp.com/icons/1430320982698233918/edc8c4b8dbe51b9af92252e80d409d25.png?size=1024" alt="Playmistic Avatar" class="partner-avatar">
             <div class="partner-info">
@@ -637,7 +504,6 @@
         </div>
     </section>
 
-    <!-- ─── THE RUINED STATS (4 CARDS GRID + DISCLAIMER) ─── -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-card">
@@ -651,26 +517,6 @@
             <div class="stat-card">
                 <div class="stat-value">6+</div>
                 <div class="stat-label">Living Systems</div>
-            </div>
-
-            <!-- 4TH CARD: VERIFIED CLIENT VOUCH -->
-            <div class="stat-card stat-card-vouch" id="vouch-card" onclick="handleDiscordVouch()">
-                <div class="stat-value" id="vouch-count">...</div>
-                <div class="stat-label">Client Vouches</div>
-                <div class="vouch-action-link">
-                    <i class="fa-brands fa-discord"></i> Vouch As Past Client
-                </div>
-                <div class="vouch-tooltip">
-                    Official proof of delivery. Only clients who have commissioned and paid for systems from me can leave their vouch.
-                </div>
-            </div>
-        </div>
-
-        <!-- REASSURING CLIENT DISCLAIMER -->
-        <div class="vouch-disclaimer-box">
-            <i class="fa-solid fa-shield-halved"></i>
-            <div>
-                <strong>Notice for Visitors & Clients:</strong> The <em>Client Vouches</em> card uses Discord OAuth strictly to read your public User ID to verify completed contracts. <strong>Please do not authorize unless we have worked together on a commission</strong>, as unlisted IDs will be automatically rejected.
             </div>
         </div>
     </section>
@@ -696,7 +542,6 @@
         </div>
     </section>
 
-    <!-- ─── SANCTUM CONTROLS (VIBE TUNER) ─── -->
     <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Sanctum Controls">
         <i class="fa-solid fa-sliders"></i>
     </button>
@@ -733,144 +578,6 @@
     <script src="sfx.js"></script>
 
     <script>
-        // ─── SUPABASE CREDENTIALS CONFIGURATION ───
-        const SUPABASE_URL = 'https://gqxitwkhefshdzbvvyzq.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_v8UJGKUlDRY8U8V7gkYLyA_usWmEj5_'; // Ensure your actual Anon public key is kept here
-
-        let supabaseClient = null;
-        if (typeof supabase !== 'undefined' && !SUPABASE_ANON_KEY.includes('YOUR_ANON')) {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
-
-        // ─── IN-SITE TOAST NOTIFICATION ───
-        function showSanctumToast(message, isSuccess = true) {
-            const toast = document.getElementById('sanctum-toast');
-            const toastMsg = document.getElementById('toast-msg');
-            const toastIcon = document.getElementById('toast-icon');
-
-            toastMsg.textContent = message;
-            toastIcon.className = isSuccess ? 'fa-solid fa-shield-halved' : 'fa-solid fa-triangle-exclamation';
-            toast.style.borderColor = isSuccess ? 'var(--spectral-teal)' : '#ff4d4d';
-
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 5500);
-        }
-
-        // ─── LIVE VOUCH COUNTER ───
-        async function loadVouchCount() {
-            const counterEl = document.getElementById('vouch-count');
-            if (!supabaseClient) {
-                counterEl.textContent = '0';
-                return;
-            }
-
-            try {
-                const { count, error } = await supabaseClient
-                    .from('vouches')
-                    .select('*', { count: 'exact', head: true });
-
-                if (!error && count !== null) {
-                    counterEl.textContent = count;
-                } else {
-                    counterEl.textContent = '0';
-                }
-            } catch (err) {
-                counterEl.textContent = '0';
-            }
-        }
-
-        // ─── POPUP DISCORD AUTH (KEEPS SITE OPEN) ───
-        async function handleDiscordVouch() {
-            if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
-            
-            if (!supabaseClient) {
-                showSanctumToast('Please link your Supabase Anon Key in index.html first.', false);
-                return;
-            }
-
-            const { data, error } = await supabaseClient.auth.signInWithOAuth({
-                provider: 'discord',
-                options: {
-                    redirectTo: window.location.origin + window.location.pathname,
-                    skipBrowserRedirect: true
-                }
-            });
-
-            if (error || !data?.url) {
-                showSanctumToast(error?.message || 'Discord provider is disabled in Supabase.', false);
-                return;
-            }
-
-            const popup = window.open(data.url, 'DiscordAuth', 'width=500,height=750');
-            
-            const checkTimer = setInterval(async () => {
-                try {
-                    if (popup && popup.location && popup.location.href.includes(window.location.origin)) {
-                        const popupUrl = new URL(popup.location.href);
-                        
-                        if (popupUrl.searchParams.has('error')) {
-                            const errDesc = popupUrl.searchParams.get('error_description') || 'Discord authentication rejected.';
-                            showSanctumToast(errDesc, false);
-                            popup.close();
-                            clearInterval(checkTimer);
-                            return;
-                        }
-
-                        popup.close();
-                        clearInterval(checkTimer);
-                        await checkAuthCallback();
-                    }
-                } catch (crossOriginErr) {
-                    // Ignored while on discord domain
-                }
-
-                if (popup && popup.closed) {
-                    clearInterval(checkTimer);
-                    await checkAuthCallback();
-                }
-            }, 500);
-        }
-
-        // ─── FIXED AUTH CALLBACK (REJECTS UNWHITELISTED ACCURATELY) ───
-        async function checkAuthCallback() {
-            if (!supabaseClient) return;
-
-            const currentParams = new URLSearchParams(window.location.search);
-            if (currentParams.has('error')) {
-                showSanctumToast(currentParams.get('error_description') || 'Authentication cancelled.', false);
-                window.history.replaceState({}, document.title, window.location.pathname);
-                return;
-            }
-
-            try {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-
-                if (session) {
-                    const { data, error } = await supabaseClient.rpc('submit_vouch');
-                    
-                    if (error) {
-                        showSanctumToast(error.message, false);
-                    } else if (data) {
-                        // Explicit validation check
-                        if (data.success) {
-                            showSanctumToast(data.message, true); // Green aura success
-                        } else {
-                            showSanctumToast(data.message, false); // Red alert for unwhitelisted or claimed ID
-                        }
-                    }
-
-                    // Keep visitor state unauthenticated
-                    await supabaseClient.auth.signOut();
-                    loadVouchCount();
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                }
-            } catch (err) {
-                showSanctumToast('Verification check encountered an error.', false);
-            }
-        }
-
         // ─── CINEMATIC LOGIC ───
         const loader = document.getElementById('viego-loader');
         const skipBtn = document.getElementById('btn-skip');
@@ -1030,7 +737,7 @@
             }
         }
 
-        // LOAD SAVED SETTINGS & INITIALIZE VOUCHES
+        // LOAD SAVED SETTINGS
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('viego_aspect') || 'ruined';
             setViegoTheme(savedTheme);
@@ -1047,9 +754,6 @@
                 sfxBtn.textContent = enabled ? 'SOUND FX: ON 🔊' : 'SOUND FX: OFF 🔇';
                 sfxBtn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
             }
-
-            loadVouchCount();
-            checkAuthCallback();
         });
     </script>
 </body>
