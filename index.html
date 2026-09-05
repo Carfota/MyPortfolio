@@ -174,7 +174,7 @@
         }
 
         body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
+        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0.1) contrast(1.1) blur(0px); }
 
         .fog-layer {
             position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -213,7 +213,7 @@
         .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── DYNAMIC FAST ENTRY ANIMATIONS ─── */
+        /* ─── DYNAMIC ENTRY ANIMATIONS ─── */
         .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
         .hero-title::after { width: 0; }
 
@@ -315,7 +315,7 @@
             transition: border-color 1.5s;
         }
 
-        /* ─── STATS SECTION (NOW 4 CARDS GRID) ─── */
+        /* ─── STATS SECTION (4 CARDS GRID) ─── */
         .stats-section { position: relative; z-index: 10; padding: 0 10vw 60px; }
 
         .stats-grid {
@@ -459,7 +459,7 @@
         .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 20px var(--vignette-color); }
         .btn-ruin:hover::before { left: 0; }
 
-        /* ─── SANCTUM NOTIFICATION TOAST ─── */
+        /* ─── IN-SITE TOAST NOTIFICATION ─── */
         .sanctum-toast {
             position: fixed;
             top: 24px;
@@ -593,7 +593,7 @@
         
         <!-- CURRENTLY WORKING WITH: PLAYMISTIC BANNER -->
         <a href="https://playmistic.com/" target="_blank" class="partner-shard">
-            <img src="discord-lookup_1430320982698233918_avatar_5959.jpg" alt="Playmistic Avatar" class="partner-avatar">
+            <img src="https://cdn.discordapp.com/icons/1430320982698233918/edc8c4b8dbe51b9af92252e80d409d25.png?size=1024" alt="Playmistic Avatar" class="partner-avatar">
             <div class="partner-info">
                 <span class="partner-tag">Currently Working With:</span>
                 <span class="partner-name">Playmistic Interactive</span>
@@ -606,7 +606,7 @@
         </div>
     </section>
 
-    <!-- ─── THE RUINED STATS (NOW 4 CARDS WITH SOVEREIGN ENDORSEMENT) ─── -->
+    <!-- ─── THE RUINED STATS (4 CARDS GRID) ─── -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-card">
@@ -695,16 +695,15 @@
 
     <script>
         // ─── SUPABASE CREDENTIALS CONFIGURATION ───
-        // Paste your exact Project URL and Anon Public Key here from Supabase Settings -> API
         const SUPABASE_URL = 'https://gqxitwkhefshdzbvvyzq.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_v8UJGKUlDRY8U8V7gkYLyA_usWmEj5_';
+        const SUPABASE_ANON_KEY = 'YOUR_ANON_PUBLIC_KEY'; // Paste your actual Anon Public Key from Supabase Project Settings -> API
 
         let supabaseClient = null;
-        if (typeof supabase !== 'undefined' && SUPABASE_URL !== 'https://YOUR_PROJECT_ID.supabase.co') {
+        if (typeof supabase !== 'undefined' && !SUPABASE_ANON_KEY.includes('YOUR_ANON')) {
             supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         }
 
-        // ─── TOAST NOTIFICATION HANDLER ───
+        // ─── IN-SITE TOAST NOTIFICATION ───
         function showSanctumToast(message, isSuccess = true) {
             const toast = document.getElementById('sanctum-toast');
             const toastMsg = document.getElementById('toast-msg');
@@ -743,28 +742,39 @@
             }
         }
 
-        // ─── DISCORD OAUTH2 ENDORSEMENT TRIGGER ───
+        // ─── POPUP DISCORD AUTH (KEEPS SITE OPEN) ───
         async function handleDiscordVouch() {
             if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
             
             if (!supabaseClient) {
-                showSanctumToast('Please link your Supabase keys to enable live endorsements.', false);
+                showSanctumToast('Please link your Supabase Anon Key in index.html first.', false);
                 return;
             }
 
             const { data, error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'discord',
                 options: {
-                    redirectTo: window.location.origin + window.location.pathname
+                    redirectTo: window.location.origin + window.location.pathname,
+                    skipBrowserRedirect: true
                 }
             });
 
-            if (error) {
-                showSanctumToast('Failed to contact Discord realm: ' + error.message, false);
+            if (error || !data?.url) {
+                showSanctumToast(error?.message || 'Discord provider is disabled in Supabase.', false);
+                return;
             }
+
+            const popup = window.open(data.url, 'DiscordAuth', 'width=500,height=750');
+            
+            const checkTimer = setInterval(async () => {
+                if (popup && popup.closed) {
+                    clearInterval(checkTimer);
+                    await checkAuthCallback();
+                }
+            }, 1000);
         }
 
-        // ─── OAUTH CALLBACK VERIFICATION ───
+        // ─── VERIFY AUTH RESULT & SEAL STATUS ───
         async function checkAuthCallback() {
             if (!supabaseClient) return;
 
@@ -772,7 +782,6 @@
                 const { data: { session } } = await supabaseClient.auth.getSession();
 
                 if (session) {
-                    // Call the secure PostgreSQL function
                     const { data, error } = await supabaseClient.rpc('submit_vouch');
                     
                     if (data) {
@@ -781,15 +790,12 @@
                         showSanctumToast(error.message, false);
                     }
 
-                    // Clean session so public visits remain unauthenticated
                     await supabaseClient.auth.signOut();
                     loadVouchCount();
-                    
-                    // Remove Supabase hash credentials from browser bar
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
             } catch (err) {
-                console.error("Auth check failed:", err);
+                showSanctumToast('Verification failed to complete.', false);
             }
         }
 
@@ -970,7 +976,6 @@
                 sfxBtn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
             }
 
-            // Fetch live vouch data & check login redirect
             loadVouchCount();
             checkAuthCallback();
         });
