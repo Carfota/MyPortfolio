@@ -51,7 +51,29 @@
             overflow-x: hidden;
         }
 
-        /* ─── SHADER HERO BANNER (FIRST SECTION) ─── */
+        /* ─── SMOOTH SCROLL REVEAL & TYPOGRAPHY TRANSITIONS ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            filter: blur(4px);
+            transition:
+                opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform, filter;
+        }
+
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ─── SHADER & PATH-DRAWING HERO BANNER ─── */
         .shader-hero {
             position: relative;
             width: 100%;
@@ -71,6 +93,15 @@
             width: 100%;
             height: 100%;
             z-index: 1;
+            opacity: 0.65;
+        }
+
+        .shader-vignette {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: radial-gradient(circle at center, rgba(9, 9, 11, 0.25) 0%, rgba(9, 9, 11, 0.88) 100%);
+            pointer-events: none;
         }
 
         .shader-overlay-content {
@@ -78,34 +109,63 @@
             z-index: 10;
             text-align: center;
             pointer-events: none;
+            width: 100%;
+            max-width: 1150px;
             padding: 0 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 14px;
         }
 
-        .shader-title {
-            font-family: var(--font-head);
-            font-size: clamp(3.2rem, 9vw, 6.8rem);
-            font-weight: 700;
-            line-height: 1;
-            letter-spacing: -0.04em;
-            color: #ffffff;
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.75);
+        .hero-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.38em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+        }
+
+        /* SVG Path-Drawing Brand Container */
+        .path-drawing-wrapper {
+            width: 100%;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.985);
+            animation: heroScaleIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+        }
+
+        #brand-path-svg {
+            width: 100%;
+            height: auto;
+            max-height: 240px;
+            overflow: visible;
+            visibility: hidden;
         }
 
         .shader-subtitle {
+            margin-top: 12px;
             font-family: var(--font-mono);
-            font-size: clamp(0.75rem, 1.5vw, 0.95rem);
-            letter-spacing: 0.22em;
+            font-size: clamp(0.75rem, 1.4vw, 0.92rem);
+            letter-spacing: 0.18em;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.85);
-            background: rgba(9, 9, 11, 0.55);
-            backdrop-filter: blur(8px);
-            padding: 6px 16px;
+            background: rgba(9, 9, 11, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 20px;
             border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            opacity: 0;
+            transform: translateY(16px);
+            animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
         }
 
         .scroll-cue {
@@ -115,19 +175,46 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             text-decoration: none;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.5);
             font-family: var(--font-mono);
-            font-size: 0.7rem;
-            letter-spacing: 0.15em;
+            font-size: 0.65rem;
+            letter-spacing: 0.28em;
             text-transform: uppercase;
-            transition: color 0.2s ease, transform 0.2s ease;
+            transition: color 0.25s ease;
+            opacity: 0;
+            animation: heroFadeIn 0.7s ease 1s forwards;
         }
 
         .scroll-cue:hover {
             color: #ffffff;
-            transform: translateY(3px);
+        }
+
+        .scroll-cue-line {
+            display: block;
+            width: 1px;
+            height: 32px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.65), transparent);
+            transform-origin: top;
+            animation: pulseLine 1.9s ease-in-out infinite;
+        }
+
+        @keyframes heroFadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes heroScaleIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes heroFadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes pulseLine {
+            0%, 100% { transform: scaleY(1); opacity: 0.65; }
+            50% { transform: scaleY(0.5); opacity: 0.2; }
         }
 
         /* ─── NIKE-INSPIRED TOP BAR & FULLSCREEN OVERLAY MENU ─── */
@@ -181,12 +268,29 @@
             text-decoration: none;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            transition: color 0.2s ease;
+            transition: color 0.25s ease;
+            position: relative;
+        }
+
+        .nav-quick-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0%;
+            height: 1px;
+            background: var(--text-primary);
+            transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .nav-quick-links a:hover,
         .nav-quick-links a.active {
             color: var(--text-primary);
+        }
+
+        .nav-quick-links a.active::after,
+        .nav-quick-links a:hover::after {
+            width: 100%;
         }
 
         .nike-menu-trigger {
@@ -283,7 +387,7 @@
             letter-spacing: -0.03em;
             line-height: 1.05;
             transform: translateY(100%);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease, padding-left 0.25s ease;
         }
 
         .nike-overlay.open .nike-nav-link {
@@ -399,7 +503,7 @@
         }
 
         section {
-            padding: 80px 0;
+            padding: 88px 0;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -416,22 +520,27 @@
             font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.18em;
             display: block;
             margin-bottom: 8px;
         }
 
         .section-title {
             font-family: var(--font-head);
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-size: clamp(1.9rem, 4.2vw, 2.6rem);
             font-weight: 700;
             letter-spacing: -0.03em;
             color: var(--text-primary);
+            transition: letter-spacing 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .section-header:hover .section-title {
+            letter-spacing: -0.015em;
         }
 
         /* ─── OVERVIEW SECTION ─── */
         #about {
-            padding: 90px 0 80px;
+            padding: 96px 0 88px;
         }
 
         .status-pill {
@@ -454,6 +563,12 @@
             background: #ffffff;
             border-radius: 50%;
             box-shadow: 0 0 8px #ffffff;
+            animation: statusPulse 2.4s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.85); }
         }
 
         .hero-subtitle {
@@ -476,12 +591,12 @@
             text-decoration: none;
             color: var(--text-primary);
             margin-bottom: 48px;
-            transition: border-color 0.2s ease, transform 0.2s ease;
+            transition: border-color 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .partner-card:hover {
             border-color: var(--border-hover);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
 
         .partner-card img {
@@ -528,6 +643,12 @@
             border: 1px solid var(--border-color);
             padding: 24px;
             border-radius: 10px;
+            transition: border-color 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .stat-box:hover {
+            border-color: var(--text-secondary);
+            transform: translateY(-2px);
         }
 
         .stat-num {
@@ -561,12 +682,12 @@
             padding: 28px;
             display: flex;
             flex-direction: column;
-            transition: border-color 0.25s ease, transform 0.25s ease;
+            transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .card:hover {
             border-color: var(--border-hover);
-            transform: translateY(-3px);
+            transform: translateY(-4px);
         }
 
         .card-badge {
@@ -587,6 +708,7 @@
             font-size: 1.4rem;
             font-weight: 700;
             margin-bottom: 10px;
+            transition: color 0.2s ease;
         }
 
         .card-text {
@@ -611,6 +733,13 @@
             border: 1px solid var(--border-color);
             padding: 4px 10px;
             border-radius: 4px;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .card:hover .tag,
+        .system-card:hover .tag {
+            border-color: #3f3f46;
+            color: var(--text-primary);
         }
 
         /* ─── SKIPER67 VIDEO PLAYER & SYSTEMS SHOWCASE ─── */
@@ -632,7 +761,7 @@
             color: var(--text-secondary);
             border: 1px solid var(--border-color);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .filter-btn:hover {
@@ -660,7 +789,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: border-color 0.25s ease, transform 0.25s ease;
+            transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .system-card.hidden {
@@ -669,7 +798,7 @@
 
         .system-card:hover {
             border-color: var(--border-hover);
-            transform: translateY(-3px);
+            transform: translateY(-4px);
         }
 
         /* Skiper67 Thumbnail Wrapper + Magnetic Play Pill */
@@ -1003,12 +1132,13 @@
             text-decoration: none;
             border: 1px solid var(--accent);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .btn-primary:hover {
             background: transparent;
             color: var(--text-primary);
+            transform: translateY(-2px);
         }
 
         .btn-outline {
@@ -1027,13 +1157,13 @@
             border: 1px solid var(--border-color);
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             margin-top: auto;
         }
 
         .btn-outline:hover {
             border-color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         /* ─── FOOTER ─── */
@@ -1044,6 +1174,20 @@
             font-family: var(--font-mono);
             font-size: 0.78rem;
             color: var(--text-muted);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+                transition: none !important;
+            }
+            .hero-eyebrow, .path-drawing-wrapper, .shader-subtitle, .scroll-cue {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
         }
 
         @media (max-width: 820px) {
@@ -1147,18 +1291,57 @@
         </div>
     </div>
 
-    <!-- ─── 00. THREE.JS SHADER HERO BANNER (FIRST) ─── -->
+    <!-- ─── 00. SHADER + PATH-DRAWING HERO BANNER (FIRST) ─── -->
     <div class="shader-hero" id="hero-shader">
         <div id="shader-canvas-container"></div>
+        <div class="shader-vignette"></div>
         
         <div class="shader-overlay-content">
-            <h1 class="shader-title">CarfotaTheDev</h1>
+            <p class="hero-eyebrow">Portfolio</p>
+            <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">CarfotaTheDev</h1>
+
+            <!-- SVG Path-Drawing Signature Name -->
+            <div class="path-drawing-wrapper">
+                <svg
+                    id="brand-path-svg"
+                    width="1100"
+                    height="200"
+                    viewBox="0 0 1100 200"
+                    role="img"
+                    aria-label="CarfotaTheDev"
+                >
+                    <defs>
+                        <linearGradient id="carfotaStrokeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="55%" stop-color="#e4e4e7" />
+                            <stop offset="100%" stop-color="#71717a" />
+                        </linearGradient>
+                    </defs>
+                    <text
+                        id="brand-path-text"
+                        x="50%"
+                        y="50%"
+                        text-anchor="middle"
+                        dominant-baseline="middle"
+                        fill="none"
+                        stroke="url(#carfotaStrokeGradient)"
+                        stroke-width="2.4"
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        font-size="96"
+                        font-weight="700"
+                        font-family="'Space Grotesk', Arial, sans-serif"
+                        letter-spacing="0.02em"
+                    >CarfotaTheDev</text>
+                </svg>
+            </div>
+
             <div class="shader-subtitle">Luau Systems Engineer // Game Programmer</div>
         </div>
 
         <a href="#about" class="scroll-cue">
-            <span>Explore Work</span>
-            <i class="fa-solid fa-chevron-down"></i>
+            <span>Scroll</span>
+            <span class="scroll-cue-line"></span>
         </a>
     </div>
 
@@ -1166,22 +1349,22 @@
 
         <!-- ─── 01. OVERVIEW ─── -->
         <section id="about">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <span class="section-tag">00 // Profile</span>
                 <h2 class="section-title">Overview</h2>
             </div>
 
-            <div class="status-pill">
+            <div class="status-pill reveal reveal-delay-1">
                 <span class="status-dot"></span>
                 <span id="hero-status-text">COMMISSIONS OPEN // USD ONLY</span>
             </div>
 
-            <p class="hero-subtitle">
+            <p class="hero-subtitle reveal reveal-delay-1">
                 Roblox Luau Systems Engineer &amp; Game Programmer. Specializing in modular server-client architectures, combat frameworks, and backend integrations.
             </p>
 
             <!-- Active Studio Role -->
-            <a href="https://playmistic.com/" target="_blank" class="partner-card">
+            <a href="https://playmistic.com/" target="_blank" class="partner-card reveal reveal-delay-2">
                 <img src="https://cdn.discordapp.com/icons/1430320982698233918/edc8c4b8dbe51b9af92252e80d409d25.png?size=1024" alt="Playmistic Interactive">
                 <div class="partner-meta">
                     <span class="partner-label">Currently Working With</span>
@@ -1191,15 +1374,15 @@
 
             <!-- Quick Stats -->
             <div class="stats-grid">
-                <div class="stat-box">
+                <div class="stat-box reveal reveal-delay-1">
                     <div class="stat-num">2+</div>
                     <div class="stat-desc">Years Luau Experience</div>
                 </div>
-                <div class="stat-box">
+                <div class="stat-box reveal reveal-delay-2">
                     <div class="stat-num">5+</div>
                     <div class="stat-desc">Games Developed</div>
                 </div>
-                <div class="stat-box">
+                <div class="stat-box reveal reveal-delay-3">
                     <div class="stat-num">7+</div>
                     <div class="stat-desc">Custom Frameworks</div>
                 </div>
@@ -1208,13 +1391,13 @@
 
         <!-- ─── 02. GAMES & PROJECTS ─── -->
         <section id="games">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <span class="section-tag">01 // Game Titles</span>
                 <h2 class="section-title">Featured Projects</h2>
             </div>
 
             <div class="games-grid">
-                <div class="card">
+                <div class="card reveal reveal-delay-1">
                     <span class="card-badge">In Development</span>
                     <h3 class="card-title">Blackgate: BreakPoint</h3>
                     <p class="card-text">
@@ -1227,7 +1410,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card reveal reveal-delay-2">
                     <span class="card-badge">Playable Prototype</span>
                     <h3 class="card-title">BlockZone</h3>
                     <p class="card-text">
@@ -1240,7 +1423,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card reveal reveal-delay-3">
                     <span class="card-badge">Co-Development</span>
                     <h3 class="card-title">Haunted School &amp; Horror Suite</h3>
                     <p class="card-text">
@@ -1257,12 +1440,12 @@
 
         <!-- ─── 03. SCRIPTING SYSTEMS (SKIPER67 VIDEO STYLE) ─── -->
         <section id="systems">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <span class="section-tag">02 // Technical Showcase</span>
                 <h2 class="section-title">Scripting Systems</h2>
             </div>
 
-            <div class="filter-bar">
+            <div class="filter-bar reveal reveal-delay-1">
                 <button class="filter-btn active" onclick="filterSystems('all', this)">All Systems</button>
                 <button class="filter-btn" onclick="filterSystems('combat', this)">Combat</button>
                 <button class="filter-btn" onclick="filterSystems('backend', this)">Backend &amp; APIs</button>
@@ -1273,7 +1456,7 @@
             <div class="systems-grid">
 
                 <!-- 1. Turf War -->
-                <div class="system-card" data-tags="luau combat">
+                <div class="system-card reveal reveal-delay-1" data-tags="luau combat">
                     <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map', 'Dynamic territory control system updating zone colors and map state in real time as teams capture sectors.')">
                         <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
@@ -1294,7 +1477,7 @@
                 </div>
 
                 <!-- 2. GoogleDataSave -->
-                <div class="system-card" data-tags="luau backend">
+                <div class="system-card reveal reveal-delay-2" data-tags="luau backend">
                     <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'External Cloud DataSave', 'Flexible external data persistence bridge utilizing HTTP services and cloud APIs to store structured player inventory and progression.')">
                         <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
@@ -1316,7 +1499,7 @@
                 </div>
 
                 <!-- 3. Advanced AI System -->
-                <div class="system-card" data-tags="luau ai backend">
+                <div class="system-card reveal reveal-delay-3" data-tags="luau ai backend">
                     <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Conversational AI NPC', 'AI-driven NPC integrated via HTTP bridge with GroqCloud API, featuring contextual memory and a per-player reputation system.')">
                         <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
@@ -1338,7 +1521,7 @@
                 </div>
 
                 <!-- 4. Flexible Combat System -->
-                <div class="system-card" data-tags="luau combat">
+                <div class="system-card reveal reveal-delay-1" data-tags="luau combat">
                     <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Modular Melee Combat', 'Combo-driven melee framework with hitbox detection, camera trauma/shake, weapon support, and directional knockbacks.')">
                         <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
@@ -1359,7 +1542,7 @@
                 </div>
 
                 <!-- 5. Admin Announcement System -->
-                <div class="system-card" data-tags="luau commissioned backend">
+                <div class="system-card reveal reveal-delay-2" data-tags="luau commissioned backend">
                     <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Broadcast System', 'Commissioned global server announcement system enabling authorized admins to push styled, animated alerts to all active clients.')">
                         <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
@@ -1380,7 +1563,7 @@
                 </div>
 
                 <!-- 6. Target Locking System -->
-                <div class="system-card" data-tags="luau combat">
+                <div class="system-card reveal reveal-delay-3" data-tags="luau combat">
                     <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Universal Target Lock', 'Smooth camera target-locking framework capable of tracking players, NPCs, or world objects with custom viewport UI.')">
                         <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
@@ -1405,19 +1588,19 @@
 
         <!-- ─── 04. COMMISSIONS & SERVICES ─── -->
         <section id="hire">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <span class="section-tag">03 // Work With Me</span>
                 <h2 class="section-title">Commissions &amp; Services</h2>
             </div>
 
-            <div class="notice-banner" id="payment-banner">
+            <div class="notice-banner reveal reveal-delay-1" id="payment-banner">
                 <i class="fa-solid fa-circle-info"></i>
                 <span id="payment-banner-text">Currently accepting USD only (PayPal / Card). Robux commissions are temporarily closed.</span>
             </div>
 
             <div class="pricing-grid">
                 <!-- Tier 1 -->
-                <div class="card">
+                <div class="card reveal reveal-delay-1">
                     <span class="card-badge">Tier 01 // Basic</span>
                     <h3 class="card-title">Small Systems</h3>
                     <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary); margin-bottom: 12px;">Quote Based on Scope</p>
@@ -1431,7 +1614,7 @@
                 </div>
 
                 <!-- Tier 2 -->
-                <div class="card" style="border-color: var(--text-secondary);">
+                <div class="card reveal reveal-delay-2" style="border-color: var(--text-secondary);">
                     <span class="card-badge">Tier 02 // Standard</span>
                     <h3 class="card-title">Advanced Mechanics</h3>
                     <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary); margin-bottom: 12px;">Quote Based on Scope</p>
@@ -1445,7 +1628,7 @@
                 </div>
 
                 <!-- Tier 3 -->
-                <div class="card">
+                <div class="card reveal reveal-delay-3">
                     <span class="card-badge">Tier 03 // Full Suite</span>
                     <h3 class="card-title">Custom Backend</h3>
                     <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary); margin-bottom: 12px;">Quote Based on Scope</p>
@@ -1460,7 +1643,7 @@
             </div>
 
             <!-- Terms of Service -->
-            <div class="tos-panel">
+            <div class="tos-panel reveal reveal-delay-1">
                 <h3><i class="fa-solid fa-file-contract"></i> Terms of Service</h3>
                 <ul>
                     <li><strong>50% upfront deposit</strong> is required before development begins.</li>
@@ -1470,7 +1653,7 @@
                 </ul>
             </div>
 
-            <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-primary">
+            <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-primary reveal reveal-delay-2">
                 <i class="fa-brands fa-discord" style="font-size: 1.1rem;"></i> Request a Quote on Discord
             </a>
         </section>
@@ -1516,7 +1699,139 @@
     </div>
 
     <script>
-        // ─── THREE.JS SHADER ANIMATION (PORTED FROM SHADER-ANIMATION.TSX) ───
+        // ─── SVG PATH-DRAWING BRAND ANIMATION (PORTED FROM PATH-DRAWING-PORTFOLIO-HERO.TSX) ───
+        function loadSvgImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error("svg raster failed"));
+                img.src = url;
+            });
+        }
+
+        function countOpaquePixels(ctx, w, h) {
+            const data = ctx.getImageData(0, 0, w, h).data;
+            let n = 0;
+            for (let i = 3; i < data.length; i += 4) {
+                if (data[i] > 12) n += 1;
+            }
+            return n;
+        }
+
+        async function rasterizeInk(sourceSvg, applyStyle) {
+            const clone = sourceSvg.cloneNode(true);
+            clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            const text = clone.querySelector("text");
+            if (!text) return 0;
+            applyStyle(text);
+            text.setAttribute("stroke", "#ffffff");
+            text.style.stroke = "#ffffff";
+
+            const vb = sourceSvg.viewBox.baseVal;
+            const w = Math.max(1, Math.round(vb.width || 1100));
+            const h = Math.max(1, Math.round(vb.height || 200));
+            clone.setAttribute("width", String(w));
+            clone.setAttribute("height", String(h));
+            clone.style.visibility = "visible";
+
+            const xml = new XMLSerializer().serializeToString(clone);
+            const blob = new Blob([xml], { type: "image/svg+xml;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            try {
+                const img = await loadSvgImage(url);
+                const cw = Math.max(1, Math.round(w * 0.45));
+                const ch = Math.max(1, Math.round(h * 0.45));
+                const canvas = document.createElement("canvas");
+                canvas.width = cw;
+                canvas.height = ch;
+                const ctx = canvas.getContext("2d", { willReadFrequently: true });
+                if (!ctx) return 0;
+                ctx.clearRect(0, 0, cw, ch);
+                ctx.drawImage(img, 0, 0, cw, ch);
+                return countOpaquePixels(ctx, cw, ch);
+            } finally {
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        async function measureExactDashLength(svg) {
+            const full = await rasterizeInk(svg, (text) => {
+                text.style.strokeDasharray = "none";
+                text.style.strokeDashoffset = "0";
+            });
+            if (full <= 0) throw new Error("empty ink");
+
+            const covered = async (dash) => {
+                const ink = await rasterizeInk(svg, (text) => {
+                    text.style.strokeDasharray = `${dash} 100000`;
+                    text.style.strokeDashoffset = "0";
+                });
+                return ink >= full * 0.994;
+            };
+
+            let hi = 64;
+            while (hi < 24000 && !(await covered(hi))) {
+                hi *= 2;
+            }
+
+            let lo = 1;
+            while (lo < hi) {
+                const mid = (lo + hi) >> 1;
+                if (await covered(mid)) hi = mid;
+                else lo = mid + 1;
+            }
+
+            return Math.max(1, lo);
+        }
+
+        async function initPathDrawingBrand() {
+            const svg = document.getElementById("brand-path-svg");
+            const textEl = document.getElementById("brand-path-text");
+            if (!svg || !textEl) return;
+
+            const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (prefersReduced) {
+                textEl.style.strokeDasharray = "none";
+                textEl.style.strokeDashoffset = "0";
+                svg.style.visibility = "visible";
+                return;
+            }
+
+            let dashLength = 0;
+            try {
+                if (document.fonts && document.fonts.ready) {
+                    await document.fonts.ready;
+                }
+                dashLength = await measureExactDashLength(svg);
+            } catch {
+                const width = textEl.getComputedTextLength() || 13 * 96 * 0.62;
+                dashLength = Math.max(1, Math.ceil(width * 1.15));
+            }
+
+            svg.style.visibility = "visible";
+            textEl.style.strokeDasharray = `${dashLength} ${dashLength}`;
+            textEl.style.strokeDashoffset = String(dashLength);
+
+            const drawMs = 5500;
+            const unitsPerMs = dashLength / drawMs;
+            let offset = dashLength;
+            let last = performance.now();
+
+            function tick(now) {
+                const dt = Math.min(48, now - last);
+                last = now;
+                offset -= unitsPerMs * dt;
+                if (offset <= 0) {
+                    offset = dashLength;
+                }
+                textEl.style.strokeDashoffset = String(offset);
+                requestAnimationFrame(tick);
+            }
+
+            requestAnimationFrame(tick);
+        }
+
+        // ─── THREE.JS SHADER ANIMATION ───
         function initShaderAnimation() {
             const container = document.getElementById('shader-canvas-container');
             if (!container || typeof THREE === 'undefined') return;
@@ -1593,6 +1908,29 @@
             };
 
             animate();
+        }
+
+        // ─── SMOOTH SCROLL REVEAL OBSERVER ───
+        function initScrollReveals() {
+            const revealEls = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window)) {
+                revealEls.forEach(el => el.classList.add('is-visible'));
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.12,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            revealEls.forEach(el => observer.observe(el));
         }
 
         // ─── PAYMENT CONFIGURATION ("USD_ONLY" or "BOTH") ───
@@ -1768,6 +2106,7 @@
                 const tags = card.getAttribute('data-tags').split(' ');
                 if (category === 'all' || tags.includes(category)) {
                     card.classList.remove('hidden');
+                    card.classList.add('is-visible');
                 } else {
                     card.classList.add('hidden');
                 }
@@ -1804,6 +2143,8 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initShaderAnimation();
+            initPathDrawingBrand();
+            initScrollReveals();
             applyPaymentConfig();
         });
     </script>
