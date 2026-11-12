@@ -3,758 +3,1094 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carfota | Architect of Ruin</title>
+    <title>CarfotaTheDev | Luau Systems & Game Developer</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
-            /* 👑 DEFAULT: THE RUINED KING (SPECTRAL MIST) */
-            --void-black: #0a0a0f;
-            --spectral-teal: #3ddc97;
-            --mist-deep: #1fbf87;
-            --ruin-purple: #4a2f6b;
-            --ruin-shadow: #6b3fa0;
-            --bone-white: #e8e6e1;
+            --bg-primary: #09090b;
+            --bg-secondary: #111114;
+            --bg-card: #141418;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border-color: #27272a;
+            --border-hover: #fafafa;
+            --accent: #ffffff;
+            --accent-fg: #09090b;
 
-            --font-display: 'Cinzel Decorative', serif;
+            --font-head: 'Space Grotesk', sans-serif;
             --font-body: 'Inter', sans-serif;
-            
-            --glow-mult: 1;
-            --fog-opacity: 1;
-            
-            --vignette-color: rgba(61, 220, 151, 0.1);
-            --card-border: rgba(232, 230, 225, 0.1);
+            --font-mono: 'JetBrains Mono', monospace;
         }
 
-        body.theme-king {
-            /* 🏰 THE HUMAN KING (CAMAVORAN ROYALTY) */
-            --void-black: #080a12; 
-            --spectral-teal: #E2C06A; 
-            --mist-deep: #142440; 
-            --ruin-purple: #9EABB8; 
-            --ruin-shadow: #7A6332; 
-            --bone-white: #F9F6EE; 
-            
-            --vignette-color: rgba(226, 192, 106, 0.12); 
-            --card-border: rgba(212, 175, 55, 0.25); 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* NATIVE CURSOR HIDDEN COMPLETELY */
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
 
         body {
-            background-color: var(--void-black);
-            color: var(--bone-white);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             font-family: var(--font-body);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            scrollbar-width: none;
-            transition: background-color 1.5s ease, color 1.5s ease;
-        }
-        body::-webkit-scrollbar { display: none; }
-
-        /* ─── BLADE SCROLL PROGRESS BAR ─── */
-        #blade-scrollbar {
-            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
-            background: linear-gradient(90deg, transparent, var(--spectral-teal), var(--bone-white));
-            box-shadow: 0 0 calc(10px * var(--glow-mult)) var(--spectral-teal);
-            z-index: 9999; pointer-events: none; transition: width 0.1s ease-out, background 1.5s, box-shadow 1.5s;
-        }
-        #blade-scrollbar::after {
-            content: ''; position: absolute; right: -5px; top: -3px;
-            width: 10px; height: 9px; background: var(--bone-white);
-            clip-path: polygon(0 50%, 100% 0, 100% 100%);
-            box-shadow: 0 0 15px var(--bone-white);
-            transition: background 1.5s, box-shadow 1.5s;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ─── CUSTOM CURSOR WISP & TRAIL ─── */
-        .cursor-wisp {
-            position: fixed; top: 0; left: 0; width: 14px; height: 14px;
-            background: var(--spectral-teal); border-radius: 50%;
-            pointer-events: none; z-index: 999999;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 calc(25px * var(--glow-mult)) var(--spectral-teal);
-            transition: width 0.2s, height 0.2s, background 1.5s, box-shadow 1.5s; 
-            mix-blend-mode: screen;
-        }
-        .cursor-trail {
-            position: fixed; width: 8px; height: 8px;
-            background: var(--ruin-purple); border-radius: 50%;
-            pointer-events: none; z-index: 999998;
-            transform: translate(-50%, -50%); opacity: 0.5;
-            box-shadow: 0 0 15px var(--ruin-shadow);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1.5s, box-shadow 1.5s;
+        /* ─── STICKY NAVIGATION BAR ─── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(9, 9, 11, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        /* ─── THE LOADING SCREEN (CINEMATIC) ─── */
-        #viego-loader {
-            position: fixed; inset: 0; background: var(--void-black);
-            z-index: 50000; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; overflow: hidden;
-            animation: dissolveLoader 1.5s ease-in-out 8.5s forwards;
-            transition: background 1.5s;
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .skip-btn {
-            position: absolute; bottom: 30px; right: 40px;
-            background: rgba(0,0,0,0.5); border: 1px solid rgba(61, 220, 151, 0.4);
-            color: rgba(232, 230, 225, 0.9); font-family: var(--font-body);
-            font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
-            padding: 12px 24px; z-index: 50001; transition: all 0.3s ease;
-            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-        }
-        body.theme-king .skip-btn { border-color: rgba(226, 192, 106, 0.4); }
-        .skip-btn:hover {
-            color: var(--void-black); background: var(--spectral-teal);
-            border-color: var(--spectral-teal); box-shadow: 0 0 20px var(--spectral-teal);
-            font-weight: 800; transform: scale(1.05);
+        .brand-logo {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .shattered-ring {
-            position: absolute; width: 150px; height: 150px;
-            border: 2px solid rgba(61, 220, 151, 0.1); border-radius: 50%;
-            opacity: 0; animation: crackRing 3s ease-out 1s forwards;
-            transition: border-color 1.5s;
-        }
-        body.theme-king .shattered-ring { border-color: rgba(212, 175, 55, 0.2); }
-
-        .ember {
-            position: absolute; width: 6px; height: 6px;
-            background: var(--spectral-teal); border-radius: 50%;
-            box-shadow: 0 0 20px 5px var(--spectral-teal);
-            animation: pulseEmber 2s ease-in-out infinite;
-            transition: background 1.5s, box-shadow 1.5s;
+        .brand-logo span {
+            color: var(--text-muted);
         }
 
-        .viego-silhouette {
-            position: absolute; bottom: 0; width: 100vw; height: 70vh;
-            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center/cover no-repeat;
-            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            opacity: 0; filter: contrast(1.5) brightness(0.2) sepia(1) hue-rotate(130deg) saturate(1.5);
-            animation: riseSilhouette 4s ease-out 3s forwards; pointer-events: none;
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
         }
 
-        .flavor-text {
-            position: absolute; bottom: 15%; text-align: center; font-family: var(--font-body);
-            font-size: 1.15rem; color: var(--bone-white); font-weight: 300;
-            letter-spacing: 0.05em; text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            opacity: 0; overflow: hidden; white-space: nowrap;
-            border-right: 2px solid var(--spectral-teal);
-            animation: fadeInText 0.1s 4s forwards, typing 3.5s steps(93, end) 4s forwards, blinkCursor 0.7s step-end infinite;
-            transition: color 1.5s, border-color 1.5s;
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: color 0.2s ease;
         }
 
-        /* ─── SMOOTH DUAL BACKGROUND ART ENGINE ─── */
-        .background-art {
-            position: fixed; top: 0; right: 0; width: 70vw; height: 100vh;
-            z-index: -2; pointer-events: none;
-            mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), filter 1.5s ease;
-        }
-        
-        .art-ruined {
-            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg') center right/cover no-repeat;
-            opacity: 0.15; filter: grayscale(0.4) contrast(1.2); transform: scale(1);
-        }
-        .art-king {
-            background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_21.jpg') center right/cover no-repeat;
-            opacity: 0; filter: grayscale(0.2) contrast(1.1) blur(4px); transform: scale(1.08);
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-primary);
         }
 
-        body.theme-king .art-ruined { opacity: 0; transform: scale(0.95); filter: grayscale(1) blur(5px); }
-        body.theme-king .art-king { opacity: 0.35; transform: scale(1); filter: grayscale(0) contrast(1.1) blur(0px); }
-
-        .fog-layer {
-            position: fixed; inset: 0; z-index: -1; pointer-events: none;
-            background: 
-                radial-gradient(ellipse at 80% 20%, rgba(61, 220, 151, 0.05) 0%, transparent 40%),
-                radial-gradient(ellipse at 20% 80%, rgba(74, 47, 107, 0.1) 0%, transparent 50%);
-            animation: driftFog 20s ease-in-out infinite alternate;
-            opacity: var(--fog-opacity);
-            transition: opacity 0.5s ease, background 1.5s ease;
+        /* ─── LAYOUT CONTAINER ─── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
-        body.theme-king .fog-layer {
-            background: 
-                radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 45%),
-                radial-gradient(ellipse at 20% 80%, rgba(20, 36, 64, 0.12) 0%, transparent 55%);
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .soul-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--fog-opacity); }
-
-        /* ─── NAVIGATION ─── */
-        nav {
-            position: relative; z-index: 10; display: flex; justify-content: center; gap: 40px; padding: 40px 0;
-            border-bottom: 1px solid rgba(232, 230, 225, 0.05);
+        section:last-of-type {
+            border-bottom: none;
         }
 
-        .nav-link {
-            font-family: var(--font-display); font-size: 1rem;
-            color: rgba(232, 230, 225, 0.6); text-decoration: none; text-transform: uppercase;
-            letter-spacing: 0.15em; transition: all 0.3s ease, color 1.5s; position: relative;
+        .section-header {
+            margin-bottom: 40px;
         }
-        .nav-link::before {
-            content: ''; position: absolute; bottom: -6px; left: 50%;
-            width: 0; height: 1px; background: var(--spectral-teal);
-            transition: all 0.3s ease, background 1.5s, box-shadow 1.5s; transform: translateX(-50%); box-shadow: 0 0 8px var(--spectral-teal);
+
+        .section-tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            display: block;
+            margin-bottom: 8px;
         }
-        .nav-link:hover, .nav-link.active { color: var(--bone-white); text-shadow: 0 0 10px var(--mist-deep); }
-        .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
-        /* ─── DYNAMIC FAST ENTRY ANIMATIONS ─── */
-        .hero, .hero-subtitle, .hero-tagline, .stats-section, .ruins-section { opacity: 0; }
-        .hero-title::after { width: 0; }
-
-        body.content-ready .hero { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        body.content-ready .hero-title::after { animation: underlineGrow 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
-        body.content-ready .hero-subtitle { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
-        body.content-ready .hero-tagline { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards; }
-        body.content-ready .stats-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards; }
-        body.content-ready .ruins-section { animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1s forwards; }
+        .section-title {
+            font-family: var(--font-head);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+        }
 
         /* ─── HERO SECTION ─── */
-        .hero {
-            position: relative; z-index: 10; min-height: 60vh; display: flex; flex-direction: column;
-            justify-content: center; padding: 0 10vw;
+        #about {
+            padding: 100px 0 80px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            margin-bottom: 24px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ffffff;
         }
 
         .hero-title {
-            font-family: var(--font-display); font-size: clamp(4rem, 8vw, 7rem);
-            font-weight: 900; line-height: 1; color: var(--bone-white);
-            margin-bottom: 10px; position: relative; display: inline-block; transition: color 1.5s;
-        }
-
-        .hero-title::after {
-            content: ''; position: absolute; bottom: -10px; left: 0;
-            height: 2px; background: var(--spectral-teal); box-shadow: 0 0 15px var(--spectral-teal);
-            transition: background 1.5s, box-shadow 1.5s;
+            font-family: var(--font-head);
+            font-size: clamp(2.8rem, 7vw, 4.8rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 16px;
         }
 
         .hero-subtitle {
-            font-family: var(--font-body); font-size: clamp(1rem, 1.5vw, 1.2rem);
-            color: var(--spectral-teal); font-weight: 300; letter-spacing: 0.2em;
-            text-transform: uppercase; margin-bottom: 25px; margin-top: 20px;
-            transition: color 1.5s;
+            font-size: clamp(1.05rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            max-width: 620px;
+            margin-bottom: 32px;
+            font-weight: 400;
         }
 
-        /* ─── CURRENTLY WORKING WITH: PLAYMISTIC BANNER ─── */
-        .partner-shard {
+        /* Partner Card */
+        .partner-card {
             display: inline-flex;
             align-items: center;
-            gap: 16px;
-            background: rgba(10, 15, 20, 0.7);
-            border: 1px solid var(--card-border);
-            border-left: 3px solid var(--spectral-teal);
-            padding: 12px 24px;
-            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-            backdrop-filter: blur(12px);
+            gap: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 10px;
             text-decoration: none;
-            color: var(--bone-white);
-            margin-bottom: 30px;
-            align-self: flex-start;
-            transition: all 0.3s ease, border-color 1.5s;
-            box-shadow: inset 0 0 15px var(--vignette-color);
+            color: var(--text-primary);
+            margin-bottom: 48px;
+            transition: border-color 0.2s ease, transform 0.2s ease;
         }
 
-        .partner-shard:hover {
-            transform: translateY(-3px) scale(1.02);
-            border-color: var(--spectral-teal);
-            box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--spectral-teal);
+        .partner-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
         }
 
-        .partner-avatar {
-            width: 44px;
-            height: 44px;
+        .partner-card img {
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1.5px solid var(--spectral-teal);
-            box-shadow: 0 0 10px var(--vignette-color);
-            transition: border-color 1.5s;
+            filter: grayscale(100%);
+            border: 1px solid var(--border-color);
+            transition: filter 0.3s ease;
         }
 
-        .partner-info {
+        .partner-card:hover img {
+            filter: grayscale(0%);
+        }
+
+        .partner-meta {
             display: flex;
             flex-direction: column;
-            text-align: left;
         }
 
-        .partner-tag {
-            font-family: var(--font-body);
+        .partner-label {
+            font-family: var(--font-mono);
             font-size: 0.68rem;
-            letter-spacing: 0.2em;
+            color: var(--text-muted);
             text-transform: uppercase;
-            color: rgba(232, 230, 225, 0.6);
-            font-weight: 600;
+            letter-spacing: 0.1em;
         }
 
         .partner-name {
-            font-family: var(--font-display);
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--spectral-teal);
-            letter-spacing: 0.05em;
-            transition: color 1.5s;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
-        .hero-tagline {
-            font-family: var(--font-body); font-size: 1.1rem; color: rgba(232, 230, 225, 0.7);
-            max-width: 500px; line-height: 1.8; font-style: italic;
-            border-left: 2px solid var(--ruin-purple); padding-left: 20px;
-            transition: border-color 1.5s;
-        }
-
-        /* ─── STATS SECTION (CLEAN ORIGINAL 3 CARDS) ─── */
-        .stats-section { position: relative; z-index: 10; padding: 0 10vw 60px; }
-
+        /* Stats Row */
         .stats-grid {
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-            gap: 30px;
-            max-width: 900px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
         }
 
-        .stat-card {
-            background: rgba(10, 10, 15, 0.6);
-            border: 1px solid var(--card-border);
-            border-bottom: 2px solid var(--spectral-teal);
-            padding: 25px 20px; text-align: center;
-            backdrop-filter: blur(10px); transition: all 0.3s ease, border-color 1.5s;
-            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+        .stat-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 10px;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px); border-color: var(--spectral-teal);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px var(--vignette-color);
+        .stat-num {
+            font-family: var(--font-head);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 6px;
         }
 
-        .stat-value {
-            font-family: var(--font-display); font-size: 3rem; font-weight: 900;
-            color: var(--spectral-teal); text-shadow: 0 0 15px var(--vignette-color);
-            margin-bottom: 5px; line-height: 1; transition: color 1.5s, text-shadow 1.5s;
+        .stat-desc {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
-        .stat-label {
-            font-family: var(--font-body); font-size: 0.75rem; font-weight: 600;
-            color: rgba(232, 230, 225, 0.7); letter-spacing: 0.25em; text-transform: uppercase;
+        /* ─── GAMES SECTION ─── */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
         }
 
-        /* ─── THE RUINS (PROJECT SECTIONS) ─── */
-        .ruins-section { position: relative; z-index: 10; padding: 40px 10vw 100px; }
-
-        .section-header {
-            font-family: var(--font-display); font-size: 2rem;
-            color: var(--bone-white); margin-bottom: 50px; text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.25s ease, transform 0.25s ease;
         }
 
-        .ruins-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
-
-        .ruin-card {
-            background: rgba(10, 10, 15, 0.6); border: 1px solid var(--card-border);
-            padding: 40px; position: relative; overflow: hidden; backdrop-filter: blur(10px); transition: all 0.4s ease, border-color 1.5s;
+        .card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
         }
 
-        .ruin-card::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(circle at center, transparent 0%, var(--vignette-color) 100%);
-            opacity: 0; transition: opacity 0.5s ease, background 1.5s; pointer-events: none;
-        }
-        
-        .ruin-card::after {
-            content: ''; position: absolute; inset: 0; border: 2px solid transparent;
-            transition: all 0.4s ease, border-color 1.5s; pointer-events: none;
-        }
-
-        .ruin-card:hover {
-            transform: translateY(-5px); border-color: rgba(255,255,255,0.15);
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8);
+        .card-badge {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            align-self: flex-start;
+            margin-bottom: 16px;
         }
 
-        .ruin-card:hover::before { opacity: 1; }
-        .ruin-card:hover::after {
-            border-color: var(--spectral-teal); clip-path: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
-            box-shadow: 0 0 calc(15px * var(--glow-mult)) var(--spectral-teal);
+        .card-title {
+            font-family: var(--font-head);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
-        .ruin-number { font-family: var(--font-body); font-size: 0.8rem; color: var(--mist-deep); letter-spacing: 0.2em; margin-bottom: 10px; display: block; transition: color 1.5s; }
-        .ruin-title { font-family: var(--font-display); font-size: 1.8rem; color: var(--bone-white); margin-bottom: 15px; }
-        .ruin-desc { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; color: rgba(232, 230, 225, 0.6); margin-bottom: 25px; }
-
-        .btn-ruin {
-            display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; background: transparent;
-            border: 1px solid var(--ruin-purple); color: var(--bone-white);
-            font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 0.1em;
-            text-transform: uppercase; text-decoration: none; position: relative; overflow: hidden; transition: all 0.3s ease, border-color 1.5s;
+        .card-text {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
         }
 
-        .btn-ruin::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--spectral-teal);
-            transition: all 0.4s ease, background 1.5s; z-index: -1; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
-        .btn-ruin:hover { border-color: var(--spectral-teal); color: var(--void-black); font-weight: 700; box-shadow: 0 0 20px var(--vignette-color); }
-        .btn-ruin:hover::before { left: 0; }
-
-        /* ─── SANCTUM CONTROLS (VIBE TUNER) ─── */
-        .vibe-controller-toggle {
-            position: fixed; bottom: 24px; right: 24px; z-index: 99;
-            background: rgba(10, 10, 15, 0.8); color: var(--bone-white); border: 1px solid var(--spectral-teal);
-            width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 0 calc(20px * var(--glow-mult)) var(--mist-deep);
-            font-size: 1.2rem; transition: transform 0.25s ease, border-color 1.5s, box-shadow 1.5s; backdrop-filter: blur(10px);
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
         }
-        .vibe-controller-toggle:hover { transform: scale(1.15) rotate(15deg); border-color: var(--bone-white); color: var(--spectral-teal); }
 
-        .vibe-panel {
-            position: fixed; bottom: 95px; right: 24px; z-index: 100;
-            background: rgba(10, 10, 15, 0.96); border: 1px solid var(--spectral-teal);
-            box-shadow: 0 0 calc(40px * var(--glow-mult)) var(--mist-deep);
-            border-radius: 8px; padding: 24px 26px; width: 330px; backdrop-filter: blur(20px);
-            display: none; flex-direction: column; gap: 16px; transition: border-color 1.5s, box-shadow 1.5s;
+        /* ─── SYSTEMS SHOWCASE ─── */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 32px;
         }
-        .vibe-panel.open { display: flex; }
-        .vibe-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255, 255, 255, 0.15); padding-bottom: 10px; }
-        .vibe-title { font-family: var(--font-display); font-size: 1.05rem; color: var(--bone-white); letter-spacing: 0.1em; }
 
-        .theme-switch-row { display: flex; gap: 8px; }
-        .theme-btn {
-            flex: 1; font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em;
-            padding: 8px 4px; border-radius: 4px; cursor: pointer; text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: var(--bone-white); transition: all 0.25s ease;
+        .filter-btn {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .theme-btn.active { border-color: var(--spectral-teal); background: var(--spectral-teal); color: var(--void-black); font-weight: 800; box-shadow: 0 0 15px var(--vignette-color); }
 
-        .vibe-row { display: flex; flex-direction: column; gap: 6px; }
-        .vibe-row label { font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232, 230, 225, 0.8); display: flex; justify-content: space-between; }
-        .vibe-row input[type="range"] { accent-color: var(--spectral-teal); height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); cursor: pointer; }
+        .filter-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
+        }
 
-        .sfx-btn { padding: 6px 12px; font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; border-radius: 4px; background: rgba(0,0,0,0.6); border: 1px solid var(--spectral-teal); color: var(--bone-white); cursor: pointer; transition: 0.3s, border-color 1.5s; width: 100%; margin-top: 5px; }
-        .sfx-btn:hover { background: var(--spectral-teal); color: var(--void-black); }
+        .filter-btn.active {
+            background: var(--accent);
+            color: var(--accent-fg);
+            border-color: var(--accent);
+            font-weight: 700;
+        }
 
-        /* ─── KEYFRAMES ─── */
-        @keyframes pulseEmber { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 30px 10px var(--spectral-teal); } }
-        @keyframes crackRing { 0% { opacity: 1; transform: scale(0.8); border-color: rgba(61, 220, 151, 0.1); } 50% { opacity: 1; transform: scale(1.2); border-color: var(--spectral-teal); box-shadow: inset 0 0 20px var(--spectral-teal); } 100% { opacity: 0; transform: scale(2); border-color: transparent; } }
-        @keyframes riseSilhouette { 0% { opacity: 0; transform: translateY(50px); filter: brightness(0); } 100% { opacity: 0.6; transform: translateY(0); filter: brightness(0.4) sepia(1) hue-rotate(130deg); } }
-        @keyframes fadeInText { to { opacity: 1; } }
-        @keyframes typing { from { width: 0; } to { width: 94ch; } }
-        @keyframes blinkCursor { 50% { border-color: transparent; } }
-        @keyframes dissolveLoader { 0% { opacity: 1; filter: blur(0); transform: scale(1); } 100% { opacity: 0; filter: blur(20px); transform: scale(1.1); pointer-events: none; visibility: hidden; display: none; } }
-        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes underlineGrow { 0% { width: 0; } 100% { width: 100%; } }
-        @keyframes driftFog { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-2vw, 2vh) scale(1.05); } }
-        @keyframes soulRise { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.4; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
 
-        @media (max-width: 900px) {
-            .ruin-media { margin: -40px -30px 25px -30px; width: calc(100% + 60px); }
-            .ruin-card { padding: 40px 30px; }
-            .vibe-panel { width: calc(100vw - 48px); right: 24px; }
-            .partner-shard { width: 100%; }
+        .system-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .system-card.hidden {
+            display: none;
+        }
+
+        .system-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.75;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .system-card:hover .video-wrapper video {
+            opacity: 1;
+            transform: scale(1.03);
+        }
+
+        .expand-hint {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(9, 9, 11, 0.85);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .system-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        /* ─── SERVICES & HIRE ME ─── */
+        .notice-banner {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent);
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notice-banner i {
+            color: var(--text-primary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .tier-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .tier-list li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tier-list li i {
+            color: var(--text-primary);
+            font-size: 0.75rem;
+        }
+
+        .tos-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 36px;
+        }
+
+        .tos-panel h3 {
+            font-family: var(--font-head);
+            font-size: 1.2rem;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tos-panel ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tos-panel strong {
+            color: var(--text-primary);
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: var(--accent-fg);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 1px solid var(--accent);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 10px 18px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: auto;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 24px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ─── VIDEO LIGHTBOX MODAL ─── */
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            max-width: 860px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 10;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .modal-close:hover {
+            background: var(--accent);
+            color: var(--accent-fg);
+        }
+
+        .modal video {
+            width: 100%;
+            max-height: 60vh;
+            background: #000;
+            display: block;
+        }
+
+        .modal-info {
+            padding: 24px;
+        }
+
+        .modal-info h3 {
+            font-family: var(--font-head);
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .modal-info p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+        }
+
+        @media (max-width: 680px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .nav-links {
+                gap: 16px;
+            }
+            section {
+                padding: 60px 0;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="viego-loader">
-        <div class="shattered-ring"></div>
-        <div class="ember"></div>
-        <div class="viego-silhouette"></div>
-        <div class="flavor-text">I want precious little, yet I am forced to kill for it</div>
-        
-        <button class="skip-btn" id="btn-skip">Skip Sequence <i class="fa-solid fa-forward-step"></i></button>
+    <!-- ─── STICKY NAVIGATION ─── -->
+    <header>
+        <div class="nav-container">
+            <a href="#about" class="brand-logo">
+                CarfotaTheDev<span>//</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#about" class="nav-item active">Overview</a></li>
+                <li><a href="#games" class="nav-item">Projects</a></li>
+                <li><a href="#systems" class="nav-item">Systems</a></li>
+                <li><a href="#hire" class="nav-item">Commissions</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- ─── 01. OVERVIEW & HERO ─── -->
+        <section id="about">
+            <div class="status-pill">
+                <span class="status-dot"></span>
+                <span id="hero-status-text">COMMISSIONS OPEN // USD ONLY</span>
+            </div>
+
+            <h1 class="hero-title">CarfotaTheDev</h1>
+            <p class="hero-subtitle">
+                Roblox Luau Systems Engineer &amp; Game Programmer. Specializing in modular server-client architectures, combat frameworks, and backend integrations.
+            </p>
+
+            <!-- Active Studio Role -->
+            <a href="https://playmistic.com/" target="_blank" class="partner-card">
+                <img src="https://cdn.discordapp.com/icons/1430320982698233918/edc8c4b8dbe51b9af92252e80d409d25.png?size=1024" alt="Playmistic Interactive">
+                <div class="partner-meta">
+                    <span class="partner-label">Currently Working With</span>
+                    <span class="partner-name">Playmistic Interactive <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem; margin-left: 4px;"></i></span>
+                </div>
+            </a>
+
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-num">2+</div>
+                    <div class="stat-desc">Years Luau Experience</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-num">5+</div>
+                    <div class="stat-desc">Games Developed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-num">7+</div>
+                    <div class="stat-desc">Custom Frameworks</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── 02. GAMES & PROJECTS ─── -->
+        <section id="games">
+            <div class="section-header">
+                <span class="section-tag">01 // Game Titles</span>
+                <h2 class="section-title">Featured Projects</h2>
+            </div>
+
+            <div class="games-grid">
+                <div class="card">
+                    <span class="card-badge">In Development</span>
+                    <h3 class="card-title">Blackgate: BreakPoint</h3>
+                    <p class="card-text">
+                        Tactical multiplayer correctional complex survival game featuring custom UI frameworks, proximity interaction systems, and server-authoritative door/security mechanics.
+                    </p>
+                    <div class="tag-row">
+                        <span class="tag">Server-Authoritative</span>
+                        <span class="tag">Tactical</span>
+                        <span class="tag">Custom UI</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-badge">Playable Prototype</span>
+                    <h3 class="card-title">BlockZone</h3>
+                    <p class="card-text">
+                        2D arena combat experience built inside Roblox Studio with wave navigation, card modifier upgrades, custom knockback physics, and enemy stat persistence.
+                    </p>
+                    <div class="tag-row">
+                        <span class="tag">2D Engine</span>
+                        <span class="tag">Wave System</span>
+                        <span class="tag">DataStore</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-badge">Co-Development</span>
+                    <h3 class="card-title">Haunted School &amp; Horror Suite</h3>
+                    <p class="card-text">
+                        Atmospheric indie horror and roleplay experiences built with custom lighting triggers, scripted AI encounters, and modular event sequencing.
+                    </p>
+                    <div class="tag-row">
+                        <span class="tag">AI Scripting</span>
+                        <span class="tag">Event Triggers</span>
+                        <span class="tag">Multiplayer</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── 03. SCRIPTING SYSTEMS ─── -->
+        <section id="systems">
+            <div class="section-header">
+                <span class="section-tag">02 // Technical Showcase</span>
+                <h2 class="section-title">Scripting Systems</h2>
+            </div>
+
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterSystems('all', this)">All Systems</button>
+                <button class="filter-btn" onclick="filterSystems('combat', this)">Combat</button>
+                <button class="filter-btn" onclick="filterSystems('backend', this)">Backend &amp; APIs</button>
+                <button class="filter-btn" onclick="filterSystems('ai', this)">AI</button>
+                <button class="filter-btn" onclick="filterSystems('commissioned', this)">Commissioned</button>
+            </div>
+
+            <div class="systems-grid">
+
+                <!-- 1. Turf War -->
+                <div class="system-card" data-tags="luau combat">
+                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map', 'Dynamic territory control system updating zone colors and map state in real time as teams capture sectors.')">
+                        <video autoplay loop muted playsinline>
+                            <source src="https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1" type="video/mp4">
+                        </video>
+                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
+                    </div>
+                    <div class="system-body">
+                        <h3 class="card-title">Turf War Map Control</h3>
+                        <p class="card-text">Real-time territory capture engine that shifts zone colors, tracks team dominance, and updates client UI indicators.</p>
+                        <div class="tag-row">
+                            <span class="tag">Luau</span>
+                            <span class="tag">Combat</span>
+                        </div>
+                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map', 'Dynamic territory control system updating zone colors and map state in real time as teams capture sectors.')">
+                            Inspect Video
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. GoogleDataSave -->
+                <div class="system-card" data-tags="luau backend">
+                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'External Cloud DataSave', 'Flexible external data persistence bridge utilizing HTTP services and cloud APIs to store structured player inventory and progression.')">
+                        <video autoplay loop muted playsinline>
+                            <source src="https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1" type="video/mp4">
+                        </video>
+                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
+                    </div>
+                    <div class="system-body">
+                        <h3 class="card-title">External Cloud DataSave</h3>
+                        <p class="card-text">Custom external data persistence bridge built to serialize and store player inventories and progression outside standard Roblox DataStores.</p>
+                        <div class="tag-row">
+                            <span class="tag">Luau</span>
+                            <span class="tag">Backend</span>
+                            <span class="tag">HTTP</span>
+                        </div>
+                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'External Cloud DataSave', 'Flexible external data persistence bridge utilizing HTTP services and cloud APIs to store structured player inventory and progression.')">
+                            Inspect Video
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Advanced AI System -->
+                <div class="system-card" data-tags="luau ai backend">
+                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Conversational AI NPC', 'AI-driven NPC integrated via HTTP bridge with GroqCloud API, featuring contextual memory and a per-player reputation system.')">
+                        <video autoplay loop muted playsinline>
+                            <source src="https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1" type="video/mp4">
+                        </video>
+                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
+                    </div>
+                    <div class="system-body">
+                        <h3 class="card-title">Conversational AI NPC</h3>
+                        <p class="card-text">LLM-powered NPC integrated with GroqCloud API via external HTTP server, complete with dynamic player reputation tracking.</p>
+                        <div class="tag-row">
+                            <span class="tag">AI</span>
+                            <span class="tag">Backend</span>
+                            <span class="tag">GroqCloud</span>
+                        </div>
+                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Conversational AI NPC', 'AI-driven NPC integrated via HTTP bridge with GroqCloud API, featuring contextual memory and a per-player reputation system.')">
+                            Inspect Video
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. Flexible Combat System -->
+                <div class="system-card" data-tags="luau combat">
+                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Modular Melee Combat', 'Combo-driven melee framework with hitbox detection, camera trauma/shake, weapon support, and directional knockbacks.')">
+                        <video autoplay loop muted playsinline>
+                            <source src="https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1" type="video/mp4">
+                        </video>
+                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
+                    </div>
+                    <div class="system-body">
+                        <h3 class="card-title">Modular Melee Combat</h3>
+                        <p class="card-text">Extensible combo framework supporting multi-hit chains, dynamic camera shake, SFX sync, and per-hit knockback physics.</p>
+                        <div class="tag-row">
+                            <span class="tag">Luau</span>
+                            <span class="tag">Combat</span>
+                        </div>
+                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Modular Melee Combat', 'Combo-driven melee framework with hitbox detection, camera trauma/shake, weapon support, and directional knockbacks.')">
+                            Inspect Video
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. Admin Announcement System -->
+                <div class="system-card" data-tags="luau commissioned backend">
+                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Broadcast System', 'Commissioned global server announcement system enabling authorized admins to push styled, animated alerts to all active clients.')">
+                        <video autoplay loop muted playsinline>
+                            <source src="https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1" type="video/mp4">
+                        </video>
+                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
+                    </div>
+                    <div class="system-body">
+                        <h3 class="card-title">Admin Broadcast System</h3>
+                        <p class="card-text">Commissioned server-wide alert tool allowing verified staff to broadcast styled, animated announcements across all players.</p>
+                        <div class="tag-row">
+                            <span class="tag">Commissioned</span>
+                            <span class="tag">Backend</span>
+                        </div>
+                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Broadcast System', 'Commissioned global server announcement system enabling authorized admins to push styled, animated alerts to all active clients.')">
+                            Inspect Video
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 6. Target Locking System -->
+                <div class="system-card" data-tags="luau combat">
+                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Universal Target Lock', 'Smooth camera target-locking framework capable of tracking players, NPCs, or world objects with custom viewport UI.')">
+                        <video autoplay loop muted playsinline>
+                            <source src="https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1" type="video/mp4">
+                        </video>
+                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
+                    </div>
+                    <div class="system-body">
+                        <h3 class="card-title">Universal Target Lock</h3>
+                        <p class="card-text">Smooth camera lock-on system supporting players, NPCs, and interactive world targets with clean reticle tracking.</p>
+                        <div class="tag-row">
+                            <span class="tag">Luau</span>
+                            <span class="tag">Combat</span>
+                        </div>
+                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Universal Target Lock', 'Smooth camera target-locking framework capable of tracking players, NPCs, or world objects with custom viewport UI.')">
+                            Inspect Video
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ─── 04. COMMISSIONS & SERVICES ─── -->
+        <section id="hire">
+            <div class="section-header">
+                <span class="section-tag">03 // Work With Me</span>
+                <h2 class="section-title">Commissions &amp; Services</h2>
+            </div>
+
+            <div class="notice-banner" id="payment-banner">
+                <i class="fa-solid fa-circle-info"></i>
+                <span id="payment-banner-text">Currently accepting USD only (PayPal / Card). Robux commissions are temporarily closed.</span>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Tier 1 -->
+                <div class="card">
+                    <span class="card-badge">Tier 01 // Basic</span>
+                    <h3 class="card-title">Small Systems</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary); margin-bottom: 12px;">Quote Based on Scope</p>
+                    <p class="card-text">Fast turnaround for standalone mechanics and clean bug fixes.</p>
+                    <ul class="tier-list">
+                        <li><i class="fa-solid fa-check"></i> Single mechanic or standalone script</li>
+                        <li><i class="fa-solid fa-check"></i> Daily Rewards &amp; Leaderboards</li>
+                        <li><i class="fa-solid fa-check"></i> Code optimization &amp; bug fixing</li>
+                        <li><i class="fa-solid fa-check"></i> Turnaround: 1–2 Days</li>
+                    </ul>
+                </div>
+
+                <!-- Tier 2 -->
+                <div class="card" style="border-color: var(--text-secondary);">
+                    <span class="card-badge">Tier 02 // Standard</span>
+                    <h3 class="card-title">Advanced Mechanics</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary); margin-bottom: 12px;">Quote Based on Scope</p>
+                    <p class="card-text">Full gameplay loops, combat frameworks, and interactive systems.</p>
+                    <ul class="tier-list">
+                        <li><i class="fa-solid fa-check"></i> Melee / Ranged Combat Frameworks</li>
+                        <li><i class="fa-solid fa-check"></i> Territory &amp; Zone Control Systems</li>
+                        <li><i class="fa-solid fa-check"></i> Custom Inventory &amp; Shiftlock UI</li>
+                        <li><i class="fa-solid fa-check"></i> Turnaround: 3–5 Days</li>
+                    </ul>
+                </div>
+
+                <!-- Tier 3 -->
+                <div class="card">
+                    <span class="card-badge">Tier 03 // Full Suite</span>
+                    <h3 class="card-title">Custom Backend</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary); margin-bottom: 12px;">Quote Based on Scope</p>
+                    <p class="card-text">Complete game architecture and external API integrations.</p>
+                    <ul class="tier-list">
+                        <li><i class="fa-solid fa-check"></i> External API Bridges (AI / Webhooks)</li>
+                        <li><i class="fa-solid fa-check"></i> Secure DataStore Architecture</li>
+                        <li><i class="fa-solid fa-check"></i> Full Core Game Loop Framework</li>
+                        <li><i class="fa-solid fa-check"></i> Turnaround: Flexible / Scope-Based</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Terms of Service -->
+            <div class="tos-panel">
+                <h3><i class="fa-solid fa-file-contract"></i> Terms of Service</h3>
+                <ul>
+                    <li><strong>50% upfront deposit</strong> is required before development begins.</li>
+                    <li>Completed work is demonstrated inside a live private test place prior to final payment and file delivery.</li>
+                    <li id="tos-payment-text"><strong>Payment:</strong> Currently accepting <strong>USD only</strong> (PayPal / Card).</li>
+                    <li>Includes <strong>7 days of free bug fixes</strong> for all delivered code.</li>
+                </ul>
+            </div>
+
+            <a href="https://discord.com/users/810665085831741471" target="_blank" class="btn-primary">
+                <i class="fa-brands fa-discord" style="font-size: 1.1rem;"></i> Request a Quote on Discord
+            </a>
+        </section>
+
+    </main>
+
+    <footer>
+        CarfotaTheDev &middot; Built in Cairo, Egypt
+    </footer>
+
+    <!-- ─── VIDEO MODAL ─── -->
+    <div class="modal" id="videoModal" onclick="closeModalOutside(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <video id="modalVideo" controls autoplay loop muted playsinline></video>
+            <div class="modal-info">
+                <h3 id="modalTitle">System Title</h3>
+                <p id="modalDesc">System description</p>
+            </div>
+        </div>
     </div>
-
-    <div id="blade-scrollbar"></div>
-    <div class="cursor-wisp" id="cursor-wisp"></div>
-
-    <div class="background-art art-ruined"></div>
-    <div class="background-art art-king"></div>
-    
-    <div class="fog-layer"></div>
-    <div class="soul-particles" id="soul-container"></div>
-
-    <nav>
-        <a href="index.html" class="nav-link active">The Throne</a>
-        <a href="games.html" class="nav-link">Realms</a>
-        <a href="systems.html" class="nav-link">Artifacts</a>
-        <a href="hire-me.html" class="nav-link">Covenant</a>
-    </nav>
-
-    <section class="hero">
-        <h1 class="hero-title">Carfota</h1>
-        <div class="hero-subtitle">Architect of Ruin // Luau Engineering</div>
-        
-        <a href="https://playmistic.com/" target="_blank" class="partner-shard">
-            <img src="https://cdn.discordapp.com/icons/1430320982698233918/edc8c4b8dbe51b9af92252e80d409d25.png?size=1024" alt="Playmistic Avatar" class="partner-avatar">
-            <div class="partner-info">
-                <span class="partner-tag">Currently Working With:</span>
-                <span class="partner-name">Playmistic Interactive</span>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.85rem; margin-left: 8px; color: var(--spectral-teal);"></i>
-        </a>
-
-        <div class="hero-tagline">
-            "Some kings chase glory. I chase what refuses to stay finished. Every system here was broken at least once before it worked."
-        </div>
-    </section>
-
-    <section class="stats-section">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">2+</div>
-                <div class="stat-label">Years Reign</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">WIP</div>
-                <div class="stat-label">Games Built</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">6+</div>
-                <div class="stat-label">Living Systems</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="ruins-section">
-        <h2 class="section-header">The Ruins Reclaimed</h2>
-        <div class="ruins-grid">
-            
-            <div class="ruin-card">
-                <span class="ruin-number">RUIN 01</span>
-                <h3 class="ruin-title">Blackgate: Breakpoint</h3>
-                <p class="ruin-desc">An isolated correctional complex where every escape has consequences. A multiplayer survival framework built on obsession.</p>
-                <a href="games.html" class="btn-ruin">Enter Realm <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-
-            <div class="ruin-card">
-                <span class="ruin-number">RUIN 02</span>
-                <h3 class="ruin-title">Spectral Combat</h3>
-                <p class="ruin-desc">A modular combo-based combat system. Hitboxes, camera shakes, and necrotic knockbacks refined through iteration.</p>
-                <a href="systems.html" class="btn-ruin">Inspect Artifact <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-
-        </div>
-    </section>
-
-    <button class="vibe-controller-toggle" onclick="toggleVibeMenu()" title="Sanctum Controls">
-        <i class="fa-solid fa-sliders"></i>
-    </button>
-
-    <div class="vibe-panel" id="vibe-panel">
-        <div class="vibe-header">
-            <span class="vibe-title">SANCTUM CONTROLS</span>
-            <button onclick="toggleVibeMenu()" style="background:none; border:none; color:var(--bone-white); cursor:pointer; font-size:1.1rem;">✕</button>
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Viego Aspect</span></label>
-            <div class="theme-switch-row">
-                <button class="theme-btn active" id="btn-theme-ruined" onclick="setViegoTheme('ruined')">RUINED</button>
-                <button class="theme-btn" id="btn-theme-king" onclick="setViegoTheme('king')">KING</button>
-            </div>
-        </div>
-
-        <div class="vibe-row" style="flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
-            <button id="sfx-toggle-btn" onclick="handleSFXToggle()" class="sfx-btn" style="margin-top: 0;">SOUND FX: ON 🔊</button>
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Spectral Aura</span> <span id="val-glow">100%</span></label>
-            <input type="range" id="slider-glow" min="10" max="150" value="100" oninput="updateSanctumSliders()">
-        </div>
-
-        <div class="vibe-row">
-            <label><span>Black Mist Fog</span> <span id="val-fog">100%</span></label>
-            <input type="range" id="slider-fog" min="0" max="100" value="100" oninput="updateSanctumSliders()">
-        </div>
-    </div>
-
-    <script src="sfx.js"></script>
 
     <script>
-        // ─── CINEMATIC LOGIC ───
-        const loader = document.getElementById('viego-loader');
-        const skipBtn = document.getElementById('btn-skip');
+        // ─── PAYMENT CONFIGURATION ("USD_ONLY" or "BOTH") ───
+        const PAYMENT_MODE = "USD_ONLY";
 
-        function revealContent() {
-            loader.style.display = 'none';
-            document.body.classList.add('content-ready');
-            startSouls(); 
-        }
+        function applyPaymentConfig() {
+            const heroStatus = document.getElementById('hero-status-text');
+            const bannerText = document.getElementById('payment-banner-text');
+            const tosPayment = document.getElementById('tos-payment-text');
 
-        skipBtn.addEventListener('click', revealContent);
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && loader.style.display !== 'none') revealContent();
-        });
-
-        setTimeout(() => {
-            if (!document.body.classList.contains('content-ready')) {
-                document.body.classList.add('content-ready');
-            }
-        }, 8500);
-
-        setTimeout(() => {
-            if (loader.style.display !== 'none') {
-                loader.style.display = 'none';
-                startSouls();
-            }
-        }, 10000);
-
-        // ─── SCROLL PROGRESS BLADE ───
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("blade-scrollbar").style.width = scrolled + "%";
-        });
-
-        // ─── CUSTOM WISP CURSOR ───
-        const wisp = document.getElementById('cursor-wisp');
-        const trails = [];
-        const maxTrails = 8;
-
-        for(let i=0; i<maxTrails; i++) {
-            const t = document.createElement('div');
-            t.className = 'cursor-trail';
-            document.body.appendChild(t);
-            trails.push({ el: t, x: 0, y: 0, alpha: 0 });
-        }
-
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            wisp.style.left = mouseX + 'px';
-            wisp.style.top = mouseY + 'px';
-        });
-
-        document.querySelectorAll('a, button, .btn-ruin, .stat-card, .skip-btn, .partner-shard').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                wisp.style.transform = 'translate(-50%, -50%) scale(2.5)';
-                wisp.style.background = 'transparent';
-                wisp.style.border = '1px solid var(--spectral-teal)';
-            });
-            el.addEventListener('mouseleave', () => {
-                wisp.style.transform = 'translate(-50%, -50%) scale(1)';
-                wisp.style.background = 'var(--spectral-teal)';
-                wisp.style.border = 'none';
-            });
-        });
-
-        function animateTrails() {
-            let prevX = mouseX;
-            let prevY = mouseY;
-
-            trails.forEach((trail, index) => {
-                trail.x += (prevX - trail.x) * 0.3;
-                trail.y += (prevY - trail.y) * 0.3;
-                
-                trail.el.style.left = trail.x + 'px';
-                trail.el.style.top = trail.y + 'px';
-                
-                const scale = (maxTrails - index) / maxTrails;
-                trail.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
-                prevX = trail.x;
-                prevY = trail.y;
-            });
-            requestAnimationFrame(animateTrails);
-        }
-        animateTrails();
-
-        // ─── GREEN SOUL PARTICLES GENERATOR ───
-        const soulContainer = document.getElementById('soul-container');
-        let soulsStarted = false;
-
-        function createSoul() {
-            const soul = document.createElement('div');
-            const size = Math.random() * 4 + 2;
-            
-            soul.style.position = 'absolute';
-            soul.style.left = Math.random() * 100 + 'vw';
-            soul.style.width = size + 'px';
-            soul.style.height = size + 'px';
-            soul.style.background = 'var(--spectral-teal)';
-            soul.style.borderRadius = '50%';
-            soul.style.boxShadow = '0 0 10px var(--mist-deep)';
-            soul.style.opacity = '0';
-            soul.style.animation = `soulRise ${Math.random() * 10 + 10}s linear forwards`;
-            
-            soulContainer.appendChild(soul);
-            setTimeout(() => { soul.remove(); }, 20000);
-        }
-        
-        function startSouls() {
-            if(!soulsStarted) {
-                soulsStarted = true;
-                setInterval(createSoul, 800);
+            if (PAYMENT_MODE === "USD_ONLY") {
+                heroStatus.textContent = "COMMISSIONS OPEN // USD ONLY";
+                bannerText.textContent = "Currently accepting USD only (PayPal / Card). Robux commissions are temporarily closed.";
+                tosPayment.innerHTML = "<strong>Payment:</strong> Currently accepting <strong>USD only</strong> (PayPal / Card). Robux payments are temporarily closed.";
+            } else {
+                heroStatus.textContent = "COMMISSIONS OPEN // USD & ROBUX";
+                bannerText.textContent = "Currently accepting both USD and Robux commissions.";
+                tosPayment.innerHTML = "<strong>Payment:</strong> Accepting <strong>USD and Robux</strong> (Client covers 30% Roblox marketplace tax if paying via Gamepass/T-Shirt).";
             }
         }
 
-        // ─── THEME & SETTINGS CONTROLS ───
-        function setViegoTheme(theme) {
-            const isKing = (theme === 'king');
-            document.body.classList.toggle('theme-king', isKing);
-            document.getElementById('btn-theme-ruined').classList.toggle('active', !isKing);
-            document.getElementById('btn-theme-king').classList.toggle('active', isKing);
-            localStorage.setItem('viego_aspect', theme);
-            if (typeof DopamineAudio !== 'undefined') DopamineAudio.playClick();
-        }
+        // ─── SYSTEM CATEGORY FILTER ───
+        function filterSystems(category, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
 
-        function toggleVibeMenu() {
-            document.getElementById('vibe-panel').classList.toggle('open');
-        }
-
-        function updateSanctumSliders() {
-            const glow = document.getElementById('slider-glow').value;
-            const fog = document.getElementById('slider-fog').value;
-
-            document.getElementById('val-glow').textContent = glow + '%';
-            document.getElementById('val-fog').textContent = fog + '%';
-
-            document.documentElement.style.setProperty('--glow-mult', glow / 100);
-            document.documentElement.style.setProperty('--fog-opacity', fog / 100);
-
-            localStorage.setItem('viego_glow', glow);
-            localStorage.setItem('viego_fog', fog);
-        }
-
-        function handleSFXToggle() {
-            if (typeof DopamineAudio !== 'undefined') {
-                const enabled = DopamineAudio.toggleSFX();
-                const btn = document.getElementById('sfx-toggle-btn');
-                if (btn) {
-                    btn.textContent = enabled ? 'SOUND FX: ON 🔊' : 'SOUND FX: OFF 🔇';
-                    btn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
+            document.querySelectorAll('.system-card').forEach(card => {
+                const tags = card.getAttribute('data-tags').split(' ');
+                if (category === 'all' || tags.includes(category)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
                 }
-            }
+            });
         }
 
-        // LOAD SAVED SETTINGS
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('viego_aspect') || 'ruined';
-            setViegoTheme(savedTheme);
+        // ─── VIDEO LIGHTBOX ───
+        const modal = document.getElementById('videoModal');
+        const modalVideo = document.getElementById('modalVideo');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
 
-            const savedGlow = localStorage.getItem('viego_glow') || '100';
-            const savedFog = localStorage.getItem('viego_fog') || '100';
-            document.getElementById('slider-glow').value = savedGlow;
-            document.getElementById('slider-fog').value = savedFog;
-            updateSanctumSliders();
+        function openModal(src, title, desc) {
+            modalVideo.src = src;
+            modalTitle.textContent = title;
+            modalDesc.textContent = desc;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            modalVideo.play();
+        }
 
-            const sfxBtn = document.getElementById('sfx-toggle-btn');
-            if (sfxBtn && typeof DopamineAudio !== 'undefined') {
-                const enabled = DopamineAudio.isEnabled();
-                sfxBtn.textContent = enabled ? 'SOUND FX: ON 🔊' : 'SOUND FX: OFF 🔇';
-                sfxBtn.style.borderColor = enabled ? 'var(--spectral-teal)' : '#555';
-            }
+        function closeModal() {
+            modal.classList.remove('open');
+            modalVideo.pause();
+            modalVideo.src = "";
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOutside(e) {
+            if (e.target === modal) closeModal();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
         });
+
+        // ─── ACTIVE NAV HIGHLIGHT ON SCROLL ───
+        const sections = document.querySelectorAll('section');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 140;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        window.addEventListener('DOMContentLoaded', applyPaymentConfig);
     </script>
 </body>
 </html>
