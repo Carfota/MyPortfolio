@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Three.js CDN for the Shader Animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <style>
         :root {
@@ -48,6 +51,85 @@
             overflow-x: hidden;
         }
 
+        /* ─── SHADER HERO BANNER (FIRST SECTION) ─── */
+        .shader-hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #000000;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #shader-canvas-container {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .shader-overlay-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .shader-title {
+            font-family: var(--font-head);
+            font-size: clamp(3.2rem, 9vw, 6.8rem);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            color: #ffffff;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.75);
+        }
+
+        .shader-subtitle {
+            font-family: var(--font-mono);
+            font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(9, 9, 11, 0.55);
+            backdrop-filter: blur(8px);
+            padding: 6px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 32px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .scroll-cue:hover {
+            color: #ffffff;
+            transform: translateY(3px);
+        }
+
         /* ─── NIKE-INSPIRED TOP BAR & FULLSCREEN OVERLAY MENU ─── */
         header {
             position: fixed;
@@ -55,10 +137,10 @@
             left: 0;
             width: 100%;
             z-index: 200;
-            background: rgba(9, 9, 11, 0.75);
+            background: rgba(9, 9, 11, 0.65);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .nav-bar {
@@ -111,7 +193,7 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: var(--bg-card);
+            background: rgba(20, 20, 24, 0.85);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
             font-family: var(--font-mono);
@@ -147,7 +229,7 @@
             position: fixed;
             inset: 0;
             z-index: 190;
-            background: rgba(9, 9, 11, 0.92);
+            background: rgba(9, 9, 11, 0.94);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             display: flex;
@@ -347,9 +429,9 @@
             color: var(--text-primary);
         }
 
-        /* ─── HERO SECTION ─── */
+        /* ─── OVERVIEW SECTION ─── */
         #about {
-            padding: 140px 0 80px;
+            padding: 90px 0 80px;
         }
 
         .status-pill {
@@ -374,19 +456,10 @@
             box-shadow: 0 0 8px #ffffff;
         }
 
-        .hero-title {
-            font-family: var(--font-head);
-            font-size: clamp(2.8rem, 7vw, 4.8rem);
-            font-weight: 700;
-            line-height: 1.05;
-            letter-spacing: -0.04em;
-            margin-bottom: 16px;
-        }
-
         .hero-subtitle {
             font-size: clamp(1.05rem, 2vw, 1.25rem);
             color: var(--text-secondary);
-            max-width: 620px;
+            max-width: 680px;
             margin-bottom: 32px;
             font-weight: 400;
         }
@@ -724,7 +797,6 @@
             cursor: pointer;
         }
 
-        /* Top Right Close Button (Rotated Plus like Skiper67) */
         .skiper-close-btn {
             position: absolute;
             top: 16px;
@@ -750,7 +822,7 @@
             transform: rotate(90deg);
         }
 
-        /* Media-Chrome Style Minimalist Control Bar (mix-blend-exclusion) */
+        /* Media-Chrome Style Minimalist Control Bar */
         .skiper-controls {
             position: absolute;
             bottom: 0;
@@ -995,7 +1067,7 @@
     <!-- ─── TOP BAR + NIKE MENU TRIGGER ─── -->
     <header>
         <div class="nav-bar">
-            <a href="#about" class="brand-logo">
+            <a href="#hero-shader" class="brand-logo">
                 CarfotaTheDev<span>//</span>
             </a>
 
@@ -1075,16 +1147,35 @@
         </div>
     </div>
 
+    <!-- ─── 00. THREE.JS SHADER HERO BANNER (FIRST) ─── -->
+    <div class="shader-hero" id="hero-shader">
+        <div id="shader-canvas-container"></div>
+        
+        <div class="shader-overlay-content">
+            <h1 class="shader-title">CarfotaTheDev</h1>
+            <div class="shader-subtitle">Luau Systems Engineer // Game Programmer</div>
+        </div>
+
+        <a href="#about" class="scroll-cue">
+            <span>Explore Work</span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </a>
+    </div>
+
     <main class="container">
 
-        <!-- ─── 01. OVERVIEW & HERO ─── -->
+        <!-- ─── 01. OVERVIEW ─── -->
         <section id="about">
+            <div class="section-header">
+                <span class="section-tag">00 // Profile</span>
+                <h2 class="section-title">Overview</h2>
+            </div>
+
             <div class="status-pill">
                 <span class="status-dot"></span>
                 <span id="hero-status-text">COMMISSIONS OPEN // USD ONLY</span>
             </div>
 
-            <h1 class="hero-title">CarfotaTheDev</h1>
             <p class="hero-subtitle">
                 Roblox Luau Systems Engineer &amp; Game Programmer. Specializing in modular server-client architectures, combat frameworks, and backend integrations.
             </p>
@@ -1425,6 +1516,85 @@
     </div>
 
     <script>
+        // ─── THREE.JS SHADER ANIMATION (PORTED FROM SHADER-ANIMATION.TSX) ───
+        function initShaderAnimation() {
+            const container = document.getElementById('shader-canvas-container');
+            if (!container || typeof THREE === 'undefined') return;
+
+            const vertexShader = `
+                void main() {
+                    gl_Position = vec4( position, 1.0 );
+                }
+            `;
+
+            const fragmentShader = `
+                #define TWO_PI 6.2831853072
+                #define PI 3.14159265359
+
+                precision highp float;
+                uniform vec2 resolution;
+                uniform float time;
+
+                void main(void) {
+                    vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
+                    float t = time * 0.05;
+                    float lineWidth = 0.002;
+
+                    vec3 color = vec3(0.0);
+                    for(int j = 0; j < 3; j++){
+                        for(int i = 0; i < 5; i++){
+                            color[j] += lineWidth * float(i * i) / abs(fract(t - 0.01 * float(j) + float(i) * 0.01) * 5.0 - length(uv) + mod(uv.x + uv.y, 0.2));
+                        }
+                    }
+                    
+                    gl_FragColor = vec4(color[0], color[1], color[2], 1.0);
+                }
+            `;
+
+            const camera = new THREE.Camera();
+            camera.position.z = 1;
+
+            const scene = new THREE.Scene();
+            const geometry = new THREE.PlaneGeometry(2, 2);
+
+            const uniforms = {
+                time: { type: "f", value: 1.0 },
+                resolution: { type: "v2", value: new THREE.Vector2() },
+            };
+
+            const material = new THREE.ShaderMaterial({
+                uniforms: uniforms,
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            const onWindowResize = () => {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                renderer.setSize(width, height);
+                uniforms.resolution.value.x = renderer.domElement.width;
+                uniforms.resolution.value.y = renderer.domElement.height;
+            };
+
+            onWindowResize();
+            window.addEventListener("resize", onWindowResize, false);
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                uniforms.time.value += 0.05;
+                renderer.render(scene, camera);
+            };
+
+            animate();
+        }
+
         // ─── PAYMENT CONFIGURATION ("USD_ONLY" or "BOTH") ───
         const PAYMENT_MODE = "USD_ONLY";
 
@@ -1466,7 +1636,6 @@
             document.body.style.overflow = '';
         }
 
-        // Live Cairo Clock for Nike Overlay Telemetry
         function updateCairoClock() {
             const clockEl = document.getElementById('cairoClock');
             if (!clockEl) return;
@@ -1485,7 +1654,6 @@
             let rafId = null;
 
             function animateSpring() {
-                // Spring interpolation matching Framer Motion mass: 0.1
                 currentX += (targetX - currentX) * 0.25;
                 currentY += (targetY - currentY) * 0.25;
                 pill.style.left = `${currentX}px`;
@@ -1540,7 +1708,6 @@
                 scPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
                 scMuteBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
             }).catch(() => {
-                // Fallback if browser blocks unmuted autoplay
                 skiperVideo.muted = true;
                 skiperVideo.play();
                 scMuteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
@@ -1635,7 +1802,10 @@
             });
         });
 
-        window.addEventListener('DOMContentLoaded', applyPaymentConfig);
+        window.addEventListener('DOMContentLoaded', () => {
+            initShaderAnimation();
+            applyPaymentConfig();
+        });
     </script>
 </body>
 </html>
