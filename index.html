@@ -45,20 +45,24 @@
             font-family: var(--font-body);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* ─── STICKY NAVIGATION BAR ─── */
+        /* ─── NIKE-INSPIRED TOP BAR & FULLSCREEN OVERLAY MENU ─── */
         header {
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
-            background: rgba(9, 9, 11, 0.85);
-            backdrop-filter: blur(12px);
+            left: 0;
+            width: 100%;
+            z-index: 200;
+            background: rgba(9, 9, 11, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border-color);
         }
 
-        .nav-container {
-            max-width: 1100px;
+        .nav-bar {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 16px 24px;
             display: flex;
@@ -69,7 +73,7 @@
         .brand-logo {
             font-family: var(--font-mono);
             font-weight: 700;
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: var(--text-primary);
             text-decoration: none;
             letter-spacing: -0.02em;
@@ -82,15 +86,15 @@
             color: var(--text-muted);
         }
 
-        .nav-links {
+        .nav-quick-links {
             display: flex;
             gap: 28px;
             list-style: none;
         }
 
-        .nav-links a {
+        .nav-quick-links a {
             font-family: var(--font-mono);
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             color: var(--text-secondary);
             text-decoration: none;
             text-transform: uppercase;
@@ -98,8 +102,210 @@
             transition: color 0.2s ease;
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
+        .nav-quick-links a:hover,
+        .nav-quick-links a.active {
+            color: var(--text-primary);
+        }
+
+        .nike-menu-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .nike-menu-trigger:hover {
+            background: var(--accent);
+            color: var(--accent-fg);
+            border-color: var(--accent);
+        }
+
+        .nike-menu-trigger .plus-icon {
+            display: inline-block;
+            font-size: 1rem;
+            line-height: 1;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .nike-menu-trigger.active .plus-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Full-Screen Expandable Overlay */
+        .nike-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 190;
+            background: rgba(9, 9, 11, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 110px 24px 40px;
+            clip-path: inset(0 0 100% 0);
+            opacity: 0;
+            pointer-events: none;
+            transition: clip-path 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
+
+        .nike-overlay.open {
+            clip-path: inset(0 0 0% 0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .nike-overlay-inner {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 48px;
+            align-items: end;
+            height: 100%;
+        }
+
+        .nike-nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nike-nav-list li {
+            overflow: hidden;
+        }
+
+        .nike-nav-link {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 16px;
+            font-family: var(--font-head);
+            font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            transform: translateY(100%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+        }
+
+        .nike-overlay.open .nike-nav-link {
+            transform: translateY(0);
+        }
+
+        .nike-overlay.open li:nth-child(1) .nike-nav-link { transition-delay: 0.08s; }
+        .nike-overlay.open li:nth-child(2) .nike-nav-link { transition-delay: 0.14s; }
+        .nike-overlay.open li:nth-child(3) .nike-nav-link { transition-delay: 0.20s; }
+        .nike-overlay.open li:nth-child(4) .nike-nav-link { transition-delay: 0.26s; }
+
+        .nike-nav-link:hover {
+            color: var(--text-primary);
+            padding-left: 12px;
+        }
+
+        .nike-nav-index {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Telemetry / Data Display Grid inside Overlay */
+        .nike-telemetry {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease 0.25s, transform 0.5s ease 0.25s;
+        }
+
+        .nike-overlay.open .nike-telemetry {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .telemetry-header {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .telemetry-item span {
+            display: block;
+        }
+
+        .t-label {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .t-val {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .nike-overlay-footer {
+            max-width: 1200px;
+            width: 100%;
+            margin: 24px auto 0;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .nike-socials {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nike-socials a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nike-socials a:hover {
             color: var(--text-primary);
         }
 
@@ -143,7 +349,7 @@
 
         /* ─── HERO SECTION ─── */
         #about {
-            padding: 100px 0 80px;
+            padding: 140px 0 80px;
         }
 
         .status-pill {
@@ -334,7 +540,7 @@
             border-radius: 4px;
         }
 
-        /* ─── SYSTEMS SHOWCASE ─── */
+        /* ─── SKIPER67 VIDEO PLAYER & SYSTEMS SHOWCASE ─── */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -393,43 +599,56 @@
             transform: translateY(-3px);
         }
 
-        .video-wrapper {
+        /* Skiper67 Thumbnail Wrapper + Magnetic Play Pill */
+        .skiper-thumb {
             position: relative;
             width: 100%;
             aspect-ratio: 16/9;
             background: #000;
             border-bottom: 1px solid var(--border-color);
-            cursor: pointer;
+            cursor: none;
             overflow: hidden;
         }
 
-        .video-wrapper video {
+        .skiper-thumb video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.75;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0.8;
+            transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
         }
 
-        .system-card:hover .video-wrapper video {
+        .skiper-thumb:hover video {
             opacity: 1;
-            transform: scale(1.03);
+            transform: scale(1.04);
         }
 
-        .expand-hint {
+        .skiper-cursor-pill {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(9, 9, 11, 0.85);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
+            top: 0;
+            left: 0;
+            z-index: 20;
             display: flex;
             align-items: center;
             gap: 6px;
+            padding: 6px 12px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #ffffff;
+            mix-blend-mode: exclusion;
+            pointer-events: none;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.85);
+            transition: opacity 0.2s ease, transform 0.15s ease-out;
+        }
+
+        .skiper-thumb:hover .skiper-cursor-pill {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .system-body {
@@ -437,6 +656,184 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
+        }
+
+        /* ─── SKIPER67 CLIP-PATH EXPANDING POPOVER PLAYER ─── */
+        .skiper-popover {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            pointer-events: none;
+            visibility: hidden;
+        }
+
+        .skiper-popover.open {
+            pointer-events: auto;
+            visibility: visible;
+        }
+
+        .skiper-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(9, 9, 11, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .skiper-popover.open .skiper-backdrop {
+            opacity: 1;
+        }
+
+        .skiper-stage {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1040px;
+            background: #000;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            clip-path: inset(43.5% 43.5% 33.5% 43.5%);
+            opacity: 0;
+            transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+        }
+
+        .skiper-popover.open .skiper-stage {
+            clip-path: inset(0% 0% 0% 0%);
+            opacity: 1;
+        }
+
+        .skiper-video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+
+        .skiper-video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            cursor: pointer;
+        }
+
+        /* Top Right Close Button (Rotated Plus like Skiper67) */
+        .skiper-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 30;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .skiper-close-btn:hover {
+            background: #ffffff;
+            color: #09090b;
+            transform: rotate(90deg);
+        }
+
+        /* Media-Chrome Style Minimalist Control Bar (mix-blend-exclusion) */
+        .skiper-controls {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            padding: 18px 28px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            mix-blend-mode: difference;
+            z-index: 25;
+        }
+
+        .sc-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            transition: opacity 0.2s;
+        }
+
+        .sc-btn:hover {
+            opacity: 0.7;
+        }
+
+        /* Ultra-thin 2px Range Scrubber */
+        .sc-range {
+            -webkit-appearance: none;
+            appearance: none;
+            flex-grow: 1;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.35);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .sc-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 0px;
+            height: 0px;
+            background: #ffffff;
+            border-radius: 50%;
+            transition: width 0.15s, height 0.15s;
+        }
+
+        .sc-range:hover::-webkit-slider-thumb {
+            width: 10px;
+            height: 10px;
+        }
+
+        .sc-time {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .skiper-meta-bar {
+            background: var(--bg-card);
+            padding: 20px 28px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .skiper-meta-bar h3 {
+            font-family: var(--font-head);
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .skiper-meta-bar p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
         }
 
         /* ─── SERVICES & HIRE ME ─── */
@@ -577,105 +974,106 @@
             color: var(--text-muted);
         }
 
-        /* ─── VIDEO LIGHTBOX MODAL ─── */
-        .modal {
-            position: fixed;
-            inset: 0;
-            z-index: 999;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal.open {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            max-width: 860px;
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            z-index: 10;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .modal-close:hover {
-            background: var(--accent);
-            color: var(--accent-fg);
-        }
-
-        .modal video {
-            width: 100%;
-            max-height: 60vh;
-            background: #000;
-            display: block;
-        }
-
-        .modal-info {
-            padding: 24px;
-        }
-
-        .modal-info h3 {
-            font-family: var(--font-head);
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-        }
-
-        .modal-info p {
-            color: var(--text-secondary);
-            font-size: 0.92rem;
-        }
-
-        @media (max-width: 680px) {
-            .nav-container {
+        @media (max-width: 820px) {
+            .nav-quick-links {
+                display: none;
+            }
+            .nike-overlay-inner {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                align-content: start;
+            }
+            .skiper-meta-bar {
                 flex-direction: column;
-                gap: 12px;
-            }
-            .nav-links {
-                gap: 16px;
-            }
-            section {
-                padding: 60px 0;
+                align-items: flex-start;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ─── STICKY NAVIGATION ─── -->
+    <!-- ─── TOP BAR + NIKE MENU TRIGGER ─── -->
     <header>
-        <div class="nav-container">
+        <div class="nav-bar">
             <a href="#about" class="brand-logo">
                 CarfotaTheDev<span>//</span>
             </a>
-            <ul class="nav-links">
+
+            <ul class="nav-quick-links">
                 <li><a href="#about" class="nav-item active">Overview</a></li>
                 <li><a href="#games" class="nav-item">Projects</a></li>
                 <li><a href="#systems" class="nav-item">Systems</a></li>
                 <li><a href="#hire" class="nav-item">Commissions</a></li>
             </ul>
+
+            <button class="nike-menu-trigger" id="nikeMenuBtn" onclick="toggleNikeMenu()">
+                <span id="nikeMenuLabel">Menu</span>
+                <span class="plus-icon">+</span>
+            </button>
         </div>
     </header>
+
+    <!-- ─── NIKE-INSPIRED FULLSCREEN EXPANDABLE OVERLAY ─── -->
+    <div class="nike-overlay" id="nikeOverlay">
+        <div class="nike-overlay-inner">
+            <ul class="nike-nav-list">
+                <li>
+                    <a href="#about" class="nike-nav-link" onclick="closeNikeMenu()">
+                        <span class="nike-nav-index">00</span> Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="#games" class="nike-nav-link" onclick="closeNikeMenu()">
+                        <span class="nike-nav-index">01</span> Projects
+                    </a>
+                </li>
+                <li>
+                    <a href="#systems" class="nike-nav-link" onclick="closeNikeMenu()">
+                        <span class="nike-nav-index">02</span> Systems
+                    </a>
+                </li>
+                <li>
+                    <a href="#hire" class="nike-nav-link" onclick="closeNikeMenu()">
+                        <span class="nike-nav-index">03</span> Commissions
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Live Telemetry & Studio Data Display -->
+            <div class="nike-telemetry">
+                <div class="telemetry-header">
+                    <span>SYSTEM TELEMETRY</span>
+                    <span>ONLINE // 2026</span>
+                </div>
+                <div class="telemetry-grid">
+                    <div class="telemetry-item">
+                        <span class="t-label">Local Time (Cairo)</span>
+                        <span class="t-val" id="cairoClock">--:--:-- EET</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="t-label">Availability</span>
+                        <span class="t-val" id="overlayStatus">OPEN (USD ONLY)</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="t-label">Active Studio</span>
+                        <span class="t-val">Playmistic Interactive</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="t-label">Core Stack</span>
+                        <span class="t-val">Luau / Rojo / HTTP APIs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nike-overlay-footer">
+            <span>CARFOTATHEDEV // ARCHITECTURE &amp; SYSTEMS</span>
+            <div class="nike-socials">
+                <a href="https://discord.com/users/810665085831741471" target="_blank">DISCORD</a>
+                <a href="https://playmistic.com/" target="_blank">PLAYMISTIC</a>
+            </div>
+        </div>
+    </div>
 
     <main class="container">
 
@@ -766,7 +1164,7 @@
             </div>
         </section>
 
-        <!-- ─── 03. SCRIPTING SYSTEMS ─── -->
+        <!-- ─── 03. SCRIPTING SYSTEMS (SKIPER67 VIDEO STYLE) ─── -->
         <section id="systems">
             <div class="section-header">
                 <span class="section-tag">02 // Technical Showcase</span>
@@ -785,11 +1183,11 @@
 
                 <!-- 1. Turf War -->
                 <div class="system-card" data-tags="luau combat">
-                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map', 'Dynamic territory control system updating zone colors and map state in real time as teams capture sectors.')">
+                    <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map', 'Dynamic territory control system updating zone colors and map state in real time as teams capture sectors.')">
+                        <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
                             <source src="https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1" type="video/mp4">
                         </video>
-                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
                     </div>
                     <div class="system-body">
                         <h3 class="card-title">Turf War Map Control</h3>
@@ -798,19 +1196,19 @@
                             <span class="tag">Luau</span>
                             <span class="tag">Combat</span>
                         </div>
-                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map', 'Dynamic territory control system updating zone colors and map state in real time as teams capture sectors.')">
-                            Inspect Video
+                        <button class="btn-outline" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/q0bjn2qk33nejivls7siu/Turf-war.-color-control-map-n-script.mp4?rlkey=wk3bikpitx9wz6vjel2qigew2&raw=1', 'Turf War - Color Control Map', 'Dynamic territory control system updating zone colors and map state in real time as teams capture sectors.')">
+                            Watch Showcase
                         </button>
                     </div>
                 </div>
 
                 <!-- 2. GoogleDataSave -->
                 <div class="system-card" data-tags="luau backend">
-                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'External Cloud DataSave', 'Flexible external data persistence bridge utilizing HTTP services and cloud APIs to store structured player inventory and progression.')">
+                    <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'External Cloud DataSave', 'Flexible external data persistence bridge utilizing HTTP services and cloud APIs to store structured player inventory and progression.')">
+                        <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
                             <source src="https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1" type="video/mp4">
                         </video>
-                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
                     </div>
                     <div class="system-body">
                         <h3 class="card-title">External Cloud DataSave</h3>
@@ -820,19 +1218,19 @@
                             <span class="tag">Backend</span>
                             <span class="tag">HTTP</span>
                         </div>
-                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'External Cloud DataSave', 'Flexible external data persistence bridge utilizing HTTP services and cloud APIs to store structured player inventory and progression.')">
-                            Inspect Video
+                        <button class="btn-outline" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/bjdkmltiiy0htkfk4dcbx/ROBLOX-DATA-SAVE.mp4?rlkey=lwgzkucgnb1c66zbo77drhm49&raw=1', 'External Cloud DataSave', 'Flexible external data persistence bridge utilizing HTTP services and cloud APIs to store structured player inventory and progression.')">
+                            Watch Showcase
                         </button>
                     </div>
                 </div>
 
                 <!-- 3. Advanced AI System -->
                 <div class="system-card" data-tags="luau ai backend">
-                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Conversational AI NPC', 'AI-driven NPC integrated via HTTP bridge with GroqCloud API, featuring contextual memory and a per-player reputation system.')">
+                    <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Conversational AI NPC', 'AI-driven NPC integrated via HTTP bridge with GroqCloud API, featuring contextual memory and a per-player reputation system.')">
+                        <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
                             <source src="https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1" type="video/mp4">
                         </video>
-                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
                     </div>
                     <div class="system-body">
                         <h3 class="card-title">Conversational AI NPC</h3>
@@ -842,19 +1240,19 @@
                             <span class="tag">Backend</span>
                             <span class="tag">GroqCloud</span>
                         </div>
-                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Conversational AI NPC', 'AI-driven NPC integrated via HTTP bridge with GroqCloud API, featuring contextual memory and a per-player reputation system.')">
-                            Inspect Video
+                        <button class="btn-outline" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/pasodlta4m3ro9hb0qcon/ADVANCED-AI-YSTEM.mp4?rlkey=2tpsuzi5rvvjizj5v9ypldf37&raw=1', 'Conversational AI NPC', 'AI-driven NPC integrated via HTTP bridge with GroqCloud API, featuring contextual memory and a per-player reputation system.')">
+                            Watch Showcase
                         </button>
                     </div>
                 </div>
 
                 <!-- 4. Flexible Combat System -->
                 <div class="system-card" data-tags="luau combat">
-                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Modular Melee Combat', 'Combo-driven melee framework with hitbox detection, camera trauma/shake, weapon support, and directional knockbacks.')">
+                    <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Modular Melee Combat', 'Combo-driven melee framework with hitbox detection, camera trauma/shake, weapon support, and directional knockbacks.')">
+                        <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
                             <source src="https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1" type="video/mp4">
                         </video>
-                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
                     </div>
                     <div class="system-body">
                         <h3 class="card-title">Modular Melee Combat</h3>
@@ -863,19 +1261,19 @@
                             <span class="tag">Luau</span>
                             <span class="tag">Combat</span>
                         </div>
-                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Modular Melee Combat', 'Combo-driven melee framework with hitbox detection, camera trauma/shake, weapon support, and directional knockbacks.')">
-                            Inspect Video
+                        <button class="btn-outline" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/4whiccs2dvjepytm0a25a/RobloxStudioBeta_jUid0NCNAo.mp4?rlkey=ykujjaj4lem7xaoxl2m65i865&raw=1', 'Modular Melee Combat', 'Combo-driven melee framework with hitbox detection, camera trauma/shake, weapon support, and directional knockbacks.')">
+                            Watch Showcase
                         </button>
                     </div>
                 </div>
 
                 <!-- 5. Admin Announcement System -->
                 <div class="system-card" data-tags="luau commissioned backend">
-                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Broadcast System', 'Commissioned global server announcement system enabling authorized admins to push styled, animated alerts to all active clients.')">
+                    <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Broadcast System', 'Commissioned global server announcement system enabling authorized admins to push styled, animated alerts to all active clients.')">
+                        <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
                             <source src="https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1" type="video/mp4">
                         </video>
-                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
                     </div>
                     <div class="system-body">
                         <h3 class="card-title">Admin Broadcast System</h3>
@@ -884,19 +1282,19 @@
                             <span class="tag">Commissioned</span>
                             <span class="tag">Backend</span>
                         </div>
-                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Broadcast System', 'Commissioned global server announcement system enabling authorized admins to push styled, animated alerts to all active clients.')">
-                            Inspect Video
+                        <button class="btn-outline" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/gs2qy2hvs011yvcbdjxto/Discord_NWEP0Qbvwy.mp4?rlkey=ypvweux0frqouvpb7m50qojb9&raw=1', 'Admin Broadcast System', 'Commissioned global server announcement system enabling authorized admins to push styled, animated alerts to all active clients.')">
+                            Watch Showcase
                         </button>
                     </div>
                 </div>
 
                 <!-- 6. Target Locking System -->
                 <div class="system-card" data-tags="luau combat">
-                    <div class="video-wrapper" onclick="openModal('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Universal Target Lock', 'Smooth camera target-locking framework capable of tracking players, NPCs, or world objects with custom viewport UI.')">
+                    <div class="skiper-thumb" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Universal Target Lock', 'Smooth camera target-locking framework capable of tracking players, NPCs, or world objects with custom viewport UI.')">
+                        <div class="skiper-cursor-pill"><i class="fa-solid fa-play"></i> Play</div>
                         <video autoplay loop muted playsinline>
                             <source src="https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1" type="video/mp4">
                         </video>
-                        <div class="expand-hint"><i class="fa-solid fa-expand"></i> Expand</div>
                     </div>
                     <div class="system-body">
                         <h3 class="card-title">Universal Target Lock</h3>
@@ -905,8 +1303,8 @@
                             <span class="tag">Luau</span>
                             <span class="tag">Combat</span>
                         </div>
-                        <button class="btn-outline" onclick="openModal('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Universal Target Lock', 'Smooth camera target-locking framework capable of tracking players, NPCs, or world objects with custom viewport UI.')">
-                            Inspect Video
+                        <button class="btn-outline" onclick="openSkiperPlayer('https://www.dropbox.com/scl/fi/rwltfah1or3nopw9usbtx/PRESS-F-TO-LOCK-IN.mp4?rlkey=x1yjmnoym7omwmxvwqmdpiuyb&raw=1', 'Universal Target Lock', 'Smooth camera target-locking framework capable of tracking players, NPCs, or world objects with custom viewport UI.')">
+                            Watch Showcase
                         </button>
                     </div>
                 </div>
@@ -992,14 +1390,36 @@
         CarfotaTheDev &middot; Built in Cairo, Egypt
     </footer>
 
-    <!-- ─── VIDEO MODAL ─── -->
-    <div class="modal" id="videoModal" onclick="closeModalOutside(event)">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <video id="modalVideo" controls autoplay loop muted playsinline></video>
-            <div class="modal-info">
-                <h3 id="modalTitle">System Title</h3>
-                <p id="modalDesc">System description</p>
+    <!-- ─── SKIPER67 EXPANDING CLIP-PATH VIDEO POPOVER ─── -->
+    <div class="skiper-popover" id="skiperPopover">
+        <div class="skiper-backdrop" onclick="closeSkiperPlayer()"></div>
+        
+        <div class="skiper-stage">
+            <div class="skiper-video-container">
+                <button class="skiper-close-btn" onclick="closeSkiperPlayer()" title="Close">
+                    <i class="fa-solid fa-plus" style="transform: rotate(45deg);"></i>
+                </button>
+
+                <video id="skiperVideo" playsinline onclick="toggleSkiperPlay()"></video>
+
+                <!-- Minimalist Media-Chrome Style Controls -->
+                <div class="skiper-controls">
+                    <button class="sc-btn" id="scPlayBtn" onclick="toggleSkiperPlay()">
+                        <i class="fa-solid fa-pause"></i>
+                    </button>
+                    <input type="range" class="sc-range" id="scProgress" value="0" min="0" max="100" step="0.1" oninput="seekSkiperVideo(this.value)">
+                    <span class="sc-time" id="scTime">0:00 / 0:00</span>
+                    <button class="sc-btn" id="scMuteBtn" onclick="toggleSkiperMute()">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="skiper-meta-bar">
+                <div>
+                    <h3 id="skiperTitle">System Title</h3>
+                    <p id="skiperDesc">System description</p>
+                </div>
             </div>
         </div>
     </div>
@@ -1010,19 +1430,167 @@
 
         function applyPaymentConfig() {
             const heroStatus = document.getElementById('hero-status-text');
+            const overlayStatus = document.getElementById('overlayStatus');
             const bannerText = document.getElementById('payment-banner-text');
             const tosPayment = document.getElementById('tos-payment-text');
 
             if (PAYMENT_MODE === "USD_ONLY") {
                 heroStatus.textContent = "COMMISSIONS OPEN // USD ONLY";
+                overlayStatus.textContent = "OPEN (USD ONLY)";
                 bannerText.textContent = "Currently accepting USD only (PayPal / Card). Robux commissions are temporarily closed.";
                 tosPayment.innerHTML = "<strong>Payment:</strong> Currently accepting <strong>USD only</strong> (PayPal / Card). Robux payments are temporarily closed.";
             } else {
                 heroStatus.textContent = "COMMISSIONS OPEN // USD & ROBUX";
+                overlayStatus.textContent = "OPEN (USD & ROBUX)";
                 bannerText.textContent = "Currently accepting both USD and Robux commissions.";
                 tosPayment.innerHTML = "<strong>Payment:</strong> Accepting <strong>USD and Robux</strong> (Client covers 30% Roblox marketplace tax if paying via Gamepass/T-Shirt).";
             }
         }
+
+        // ─── NIKE OVERLAY MENU LOGIC ───
+        const nikeOverlay = document.getElementById('nikeOverlay');
+        const nikeMenuBtn = document.getElementById('nikeMenuBtn');
+        const nikeMenuLabel = document.getElementById('nikeMenuLabel');
+
+        function toggleNikeMenu() {
+            const isOpen = nikeOverlay.classList.toggle('open');
+            nikeMenuBtn.classList.toggle('active', isOpen);
+            nikeMenuLabel.textContent = isOpen ? 'Close' : 'Menu';
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+        }
+
+        function closeNikeMenu() {
+            nikeOverlay.classList.remove('open');
+            nikeMenuBtn.classList.remove('active');
+            nikeMenuLabel.textContent = 'Menu';
+            document.body.style.overflow = '';
+        }
+
+        // Live Cairo Clock for Nike Overlay Telemetry
+        function updateCairoClock() {
+            const clockEl = document.getElementById('cairoClock');
+            if (!clockEl) return;
+            const now = new Date();
+            const options = { timeZone: 'Africa/Cairo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            clockEl.textContent = new Intl.DateTimeFormat('en-GB', options).format(now) + ' EET';
+        }
+        setInterval(updateCairoClock, 1000);
+        updateCairoClock();
+
+        // ─── SKIPER67 MAGNETIC CURSOR PILL ON THUMBNAILS ───
+        document.querySelectorAll('.skiper-thumb').forEach(thumb => {
+            const pill = thumb.querySelector('.skiper-cursor-pill');
+            let targetX = 0, targetY = 0;
+            let currentX = 0, currentY = 0;
+            let rafId = null;
+
+            function animateSpring() {
+                // Spring interpolation matching Framer Motion mass: 0.1
+                currentX += (targetX - currentX) * 0.25;
+                currentY += (targetY - currentY) * 0.25;
+                pill.style.left = `${currentX}px`;
+                pill.style.top = `${currentY}px`;
+                rafId = requestAnimationFrame(animateSpring);
+            }
+
+            thumb.addEventListener('pointerenter', (e) => {
+                const bounds = thumb.getBoundingClientRect();
+                currentX = targetX = e.clientX - bounds.left;
+                currentY = targetY = e.clientY - bounds.top;
+                if (!rafId) rafId = requestAnimationFrame(animateSpring);
+            });
+
+            thumb.addEventListener('pointermove', (e) => {
+                const bounds = thumb.getBoundingClientRect();
+                targetX = e.clientX - bounds.left;
+                targetY = e.clientY - bounds.top;
+            });
+
+            thumb.addEventListener('pointerleave', () => {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            });
+        });
+
+        // ─── SKIPER67 VIDEO POPOVER & CUSTOM MEDIA CONTROLS ───
+        const skiperPopover = document.getElementById('skiperPopover');
+        const skiperVideo = document.getElementById('skiperVideo');
+        const scPlayBtn = document.getElementById('scPlayBtn');
+        const scMuteBtn = document.getElementById('scMuteBtn');
+        const scProgress = document.getElementById('scProgress');
+        const scTime = document.getElementById('scTime');
+
+        function formatSeconds(sec) {
+            if (isNaN(sec)) return '0:00';
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function openSkiperPlayer(src, title, desc) {
+            skiperVideo.src = src;
+            skiperVideo.muted = false;
+            document.getElementById('skiperTitle').textContent = title;
+            document.getElementById('skiperDesc').textContent = desc;
+            
+            skiperPopover.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            
+            skiperVideo.play().then(() => {
+                scPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                scMuteBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            }).catch(() => {
+                // Fallback if browser blocks unmuted autoplay
+                skiperVideo.muted = true;
+                skiperVideo.play();
+                scMuteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            });
+        }
+
+        function closeSkiperPlayer() {
+            skiperPopover.classList.remove('open');
+            skiperVideo.pause();
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                if (!skiperPopover.classList.contains('open')) {
+                    skiperVideo.src = '';
+                }
+            }, 600);
+        }
+
+        function toggleSkiperPlay() {
+            if (skiperVideo.paused) {
+                skiperVideo.play();
+                scPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            } else {
+                skiperVideo.pause();
+                scPlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            }
+        }
+
+        function toggleSkiperMute() {
+            skiperVideo.muted = !skiperVideo.muted;
+            scMuteBtn.innerHTML = skiperVideo.muted 
+                ? '<i class="fa-solid fa-volume-xmark"></i>' 
+                : '<i class="fa-solid fa-volume-high"></i>';
+        }
+
+        function seekSkiperVideo(val) {
+            if (skiperVideo.duration) {
+                skiperVideo.currentTime = (val / 100) * skiperVideo.duration;
+            }
+        }
+
+        skiperVideo.addEventListener('timeupdate', () => {
+            if (skiperVideo.duration) {
+                scProgress.value = (skiperVideo.currentTime / skiperVideo.duration) * 100;
+                scTime.textContent = `${formatSeconds(skiperVideo.currentTime)} / ${formatSeconds(skiperVideo.duration)}`;
+            }
+        });
+
+        skiperVideo.addEventListener('ended', () => {
+            scPlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        });
 
         // ─── SYSTEM CATEGORY FILTER ───
         function filterSystems(category, btnElement) {
@@ -1039,44 +1607,21 @@
             });
         }
 
-        // ─── VIDEO LIGHTBOX ───
-        const modal = document.getElementById('videoModal');
-        const modalVideo = document.getElementById('modalVideo');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalDesc = document.getElementById('modalDesc');
-
-        function openModal(src, title, desc) {
-            modalVideo.src = src;
-            modalTitle.textContent = title;
-            modalDesc.textContent = desc;
-            modal.classList.add('open');
-            document.body.style.overflow = 'hidden';
-            modalVideo.play();
-        }
-
-        function closeModal() {
-            modal.classList.remove('open');
-            modalVideo.pause();
-            modalVideo.src = "";
-            document.body.style.overflow = '';
-        }
-
-        function closeModalOutside(e) {
-            if (e.target === modal) closeModal();
-        }
-
+        // ─── KEYBOARD & SCROLL LISTENERS ───
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+            if (e.key === 'Escape') {
+                if (skiperPopover.classList.contains('open')) closeSkiperPlayer();
+                if (nikeOverlay.classList.contains('open')) closeNikeMenu();
+            }
         });
 
-        // ─── ACTIVE NAV HIGHLIGHT ON SCROLL ───
         const sections = document.querySelectorAll('section');
         const navItems = document.querySelectorAll('.nav-item');
 
         window.addEventListener('scroll', () => {
             let current = '';
             sections.forEach(section => {
-                const sectionTop = section.offsetTop - 140;
+                const sectionTop = section.offsetTop - 150;
                 if (window.scrollY >= sectionTop) {
                     current = section.getAttribute('id');
                 }
