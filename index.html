@@ -538,7 +538,7 @@
             letter-spacing: -0.015em;
         }
 
-        /* ─── 01. MY JOURNEY SECTION (INTERACTIVE REVEAL CARDS) ─── */
+        /* ─── 01. MY JOURNEY SECTION (INTERACTIVE REVEAL CARDS + SKILLS CHART) ─── */
         #journey {
             padding: 96px 0 88px;
         }
@@ -635,7 +635,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
             gap: 24px;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
         .journey-card {
@@ -652,7 +652,6 @@
             --mouse-y: 50%;
         }
 
-        /* Interactive Radial Spotlight inside Journey Card */
         .journey-card::before {
             content: '';
             position: absolute;
@@ -667,7 +666,6 @@
             pointer-events: none;
         }
 
-        /* Top Animated Progress Line on Hover */
         .journey-card::after {
             content: '';
             position: absolute;
@@ -764,10 +762,17 @@
             z-index: 2;
         }
 
-        /* Stats Row */
-        .stats-grid {
+        /* ─── SKILLS CHART & STATS DASHBOARD ─── */
+        .skills-dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: 1fr 1.5fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .stats-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
 
@@ -775,7 +780,10 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             padding: 24px;
-            border-radius: 10px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             transition: border-color 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
@@ -795,10 +803,134 @@
 
         .stat-desc {
             font-family: var(--font-mono);
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.08em;
+        }
+
+        /* Skills Proficiency Chart Card */
+        .skills-chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 26px 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+            transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .skills-chart-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .skills-chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .skills-chart-title {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skills-chart-sub {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .skill-bar-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .skill-bar-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .skill-name {
+            font-family: var(--font-head);
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-badge {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 999px;
+        }
+
+        .skill-badge.expert {
+            background: var(--accent);
+            color: var(--accent-fg);
+        }
+
+        .skill-badge.learning {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .skill-track {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
+        }
+
+        .skills-chart-card.is-visible .skill-fill.luau-fill {
+            width: 96%;
+            background: linear-gradient(90deg, #a1a1aa 0%, #ffffff 100%);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+        }
+
+        .skills-chart-card.is-visible .skill-fill.fl-fill {
+            width: 38%;
+            background: repeating-linear-gradient(
+                -45deg,
+                #e4e4e7,
+                #e4e4e7 6px,
+                #71717a 6px,
+                #71717a 12px
+            );
         }
 
         /* ─── GAMES SECTION ─── */
@@ -1333,6 +1465,9 @@
                 gap: 32px;
                 align-content: start;
             }
+            .skills-dashboard {
+                grid-template-columns: 1fr;
+            }
             .skiper-meta-bar {
                 flex-direction: column;
                 align-items: flex-start;
@@ -1409,8 +1544,8 @@
                         <span class="t-val">Playmistic Interactive</span>
                     </div>
                     <div class="telemetry-item">
-                        <span class="t-label">Core Stack</span>
-                        <span class="t-val">Luau / FL Studio / Anim</span>
+                        <span class="t-label">Skills</span>
+                        <span class="t-val">Luau (Expert) / FL Studio</span>
                     </div>
                 </div>
             </div>
@@ -1482,7 +1617,7 @@
 
     <main class="container">
 
-        <!-- ─── 01. MY JOURNEY (INTERACTIVE SCROLL-REVEAL CARDS) ─── -->
+        <!-- ─── 01. MY JOURNEY (INTERACTIVE SCROLL-REVEAL CARDS + SKILLS CHART) ─── -->
         <section id="journey">
             <div class="section-header reveal">
                 <span class="section-tag">00 // About Me</span>
@@ -1567,19 +1702,47 @@
 
             </div>
 
-            <!-- Quick Stats -->
-            <div class="stats-grid">
-                <div class="stat-box reveal reveal-delay-1">
-                    <div class="stat-num">2023</div>
-                    <div class="stat-desc">Started Luau Scripting</div>
+            <!-- Stats + Skills Proficiency Chart -->
+            <div class="skills-dashboard">
+                <div class="stats-col">
+                    <div class="stat-box reveal reveal-delay-1">
+                        <div class="stat-num">2023</div>
+                        <div class="stat-desc">Started Luau Scripting</div>
+                    </div>
+                    <div class="stat-box reveal reveal-delay-2">
+                        <div class="stat-num">7+</div>
+                        <div class="stat-desc">Custom Frameworks</div>
+                    </div>
                 </div>
-                <div class="stat-box reveal reveal-delay-2">
-                    <div class="stat-num">7+</div>
-                    <div class="stat-desc">Custom Frameworks</div>
-                </div>
-                <div class="stat-box reveal reveal-delay-3">
-                    <div class="stat-num">Multi</div>
-                    <div class="stat-desc">Code &bull; Audio &bull; Anim</div>
+
+                <!-- Animated Skills Chart -->
+                <div class="skills-chart-card reveal reveal-delay-3">
+                    <div class="skills-chart-header">
+                        <span class="skills-chart-title"><i class="fa-solid fa-chart-simple"></i> Skill Proficiency</span>
+                        <span class="skills-chart-sub">Current Mastery</span>
+                    </div>
+
+                    <!-- Skill 1: Luau -->
+                    <div class="skill-bar-group">
+                        <div class="skill-bar-info">
+                            <span class="skill-name"><i class="fa-solid fa-terminal" style="font-size: 0.8rem; color: var(--text-secondary);"></i> LUAU</span>
+                            <span class="skill-badge expert">EXPERT</span>
+                        </div>
+                        <div class="skill-track">
+                            <div class="skill-fill luau-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Skill 2: FL Studio -->
+                    <div class="skill-bar-group">
+                        <div class="skill-bar-info">
+                            <span class="skill-name"><i class="fa-solid fa-sliders" style="font-size: 0.8rem; color: var(--text-secondary);"></i> FL STUDIO</span>
+                            <span class="skill-badge learning">STILL LEARNING</span>
+                        </div>
+                        <div class="skill-track">
+                            <div class="skill-fill fl-fill"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1609,7 +1772,7 @@
                     </a>
                 </div>
 
-                <!-- BlocksExtreme (Renamed from BlockZone) -->
+                <!-- BlocksExtreme -->
                 <div class="card reveal reveal-delay-2">
                     <span class="card-badge">Playable Prototype</span>
                     <h3 class="card-title">BlocksExtreme</h3>
